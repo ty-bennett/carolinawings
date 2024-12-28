@@ -1,10 +1,11 @@
+import { useReducer, useState } from "react";
 import React from "react";
 import './App.css';
 import smokehouseBurger from "./assets/foodimages/smokehouse_burger.png";
 
 
 
-function Header({ name, year }) {
+function Header({ year }) {
   return (
     <header>
       <h1>Carolina Wings </h1>
@@ -24,12 +25,13 @@ const itemsObjects = items.map((dish, i) => ({
   title: dish
 }));
 
-function Main({ dishes }) {
-
+function Main({ dishes, status, onStatus}) {
   return (
     <>
     <div>
-      <h2>Welcome to caorlina wings</h2>
+      <button onClick={() => onStatus(true)}>I want to be open</button>
+      <h2>Welcome to carolina wings</h2>
+      <h2>We are {status ? "open" : "closed"}</h2>
     </div>
     
     <main>
@@ -40,16 +42,25 @@ function Main({ dishes }) {
         ))}
       </ul>
     </main>
-    </>
+    </> 
   );
 }
 
 function App() {
+//  const [openStatus, setOpenStatus] = useState(true);
+  const [openStatus, toggle] = useReducer((status) => !status, true)
+
+  useEffect(() => {
+    console.log(`The restaurant is ${openStatus ? "open" : "closed"}`)
+  });
 
   return (
     <div>
     <Header name="Ty" year={new Date().getFullYear()}/>
-    <Main dishes={itemsObjects}/>
+    <h2>The restaurant is currently{" "}{openStatus ? "Open" : "Closed"}.</h2>
+    <button onClick={() => openStatus(!openStatus)}>{openStatus ? "Close" : "Open"} restaurant</button>
+    <br/>
+    <Main dishes={itemsObjects} openStatus={openStatus} onStatus={toggle}/>
     </div>
   );
 }
