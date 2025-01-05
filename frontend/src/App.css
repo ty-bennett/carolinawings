@@ -1,8 +1,21 @@
-ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  padding: 5px;
-  margin: 5px; 
+//nav bar styling 
 
+body {
+  color: black;
+}
+
+
+.nav-bar {
+  color: black;
+  list-style-type: none;
+}
+
+.nav-bar-item {
+  display: inline;
+  margin: 5px;
+  color: #be9514;
+}
+
+.nav-bar-item:hover {
+  color: white;
 }
