@@ -1,5 +1,6 @@
 /* NavBar styling */
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* sticky div for the navbar */
 
 .stickydiv {
@@ -52,11 +53,27 @@
 }
 
 /* Landing page bg styling and flex layout */
+.gridparent {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 3;
+  grid-template-areas: 
+  "logo wood button"
+  "nav nav nav";
 
-.flexcontainer {
-  display: flex;
-  margin: 0px;
-  gap: 0px;
+}
+.gridchildlogo {
+  grid-row: 1;
+  grid-area: logo;
+}
+.gridchildimg {
+  grid-row: 1;
+  grid-area: img;
+}
+
+.gridchildnav {
+  grid-row: 2;
+  grid-area: nav;
 }
 
 img {
@@ -66,12 +83,12 @@ img {
 }
 
 .logo {
-  position: absolute;
+  margin: 0;
   z-index: 2;
-  right: 80%;
-  width: 10%;
-  height: auto;
-  bottom: 0;
+  right: 0;
+  position: absolute;
+  width: auto;
+  height: 20%;
 }
 
 .ordernow {
