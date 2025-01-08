@@ -1,21 +1,8 @@
-/* NavBar styling */
+/* body styling */
 
 body {
-  color: black;
-}
-
-
-.nav-bar {
-  color: black;
-  list-style-type: none;
-}
-
-.nav-bar-item {
-  display: inline;
-  margin: 5px;
-  color: #be9514;
-}
-
-.nav-bar-item:hover {
-  color: white;
+  height: auto;
+  width: auto;
+  margin: 0;
+  padding: 0;
 }
