@@ -1,14 +1,10 @@
 import navbar from './NavBar.module.css';
 import wood from '/backgroundImages/woodtexture.jpg'
 import logo from '/carolinawingslogo.png'
-
-interface NavBarProps {
-  isActive?: boolean;
-}
+import ActiveNavBar from './ActiveNavBar.tsx'
 
 
-const NavBar: React.FC<NavBarProps> = ({ isActive }) =>  {
-  isActive = true;
+function NavBar(){
   return (
     <main>
       <div className={navbar.gridparent}>
@@ -25,7 +21,7 @@ const NavBar: React.FC<NavBarProps> = ({ isActive }) =>  {
           <div className={navbar.navbarposition}>
             <nav>
               <ul className={navbar.navbar}>
-                <li className={({isActive} ? navbar.navbaritemactive : navbar.navbaritem)}>Home</li>
+                <ActiveNavBar isActive={true} text="Home"/> 
                 <li className={navbar.navbaritem}>Menu</li>
                 <li className={navbar.navbaritem}>Lunch Specials</li>
                 <li className={navbar.navbaritem}>Nightly Specials</li>
