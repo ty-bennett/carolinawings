@@ -1,9 +1,16 @@
 import navbar from './NavBar.module.css'
-import activenavbar from './ActiveNavBar.module.css'
+import React from 'react';
+
+interface ActiveNavBarProps {
+  isActive: boolean;
+  content: string;
+}
 
 
-function ActiveNavBar ({ isActive, text }) {
-  <li className={({isActive} ? navbar.navbaritemactive : navbar.navbaritem)}>{text}</li>
+const ActiveNavBar: React.FC<ActiveNavBarProps> = ({ isActive, content }) => {
+  return (
+  <li className={(isActive ? navbar.navbaritemactive : navbar.navbaritem)}>{content}</li>
+  )
 }
 
 export default ActiveNavBar;

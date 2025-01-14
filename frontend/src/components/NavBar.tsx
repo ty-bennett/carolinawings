@@ -21,7 +21,7 @@ function NavBar(){
           <div className={navbar.navbarposition}>
             <nav>
               <ul className={navbar.navbar}>
-                <ActiveNavBar isActive={true} text="Home"/> 
+                <ActiveNavBar isActive={true} content="Home"/> 
                 <li className={navbar.navbaritem}>Menu</li>
                 <li className={navbar.navbaritem}>Lunch Specials</li>
                 <li className={navbar.navbaritem}>Nightly Specials</li>
