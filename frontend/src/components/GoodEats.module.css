@@ -3,18 +3,28 @@
 
 
 .bgimg {
-    background-image: url("")
+    background-image: url("/public/backgroundImages/backgroundimage.jpg") no-repeat fixed;
+    height: auto;
+    width: auto;
+    padding-top: 15%;
 }
 
 .floatingdiv {
-
+    height: 20%;
+    width: 30%;
+    background-color: white;
+    margin: 20%;
 }
 .goodeatsheading {
-
+    font-size: 24px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 .subheader {
-
+    font-family: "Public Sans";
+    font-size: 18px;
 }
 .chooselocationbutton {
-
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 35%;
 }
