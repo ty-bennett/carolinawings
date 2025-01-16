@@ -1,30 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 
 .bgimg {
-    background-image: url("/public/backgroundImages/backgroundimage.jpg") no-repeat fixed;
+    background-image: url("/public/backgroundImages/backgroundimage.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
     height: auto;
     width: auto;
-    padding-top: 15%;
+    padding-top: 20%;
 }
 
 .floatingdiv {
-    height: 20%;
-    width: 30%;
+    height: 20vh;
+    width: 30vw;
     background-color: white;
-    margin: 20%;
+    margin-left: 33%;
+    margin-right: 33%;
+    margin-top: 25%;
+    margin-bottom: 25%;
+
 }
 .goodeatsheading {
-    font-size: 24px;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 56px;
+    font-family: "Pacifico";
 }
 .subheader {
     font-family: "Public Sans";
     font-size: 18px;
 }
 .chooselocationbutton {
+    font-family: "Public Sans";
     font-size: 16px;
+    font-weight: 600;
     border: 1px solid black;
-    border-radius: 35%;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.container {
+    display: flex;
 }
