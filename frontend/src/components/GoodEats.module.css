@@ -23,8 +23,8 @@
     background-color: white;
     margin-left: 36%;
     margin-right: 36%;
-    margin-top: 15%;
-    margin-bottom: 50%;
+    margin-top: 13%;
+    margin-bottom: 60%;
 
 }
 .goodeatsheading {
@@ -48,8 +48,13 @@
     cursor: pointer;
     padding: 10px;
     justify-self: center;
-    background: none;
+    background-color: white;
     color: #535353;
+}
+
+.chooselocationbutton:hover {
+    background-color: #333333;
+    transition: 0.4s;
 }
 
 .container {

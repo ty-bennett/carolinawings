@@ -6,7 +6,6 @@ interface ActiveNavBarProps {
   content: string;
 }
 
-
 const ActiveNavBar: React.FC<ActiveNavBarProps> = ({ isActive, content }) => {
   return (
   <li className={(isActive ? navbar.navbaritemactive : navbar.navbaritem)}>{content}</li>

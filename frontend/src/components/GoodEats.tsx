@@ -1,8 +1,7 @@
 //TODO: 
-// background image that stays when you scroll
-// floating white div that scrolls down to location component
-//  specials div that links to specials page
-// balls
+// background image that stays when you scroll (DONE)
+// floating white div that scrolls down to location component (DONE)
+//  specials div that links to specials page (IP)
 
 import goodeats from './GoodEats.module.css';
 
@@ -19,7 +18,7 @@ function GoodEats() {
                             <h3 className={goodeats.subheader}>Carolina Wings & Rib House</h3>
                         </div>
                         <div className={goodeats.buttonflex}>
-                            <button className={goodeats.chooselocationbutton}>Choose Location</button>
+                            <button className={goodeats.chooselocationbutton} type="button">Choose Location</button>
                         </div>
                     </div>
                 </div>
