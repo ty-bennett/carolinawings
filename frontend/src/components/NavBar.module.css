@@ -33,7 +33,7 @@
 
 .navbaritem:hover {
   color: white;
-  transition: 0.5s;
+  transition: 0.4s;
   cursor: pointer;
 }
 
@@ -53,7 +53,7 @@
 .navbaritemactive:hover {
   background-color: black;
   color: white;
-  transition: 0.5s;
+  transition: 0.4s;
 }
 
 /* Landing page bg styling and flex layout */
@@ -122,7 +122,7 @@
 .ordernow:hover {
   cursor: pointer;
   background-color:black;
-  transition: 0.5s
+  transition: 0.4s;
 }
 
 .navbarposition {

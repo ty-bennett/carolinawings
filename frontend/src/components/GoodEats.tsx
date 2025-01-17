@@ -11,13 +11,17 @@ function GoodEats() {
         <div className={goodeats.bgimg}>
             <div className={goodeats.container}>
                 <div className={goodeats.floatingdiv}>
-                    <div>
-                        <h1 className={goodeats.goodeatsheading}>Good Eats</h1>
+                    <div className={goodeats.flexforcontent}>
+                        <div>
+                            <h1 className={goodeats.goodeatsheading}>Good Eats</h1>
+                        </div>
+                        <div>
+                            <h3 className={goodeats.subheader}>Carolina Wings & Rib House</h3>
+                        </div>
+                        <div className={goodeats.buttonflex}>
+                            <button className={goodeats.chooselocationbutton}>Choose Location</button>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className={goodeats.subheader}>Carolina Wings & Rib House</h3>
-                    </div>
-                    <button className={goodeats.chooselocationbutton}>Choose Location</button>
                 </div>
             </div>
         </div>

@@ -8,26 +8,36 @@
     background-size: cover;
     height: auto;
     width: auto;
-    padding-top: 20%;
+    max-height: 80vh;
 }
 
+/* for phone screens */
+@media only screen and (max-device-width: 1366px) {
+    .bgimg {
+      background-attachment: scroll;
+    }
+}
 .floatingdiv {
-    height: 20vh;
-    width: 30vw;
+    height: auto;
+    width: 100%;
     background-color: white;
-    margin-left: 33%;
-    margin-right: 33%;
-    margin-top: 25%;
-    margin-bottom: 25%;
+    margin-left: 36%;
+    margin-right: 36%;
+    margin-top: 15%;
+    margin-bottom: 50%;
 
 }
 .goodeatsheading {
-    font-size: 56px;
+    font-size: 72px;
     font-family: "Pacifico";
+    text-align: center;
+    color: #7c2121;
+    margin: 2rem;
 }
 .subheader {
     font-family: "Public Sans";
     font-size: 18px;
+    text-align: center;
 }
 .chooselocationbutton {
     font-family: "Public Sans";
@@ -37,8 +47,24 @@
     border-radius: 20px;
     cursor: pointer;
     padding: 10px;
+    justify-self: center;
+    background: none;
+    color: #535353;
 }
 
 .container {
     display: flex;
+    width: 100%;
+    height: auto;
+}
+
+.flexforcontent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.buttonflex {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
 }
