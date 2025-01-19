@@ -2,7 +2,7 @@
 
 
 .bgimg {
-    background-image: url("/public/backgroundImages/backgroundimage.jpg");
+    background-image: url("/backgroundImages/backgroundimage.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;

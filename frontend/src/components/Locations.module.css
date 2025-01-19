@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+.contentcontainer{
+  display:flex; 
+  flex-direction: column;
+}
+
+.cardcontainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.textcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+.card {
+  width: 25%;
+  gap: 10px;
+}
+
+.headers {
+  font-family: Oswald;
+  font-weight: 600;
+  color: white;
+}
+
+.text{
+  color: white;
+  font-family: "Public Sans";
+  font-size: 20px;
+}
