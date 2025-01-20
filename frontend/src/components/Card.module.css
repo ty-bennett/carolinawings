@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+.button {
+  font-family: "Public Sans";
+  font-size: small;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  width: 100%;
+}
+
+.card {
+  width: 25%;
+  display: flex;
+  align-self: flex-end;
+  padding: 5%;
+  height: 100%;
+  background-size: cover;
+}
+
+.image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.forkandknife {
+  height: 32px;
+  width: 32px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  
+}
