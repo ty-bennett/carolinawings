@@ -6,7 +6,6 @@ import ActiveNavBar from './ActiveNavBar.tsx'
 
 function NavBar(){
   return (
-    <main>
       <div className={navbar.gridparent}>
         <div className={navbar.gridchildlogo}> 
           <img src={logo} className={navbar.logo}></img>
@@ -22,18 +21,17 @@ function NavBar(){
             <nav>
               <ul className={navbar.navbar}>
                 <ActiveNavBar isActive={true} content="Home"/> 
-                <li className={navbar.navbaritem}>Menu</li>
-                <li className={navbar.navbaritem}>Lunch Specials</li>
-                <li className={navbar.navbaritem}>Nightly Specials</li>
-                <li className={navbar.navbaritem}>Catering</li>
-                <li className={navbar.navbaritem}>Locations</li>
-                <li className={navbar.navbaritem}>Contact</li>
+                <ActiveNavBar isActive={false} content="Menu" />
+                <ActiveNavBar isActive={false} content="Lunch Specials" />
+                <ActiveNavBar isActive={false} content="Nightly Specials" />
+                <ActiveNavBar isActive={false} content="Catering" />
+                <ActiveNavBar isActive={false} content="Locations" />
+                <ActiveNavBar isActive={false} content="Contact" />
               </ul>
             </nav>
           </div>
         </div>
       </div>
-    </main>
   );
 }
 

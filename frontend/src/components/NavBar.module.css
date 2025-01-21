@@ -2,13 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 
-/* sticky div for the navbar */ 
-.stickydiv {
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-}
-
 /* navbar styling */
 
 .navbar {
@@ -64,7 +57,7 @@
   grid-template-areas: 
   "logo img button"
   "nav nav nav";
-  gap: 0px;
+  gap: 0;
   margin: 0;
 }
 
@@ -73,10 +66,12 @@
 }
 
 .gridchildimg {
-  width: 100%;
+  width: auto;
   height: 22vh;
+  z-index: -1;
   overflow: hidden;
   grid-area: img;
+  margin: 0;
 }
 
 .gridchildbutton {
@@ -91,18 +86,19 @@
   width: 100%;
   height: auto;
   object-fit: scale-down;
-  z-index: 1;
-  margin-bottom: 95vh;
+  z-index: -1;
+  margin-bottom: 22%;
   
 }
 
 .logo {
-  z-index: 2;
+  position: absolute;
+  z-index: 5;
   width: auto;
   height: 200px;
-  position: absolute;
-  margin-top: 50px;
-  margin-left: 50px;
+  float: right;
+  bottom: 74%;
+  left: 5%;
 }
 
 .ordernow {

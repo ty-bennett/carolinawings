@@ -4,7 +4,7 @@ import Card from './Card.tsx'
 function Locations() {
     return (
     <>
-      <div className={locations.contentcontainer}>
+      <div className={locations.contentcontainer} id="locations">
         <div className={locations.textcontainer}>
           <h1 className={locations.headers}>Choose Your Location</h1>
           <p className={locations.text}>Trying to find the best wings and ribs near you? Carolina Wings and Rib House has four locations ready for any occasion!</p>

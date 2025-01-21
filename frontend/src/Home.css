@@ -1,0 +1,19 @@
+/* body styling */
+
+body {
+  height: auto;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background: transparent;
+  background-color: white;
+}
+
+html {
+  scroll-behavior: smooth;
+}

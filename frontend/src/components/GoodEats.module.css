@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
 
 
 .bgimg {
@@ -8,7 +10,7 @@
     background-size: cover;
     height: auto;
     width: auto;
-    max-height: 80vh;
+    max-height: 70vh;
 }
 
 /* for phone screens */
@@ -23,19 +25,21 @@
     background-color: white;
     margin-left: 36%;
     margin-right: 36%;
-    margin-top: 13%;
+    margin-top: 10%;
     margin-bottom: 60%;
+    border-radius: 5px;
 
 }
 .goodeatsheading {
-    font-size: 72px;
+    font-size: 96px;
     font-family: "Pacifico";
     text-align: center;
     color: #7c2121;
-    margin: 2rem;
+    margin-bottom: 5%;
 }
 .subheader {
-    font-family: "Public Sans";
+    font-family: "Oswald";
+    letter-spacing: 0.3em;
     font-size: 18px;
     text-align: center;
 }
@@ -53,7 +57,8 @@
 }
 
 .chooselocationbutton:hover {
-    background-color: #333333;
+    background-color: rgb(50,50,50);
+    color: white;
     transition: 0.4s;
 }
 

@@ -7,23 +7,32 @@
   font-size: small;
   text-align: center;
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: center;
-  justify-items: center;
   width: 100%;
+  align-self: flex-end;
+}
+
+.button:hover {
+  background-color: rgb(1,1,1,0.5);
+  color: white;
 }
 
 .card {
   width: 25%;
   display: flex;
-  align-self: flex-end;
+  align-self: center;
   padding: 5%;
-  height: 100%;
+  height: 5em;
   background-size: cover;
 }
 
-.image {
+.container {
+  display: flex;
+  width: 100%;
+  height: auto;
+}
+
+.button img {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,11 +40,23 @@
 }
 
 .forkandknife {
-  height: 32px;
-  width: 32px;
-  z-index: 2;
+  margin: auto;
   display: flex;
   align-items: center;
-  align-content: center;
-  
+  align-content: center; 
+  height: auto;
+  width: 10%;
+}
+
+.childposition {
+  display: flex;
+  flex-direction: row;
+}
+
+.text {
+  padding: 0;
+  width: 100%;
+  font-size: 18px;
+  margin: 0;
+  padding: 3px;
 }

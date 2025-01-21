@@ -1,9 +1,9 @@
-import './App.css'
+import './Home.css'
 import NavBar from './components/NavBar.tsx'
 import GoodEats from './components/GoodEats.tsx'
 import Locations from './components/Locations.tsx'
 
-function App() {
+function Home() {
   return (
   <>
     <NavBar /> 
@@ -13,4 +13,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
