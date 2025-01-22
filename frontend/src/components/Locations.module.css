@@ -12,9 +12,9 @@
   display: flex;
   flex-direction: row;
   background-color: black;
-  justify-content: space-between;
   column-gap: 1rem;
-  align-content: space-around;
+  row-gap: 1rem;
+  padding: 1.5em 0 1.5em 0;
 }
 
 .textcontainer {
@@ -33,7 +33,7 @@
   margin: 10px;
 }
 
-.text{
+.text {
   margin: 10px;
   color: white;
   font-family: "Public Sans";

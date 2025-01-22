@@ -11,8 +11,7 @@ const Card = ({ location, backgroundImage, cover, position }: CardProps) => {
   return(
     <div className={card.card} style={{ backgroundImage: `url('/backgroundImages/${backgroundImage}')`, backgroundSize:`${cover}`, backgroundPosition:`${position}` }}>
         <button className={card.button}> 
-            <img src="/fork-and-knife-meal-svgrepo-com.svg" className={card.forkandknife}></img>
-          <p className={card.text}>ORDER {location.toUpperCase()}</p>
+        <img src="/fork-and-knife-meal-svgrepo-com.svg" className={card.forkandknife}></img><span className={card.text}>ORDER {location.toUpperCase()}</span>
         </button>
     </div>
   );
