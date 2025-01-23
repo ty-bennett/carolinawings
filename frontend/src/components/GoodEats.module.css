@@ -23,11 +23,12 @@
     height: auto;
     width: 100%;
     background-color: white;
-    margin-left: 36%;
-    margin-right: 36%;
-    margin-top: 10%;
-    margin-bottom: 60%;
+    margin-left: 33%;
+    margin-right: 33%;
+    margin-top: 8%;
+    margin-bottom: 30%;
     border-radius: 5px;
+    padding: 0;
 
 }
 .goodeatsheading {
@@ -35,7 +36,8 @@
     font-family: "Pacifico";
     text-align: center;
     color: #7c2121;
-    margin-bottom: 5%;
+    margin: 0;
+    padding-top: 10%;
 }
 .subheader {
     font-family: "Oswald";
@@ -54,6 +56,8 @@
     justify-self: center;
     background-color: white;
     color: #535353;
+    margin-top: 15%;
+    margin-bottom: 20%;
 }
 
 .chooselocationbutton:hover {
