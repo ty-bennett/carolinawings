@@ -19,6 +19,8 @@
 .button:hover {
   background-color:rgb(225, 225, 225);
   border: none;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .card {

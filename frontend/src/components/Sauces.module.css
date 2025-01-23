@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header {
+  font-family: "Oswald";
+  font-size: 36px;
+  color: white;
+}
+
+.bgimg {
+  background-image: url("/public/backgroundImages/saucesbg.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.contentcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardcontainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+.card {
+  width: 25%;
+  background-color: rgba(255,255,255, 0.6);
+}
