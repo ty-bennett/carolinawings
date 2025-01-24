@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 .headercontainer {
-  margin-top: 1%;
+  padding-top: 1%;
   margin-bottom: 1%;
 }
 
@@ -19,6 +19,7 @@ h1 {
   flex-direction: column;
   height: auto;
   width: 100%;
+  margin-bottom: 2%;
 }
 
 .textcontainer {
@@ -26,11 +27,11 @@ h1 {
   flex-direction: row;
   margin-right: 15%;
   margin-left: 15%;
-  margin-bottom: 5%;
 }
 
 p {
   font-family: "Public Sans", arial;
+  font-size: 18px;
 }
 
 img {
