@@ -5,6 +5,8 @@ import Locations from './components/Locations.tsx'
 import About from './components/About.tsx'
 import Sauces from './components/Sauces.tsx'
 import GiftCard from './components/GiftCard.tsx'
+import Map from './components/Map.tsx'
+import Footer from './components/Footer.tsx'
 
 function Home() {
   return (
@@ -15,6 +17,8 @@ function Home() {
     <About />
     <Sauces />
     <GiftCard />
+    <Map />
+    <Footer />
   </>
   );
 }
