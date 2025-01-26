@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header {
+  font-family: "Oswald", sans-serif;
+  font-size: 36px;
+  text-align: center;
+  color: white;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+.headercontainer {
+  margin: 0;
+  padding: 0;
+}
+
+.paragraphcontainer {
+  margin: 0;
+  padding: 0;
+}
+
+.paragraph {
+  font-family: "Public Sans", sans-serif;
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  margin-bottom: 2em;
+  margin-top: 0;
+}
+
+.contentcontainer {
+  background-color: rgb(75,0,0);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
