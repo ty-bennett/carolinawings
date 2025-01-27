@@ -8,7 +8,7 @@
 }
 
 .bgimg {
-  background-image: url("/public/backgroundImages/saucesbg.jpg");
+  background-image: url("/backgroundImages/saucesbg.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position-y: top;
