@@ -12,3 +12,8 @@
 .header {
   color: rgb(212,189,118);
 }
+
+.image{
+  width: 200px;
+  height: auto;
+}
