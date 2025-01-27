@@ -36,8 +36,11 @@ p {
 img {
   height: auto;
   width: 100%;
+  padding-right: 50px;
+  margin-bottom: 10px;
 }
 
 .abouttext {
   padding-left: 5%;
+  padding-top: 30px;
 }

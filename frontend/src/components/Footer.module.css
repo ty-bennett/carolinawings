@@ -1,19 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+.footercontainer {
+  background-color: black;
+  display:flex;
+  flex-direction: column;
+}
 .locationcontainer {
   display: flex;
   flex-direction: row;
-  gap: 15%;
+  gap: 14%;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  margin-bottom: 50px;
+  padding-top: 20px;
+}
+
+.locationtext {
+  font-size: medium;
+  color: white;
+  text-align: center;
+  text-decoration: solid underline 1px;
+  text-decoration-color: white;
+}
+
+.locationtext:link {
+  color: white;
+}
+.locationtext:active {
+  color: red;
+}
+.locationtext:after {
+  color: blue;
 }
 
 .header {
   color: rgb(212,189,118);
+  text-align: center;
 }
 
 .image{
   width: 200px;
   height: auto;
+  margin: 0;
+  padding-right: 2fr 2fr;
+}
+
+.hours {
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.hourscontainer{
+  display: flex;
+  flex-direction: row;
+}
+.imagecontainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.text {
+  display:flex;
+  flex-direction: column;
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.bottomlayout {
+  display: flex;
+  justify-content: center;
+  gap: 15%;
+}
+.facebookicon {
+  width: 52px;
+  height: auto;
+  background-color: transparent;
+  filter: invert(100%);
+  margin: 0;
+  padding: 0;
+}
+.followuscontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  
 }
