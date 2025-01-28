@@ -7,7 +7,7 @@ function About() {
         <h1 className={about.header}>About Carolina Wings & Rib House</h1>
       </div>
       <div className={about.textcontainer}>
-        <img src='/carolinawings.png'></img>
+        <img src='/carolinawings.png' alt={"Carolina Wings Logo"}></img>
         <section className={about.abouttext}>
           <p>When the first Carolina Wings & Rib House opened for business in 1996, people soon realized there was something special about this new, local wing joint. 
             As word got out about the great food, personable service, and fun atmosphere, business took off.
