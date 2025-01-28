@@ -21,6 +21,7 @@
   text-align: center;
   text-decoration: solid underline 1px;
   text-decoration-color: white;
+  margin: 5px;
 }
 
 .locationtext:link {
@@ -32,32 +33,50 @@
 .locationtext:after {
   color: blue;
 }
+.location{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 .header {
   color: rgb(212,189,118);
   text-align: center;
+  margin: 5px;
+  margin-bottom: 1em;
 }
 
 .image{
-  width: 200px;
+  width: 250px;
   height: auto;
   margin: 0;
-  padding-right: 2fr 2fr;
+  padding: 0;
 }
 
 .hours {
   color: white;
   display: flex;
   justify-content: center;
+  align-items: center;  
+  padding: 0;
+  margin: 0;
 }
 
 .hourslayout{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
 }
+
 .imagecontainer {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  gap: 5%;
 }
 
 .text {
@@ -70,8 +89,11 @@
 
 .bottomlayout {
   display: flex;
-  justify-content: center;
-  gap: 15%;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 40px;
+  margin-right: 10px;
+  padding-right: 15px;
 }
 .facebookicon {
   width: 52px;
@@ -80,12 +102,33 @@
   filter: invert(100%);
   margin: 0;
   padding: 0;
+  cursor: pointer;
 }
 .followuscontainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
-  
+  margin: 0; 
+}
+
+.privacypolicy {
+  font-family: "Oswald";
+  letter-spacing: 3px;
+  color: rgb(212,189,118);
+  text-decoration: dashed underline rgb(212,189,118);
+}
+.privacypolicycontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.instagramicon {
+  width: 50px;
 }
