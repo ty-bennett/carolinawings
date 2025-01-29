@@ -35,16 +35,18 @@ function Footer() {
       </div>
       <div className={footer.hours}>
           <div className={footer.imagecontainer}>
-          <img src="/carolinawings.png" className={footer.image}></img>
+          <img src="/carolinawings.png" className={footer.image} alt={"Carolina Wings Logo"}></img>
             <div className={footer.hourslayout}>
               <h1 className={footer.header}>Hours of Operation</h1>
               <p className={footer.text}>Sunday - Thursday 11AM - 10PM</p>
               <p className={footer.text}>Friday - Saturday 11AM - 11PM</p>
             </div>
             <div className={footer.bottomlayout}>
-              <h1 className={footer.header}>Follow Us</h1>
-              <a href="https://www.facebook.com/CarolinaWingsRedbank" target='_blank'><img src="/facebooklogo.png"className={footer.facebookicon}></img></a>
-              <img src="instagramlogo.png" className={footer.instagramicon}></img>
+              <h1 className={footer.footerheader}>Follow Us</h1>
+              <div className={footer.iconscontainer}>
+                <a href="https://www.facebook.com/CarolinaWingsRedbank" target='_blank'><img src="/facebooklogo.png" className={footer.facebookicon} alt={"Facebook Logo"}></img></a>
+                <a href={""}><img src="/instagramlogo.png" className={footer.instagramicon} alt={"instagram logo"}></img></a>
+              </div>
             </div>
           </div>
         </div>

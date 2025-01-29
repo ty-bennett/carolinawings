@@ -67,9 +67,17 @@
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 0;
   align-items: center;
   justify-content: center;
+  width: 300px;
+}
+
+.bottomlayout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 5px;
+  width: 260px;
 }
 
 .imagecontainer {
@@ -87,14 +95,6 @@
   text-align: center;
 }
 
-.bottomlayout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-left: 40px;
-  margin-right: 10px;
-  padding-right: 15px;
-}
 .facebookicon {
   width: 52px;
   height: auto;
@@ -113,7 +113,7 @@
 }
 
 .privacypolicy {
-  font-family: "Oswald";
+  font-family: "Oswald", sans-serif;
   letter-spacing: 3px;
   color: rgb(212,189,118);
   text-decoration: dashed underline rgb(212,189,118);
@@ -130,5 +130,25 @@
 }
 
 .instagramicon {
-  width: 50px;
+  width: 52px;
+  margin: 0;
+  padding: 0;
+}
+
+.iconscontainer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  gap: 15px;
+  padding-left: 5px;
+  padding-top: 40px;
+}
+
+.footerheader {
+  color: rgb(212,189,118);
+  font-family: "Oswald", sans-serif;
+  margin: 0;
+  padding: 0;
+  padding-top: 5px;
+  margin-bottom: 1rem;
 }
