@@ -11,7 +11,7 @@ import Footer from '../components/Footer.tsx'
 function Home() {
   return (
   <>
-    <NavBar /> 
+    <NavBar isActive={true} /> 
     <GoodEats />
     <Locations />
     <About />

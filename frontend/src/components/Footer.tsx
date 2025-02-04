@@ -45,7 +45,7 @@ function Footer() {
               <h1 className={footer.footerheader}>Follow Us</h1>
               <div className={footer.iconscontainer}>
                 <a href="https://www.facebook.com/CarolinaWingsRedbank" target='_blank'><img src="/facebooklogo.png" className={footer.facebookicon} alt={"Facebook Logo"}></img></a>
-                <a href={""}><img src="/instagramlogo.png" className={footer.instagramicon} alt={"instagram logo"}></img></a>
+                <a href={"https://www.instagram.com/carolinawingsrestaurant/?hl=en"}><img src="/instagramlogo.png" className={footer.instagramicon} alt={"instagram logo"}></img></a>
               </div>
             </div>
           </div>

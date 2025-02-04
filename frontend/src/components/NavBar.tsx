@@ -2,9 +2,13 @@ import navbar from './NavBar.module.css';
 import wood from '/backgroundImages/woodtexture.jpg'
 import logo from '/carolinawingslogo.png'
 import ActiveNavBar from './ActiveNavBar.tsx'
+import {Link} from 'react-router'
 
+interface NavBarProps{
+  isActive?: boolean
+}
 
-function NavBar(){
+const NavBar = ({ isActive }: NavBarProps) => {
   return (
       <div className={navbar.gridparent}>
         <div className={navbar.gridchildlogo}> 
@@ -20,13 +24,12 @@ function NavBar(){
           <div className={navbar.navbarposition}>
             <nav>
               <ul className={navbar.navbar}>
-                <ActiveNavBar isActive={true} content="Home"/> 
-                <ActiveNavBar isActive={false} content="Menu" />
-                <ActiveNavBar isActive={false} content="Lunch Specials" />
-                <ActiveNavBar isActive={false} content="Nightly Specials" />
-                <ActiveNavBar isActive={false} content="Catering" />
-                <ActiveNavBar isActive={false} content="Locations" />
-                <ActiveNavBar isActive={false} content="Contact" />
+                <Link to="/"><ActiveNavBar isActive={true} content="Home"/></Link> 
+                <Link to="/menu"><ActiveNavBar content="Menu" /></Link>
+                <Link to="/specials"><ActiveNavBar content="Specials" /></Link>
+                <Link to="/catering"><ActiveNavBar content="Catering" /></Link>
+                <Link to="/locations"><ActiveNavBar content="Locations" /></Link>
+                <Link to="/contact"><ActiveNavBar content="Contact" /></Link>
               </ul>
             </nav>
           </div>
