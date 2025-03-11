@@ -11,7 +11,6 @@ export default function App() {
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="/menu" element={<Menu />} />
-          <Route path="/specials" element={<Specials />} />
         </Route>
       </Routes>
     </BrowserRouter>

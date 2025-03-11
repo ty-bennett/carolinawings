@@ -1,8 +1,7 @@
 import navbar from './NavBar.module.css';
-import wood from '/backgroundImages/woodtexture.jpg'
-import logo from '/carolinawingslogo.png'
-import ActiveNavBar from './ActiveNavBar.jsx'
-import {Link} from 'react-router'
+import wood from '/backgroundImages/woodtexture.jpg';
+import logo from '/carolinawingslogo.png';
+import { NavLink } from 'react-router';
 
 
 const NavBar = () => {
@@ -21,12 +20,12 @@ const NavBar = () => {
           <div className={navbar.navbarposition}>
             <nav>
               <ul className={navbar.navbar}>
-                <Link to="/"><ActiveNavBar isActive={true} content="Home"/></Link> 
-                <Link to="/menu"><ActiveNavBar content="Menu" /></Link>
-                <Link to="/specials"><ActiveNavBar content="Specials" /></Link>
-                <Link to="/catering"><ActiveNavBar content="Catering" /></Link>
-                <Link to="/locations"><ActiveNavBar content="Locations" /></Link>
-                <Link to="/contact"><ActiveNavBar content="Contact" /></Link>
+                <NavLink to="/" className={({isActive}) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Home</NavLink> 
+                <NavLink to="/menu" className={({isActive}) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Menu</NavLink>  
+                <NavLink to="/specials" className={({isActive}) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Specials</NavLink> 
+                <NavLink to="/catering" className={({isActive}) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Catering</NavLink> 
+                <NavLink to="/locations" className={({isActive}) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Locations</NavLink> 
+                <NavLink to="/contact" className={({isActive}) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Contact</NavLink> 
               </ul>
             </nav>
           </div>
