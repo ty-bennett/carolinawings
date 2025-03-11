@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header {
+  font-family: "Oswald", sans-serif;
+  background-color: black;
+  color: white;
+}
+
+.contentcontainer {
+  display:flex;
+  flex-direction: column;
+  background-color: black;
+}
+
+.map {
+  border: none;
+  height: 400px;
+  width: 100%;
+}

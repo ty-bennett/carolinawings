@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header {
+  font-family: "Oswald";
+  font-size: 36px;
+  color: white;
+  padding: 2vh 0 0 0;
+}
+
+.bgimg {
+  background-image: url("/backgroundImages/saucesbg.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position-y: top;
+  background-position-x: top;
+  background-size: cover;
+  height: auto;
+  width: auto;
+}
+
+.contentcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardcontainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  padding-bottom: 2%;
+}
+.card {
+  width: 25%;
+  background-color: rgba(255,255,255, 0.6);
+}
+
+.sauceheader {
+  font-family: "Oswald";
+  color: #7c2121;
+  font-size: 34px;
+  margin-top: 1em;
+  text-transform: uppercase;
+}
+
+.text {
+  text-align: center;
+  font-family: "Oswald", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0.15em;
+  line-height: 1.6em;
+}
+
+.saucecontainer {
+  margin: 0;
+  margin-bottom: 5%;
+}
