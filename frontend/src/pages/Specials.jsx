@@ -1,13 +1,13 @@
-import NavBar from "../components/ActiveNavBar"
+import NavBar from "../components/NavBar"
 
 const Specials = () => {
   return (
     <>
       <main>
         <NavBar />
-        <div>hello</div>
       </main>
     </>
-  )};
+  );
+}
 
-  export default Specials;
+export default Specials;

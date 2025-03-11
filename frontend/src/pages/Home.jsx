@@ -8,7 +8,7 @@ import GiftCard from '../components/GiftCard.jsx'
 import Map from '../components/Map.jsx'
 import Footer from '../components/Footer.jsx'
 
-function Home() {
+const Home = () => {
   return (
   <>
     <NavBar /> 
