@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
@@ -82,3 +83,89 @@
     justify-content: center;
     margin-bottom: 1.5rem;
 }
+=======
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+
+.bgimg {
+    background-image: url("/backgroundImages/backgroundimage.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height: auto;
+    width: auto;
+    max-height: 70vh;
+}
+
+/* for phone screens */
+@media only screen and (max-device-width: 1366px) {
+    .bgimg {
+      background-attachment: scroll;
+    }
+}
+.floatingdiv {
+    height: auto;
+    width: 100%;
+    background-color: white;
+    margin-left: 33%;
+    margin-right: 33%;
+    margin-top: 8%;
+    margin-bottom: 30%;
+    border-radius: 5px;
+    padding: 0;
+
+}
+.goodeatsheading {
+    font-size: 96px;
+    font-family: "Pacifico";
+    text-align: center;
+    color: #7c2121;
+    margin: 0;
+    padding-top: 10%;
+}
+.subheader {
+    font-family: "Oswald";
+    letter-spacing: 0.3em;
+    font-size: 18px;
+    text-align: center;
+}
+.chooselocationbutton {
+    font-family: "Public Sans";
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid black;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px;
+    justify-self: center;
+    background-color: white;
+    color: #535353;
+    margin-top: 15%;
+    margin-bottom: 20%;
+}
+
+.chooselocationbutton:hover {
+    background-color: rgb(50,50,50);
+    color: white;
+    transition: 0.4s;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: auto;
+}
+
+.flexforcontent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.buttonflex {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+>>>>>>> origin/main

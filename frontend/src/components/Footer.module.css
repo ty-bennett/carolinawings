@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 .footercontainer {
@@ -151,4 +152,159 @@
   padding: 0;
   padding-top: 5px;
   margin-bottom: 1rem;
+=======
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.footercontainer {
+  background-color: black;
+  display:flex;
+  flex-direction: column;
+}
+.locationcontainer {
+  display: flex;
+  flex-direction: row;
+  gap: 14%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+  padding-top: 20px;
+}
+
+.locationtext {
+  font-size: medium;
+  color: white;
+  text-align: center;
+  text-decoration: solid underline 1px;
+  text-decoration-color: white;
+  margin: 5px;
+}
+
+.locationtext:link {
+  color: white;
+}
+.locationtext:active {
+  color: red;
+}
+.locationtext:after {
+  color: blue;
+}
+.location{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  color: rgb(212,189,118);
+  text-align: center;
+  margin: 5px;
+  margin-bottom: 1em;
+}
+
+.image{
+  width: 250px;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.hours {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  padding: 0;
+  margin: 0;
+}
+
+.hourslayout{
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+}
+
+.bottomlayout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 5px;
+  width: 260px;
+}
+
+.imagecontainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 5%;
+}
+
+.text {
+  display:flex;
+  flex-direction: column;
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.facebookicon {
+  width: 52px;
+  height: auto;
+  background-color: transparent;
+  filter: invert(100%);
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.followuscontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0; 
+}
+
+.privacypolicy {
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 3px;
+  color: rgb(212,189,118);
+  text-decoration: dashed underline rgb(212,189,118);
+}
+.privacypolicycontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.instagramicon {
+  width: 52px;
+  margin: 0;
+  padding: 0;
+}
+
+.iconscontainer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  gap: 15px;
+  padding-left: 5px;
+  padding-top: 40px;
+}
+
+.footerheader {
+  color: rgb(212,189,118);
+  font-family: "Oswald", sans-serif;
+  margin: 0;
+  padding: 0;
+  padding-top: 5px;
+  margin-bottom: 1rem;
+>>>>>>> origin/main
 }

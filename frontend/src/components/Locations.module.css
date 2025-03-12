@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
@@ -38,4 +39,46 @@
   color: white;
   font-family: "Public Sans";
   font-size: 20px;
+=======
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+.contentcontainer{
+  display:flex; 
+  flex-direction: column;
+  width: 100%;
+}
+
+.cardcontainer {
+  display: flex;
+  flex-direction: row;
+  background-color: black;
+  column-gap: 1rem;
+  row-gap: 1rem;
+  padding: 1.5em 0 1.5em 0;
+}
+
+.textcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  padding-bottom: 10px;
+}
+
+.headers {
+  font-family: Oswald;
+  font-weight: 600;
+  color: white;
+  margin: 10px;
+}
+
+.text {
+  margin: 10px;
+  color: white;
+  font-family: "Public Sans";
+  font-size: 20px;
+>>>>>>> origin/main
 }

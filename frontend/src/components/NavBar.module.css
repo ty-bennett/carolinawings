@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* NavBar styling */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -128,3 +129,152 @@
   top: 0;
   margin-top: 22vh;
 }
+=======
+/* NavBar styling */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* navbar styling */
+
+.navbar {
+  color: black;
+  list-style-type: none;
+  background-color: black;
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+  top: 0;
+}
+
+.navbaritem {
+  text-decoration: none;
+  font-size: large;
+  font-family: "Public Sans", sans-serif;
+  display: inline;
+  margin: 5px;
+  color: #be9514;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.navbaritem:hover {
+  color: white;
+  transition: 0.4s;
+  cursor: pointer;
+}
+
+.navbaritemactive {
+  color: white;
+  font-size: large;
+  font-family: "Public Sans", sans-serif;
+  display: inline;
+  margin: 5px;
+  background-color: #be9514;
+  padding: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+.navbaritemactive:hover {
+  background-color: black;
+  color: white;
+  transition: 0.4s;
+}
+
+/* Landing page bg styling and flex layout */
+.gridparent {
+  display: grid;
+  width: 100%;
+  height: auto;
+  grid-template-areas: 
+  "logo img button"
+  "nav nav nav";
+  gap: 0;
+  margin: 0;
+}
+
+.gridchildlogo {
+  grid-area: logo;
+}
+
+.gridchildimg {
+  width: auto;
+  height: 22vh;
+  z-index: -1;
+  overflow: hidden;
+  grid-area: img;
+  margin: 0;
+}
+
+.gridchildbutton {
+  grid-area: button;
+}
+
+.gridchildnav {
+  grid-area: nav;
+}
+
+.backgroundimg {
+  width: 100%;
+  height: auto;
+  object-fit: scale-down;
+  z-index: -1;
+  margin-bottom: 22%;
+  
+}
+
+.logo {
+  position: absolute;
+  z-index: 5;
+  width: auto;
+  height: 200px;
+  float: right;
+  bottom: 74%;
+  left: 5%;
+}
+
+.ordernow {
+  color: white;
+  position: absolute;
+  z-index: 2;
+  background-color: #be9514;
+  border: none;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 50px;
+  right: 0;
+  margin-right: 16vw;
+  margin-top: 7vh;
+  padding: 15px;
+}
+
+.ordernow:hover {
+  cursor: pointer;
+  background-color:black;
+  transition: 0.4s;
+}
+
+.navbarposition {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  margin-top: 22vh;
+}
+/* nav bar styling */ 
+
+.nav-bar {
+  background-color: black;
+  list-style-type: none;
+}
+
+.nav-bar-item {
+  display: inline;
+  margin: 5px;
+  color: #be9514;
+}
+
+.nav-bar-item:hover {
+  color: white;
+}
+
+>>>>>>> origin/main
