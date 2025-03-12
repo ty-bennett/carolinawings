@@ -16,7 +16,11 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
+<<<<<<< HEAD
 .DS_Store
+=======
+/.DS_Store
+>>>>>>> 051fee5 (removed ds store)
 *.suo
 *.ntvs*
 *.njsproj
