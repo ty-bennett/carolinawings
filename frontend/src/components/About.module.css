@@ -14,18 +14,35 @@ h1 {
   letter-spacing: 1px;
 }
 
+.textandimagecontainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto; 
+}
 .contentcontainer {
   display: flex;
   flex-direction: column;
   height: auto;
   width: 100%;
+  margin-bottom: 3em;
 }
 
 .textcontainer {
+  width: 60%;
+  height: auto;
   display: flex;
   flex-direction: row;
-  margin-right: 15%;
-  margin-left: 10%;
+  justify-content: flex-start;
+  padding-right: 250px;
+}
+
+.imagecontainer {
+  display: flex;
+  width: 60%;
+  justify-content:flex-end;
+  padding-right: 5em;
+
 }
 
 p {
@@ -34,13 +51,10 @@ p {
 }
 
 img {
-  height: auto;
-  width: 100%;
-  padding-right: 50px;
-  margin-bottom: 10px;
+  width: auto;
+  height: 100%;
 }
 
 .abouttext {
-  padding-left: 5%;
   padding-top: 30px;
 }

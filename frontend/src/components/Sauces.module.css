@@ -4,7 +4,8 @@
   font-family: "Oswald";
   font-size: 36px;
   color: white;
-  padding: 2vh 0 0 0;
+  padding: 2vh 0 2vh 0;
+  margin: 0;
 }
 
 .bgimg {
@@ -38,7 +39,6 @@
   font-family: "Oswald";
   color: #7c2121;
   font-size: 34px;
-  margin-top: 1em;
   text-transform: uppercase;
 }
 

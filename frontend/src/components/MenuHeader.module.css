@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.menuheader {
+  margin-top: 70px;
+  font-size: 40px;
+  letter-spacing: 0.4em;
+  color: white;
+}
+
+.headercontainer {
+  background-color: rgb(75,0,0);
+  margin: 0;
+  padding: 5px;
+}
+
+.discountcontainer {
+  display:flex;
+  flex-direction: column;
+  background-color: black;
+}
+
+.discountheader {
+  text-align: center;  
+  color: white;
+  font-family: "Public Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+}

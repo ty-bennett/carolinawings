@@ -1,13 +1,7 @@
-FROM node:alpine
-
-WORKDIR /
-
-COPY . .
-
+FROM node:latest
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
-
-ENV PORT 8080
-
-EXPOSE 8080
-
-CMD [ "npm start" ]
+COPY . .
+EXPOSE 6969 
+CMD ["npm", "run", "dev"] 

@@ -1,0 +1,35 @@
+{
+  "defaults": {
+    "store": {
+      "module": "greenlock-store-fs"
+    },
+    "challenges": {
+      "http-01": {
+        "module": "acme-http-01-standalone"
+      }
+    },
+    "renewOffset": "-45d",
+    "renewStagger": "3d",
+    "accountKeyType": "EC-P256",
+    "serverKeyType": "RSA-2048",
+    "subscriberEmail": "tybennett924@gmail.com"
+  },
+  "sites": [
+    {
+      "subject": "carolinawings.com",
+      "altnames": [
+        "carolinawings.com",
+        "www.carolinawings.com"
+      ],
+      "renewAt": 1
+    },
+    {
+      "subject": "carolinawingsandribhouse.com",
+      "altnames": [
+        "carolinawingsandribhouse.com",
+        "www.carolinawingsandribhouse.com"
+      ],
+      "renewAt": 1
+    }
+  ]
+}

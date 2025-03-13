@@ -1,11 +1,20 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+'use strict';
 
-const menuRoutes = require('./routes/menu-routes');
+var app = require('./app.js');
 
-const app = express();
-app.use(menuRoutes);
+require('greenlock-express')
+    .init({
+        packageRoot: __dirname,
 
+        // contact for security and critical bug notices
+        maintainerEmail: "tybennet924@gmail.com",
 
+        // where to look for configuration
+        configDir: './greenlock.d',
 
-app.listen(5000);
+        // whether or not to run at cloudscale
+        cluster: false
+    })
+    // Serves on 80 and 443
+    // Get's SSL certificates magically!
+    .serve(app);
