@@ -13,7 +13,7 @@ function Locations()
         </div>
         <div className={locations.cardcontainer}>
           <Card location="Red Bank" backgroundImage='redbank.png' cover={'cover'} position={'center'} link={""}/>
-          <Card location="Cayce" backgroundImage='cayce.png' cover={'cover'} position={'center'} link={"https://cwc.hrpos.heartland.us/menu"}/>
+          <Card location="Cayce" backgroundImage='cayce.png' cover={'cover'} position={'center'} link={"https://cwc.hrpos.heartland.us/menu"} /> 
           <Card location="Ballentine" backgroundImage='ballentine.png'link={""}/>
           <Card location="Lexington" backgroundImage='lexington.png' link={""}/>
         </div>
