@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar"
 import Sauces from "../components/Sauces"
 import menu from "../components/MenuHeader.module.css"
-// import MenuSection from "../components/MenuSection"
+import MenuSection from "../components/MenuSection"
 const Menu = () => {
   return (
     <>
@@ -16,6 +16,7 @@ const Menu = () => {
           <h4 className={menu.discountp}>All service members, police officers, and emergency personnel are eligible. </h4>
         </div>
         <Sauces />
+        <MenuSection />
       </main>
     </>
   );

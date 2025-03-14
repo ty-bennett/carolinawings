@@ -1,0 +1,4 @@
+/backend/node_modules
+node_modules
+/backend/greenlock.d
+/backend/.greenlockrc
