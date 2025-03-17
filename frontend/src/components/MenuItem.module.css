@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 .cardcontainer {
   display: flex;
   flex-direction: column;
