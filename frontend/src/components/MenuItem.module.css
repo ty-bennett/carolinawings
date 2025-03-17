@@ -1,0 +1,9 @@
+.cardcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardheader {
+  display: flex;
+  flex-direction: row;
+}
