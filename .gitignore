@@ -1,4 +1,4 @@
-backend
+/backend/node_modules
 node_modules
-.idea/
-backend/src/main/resources/application.properties
+/backend/greenlock.d
+/backend/.greenlockrc
