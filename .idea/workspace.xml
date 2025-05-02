@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore" />
+    <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/ServletInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/ServletInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/WebappApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/OrderSystemApplication.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +20,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ty-bennett&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ty-bennett/carolinawings.git&quot;,
+    &quot;accountId&quot;: &quot;b3854d6c-922b-42f8-b1f5-7f08ae4ffd69&quot;
+  }
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -35,6 +53,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
@@ -71,12 +90,14 @@
       <option name="EXECUTE_SCRIPT_FILE" value="true" />
       <envs pass-parent-envs="false">
         <env name="DB_PASSWORD" value="CarolinaWings123!" />
-        <env name="DB_URL" value="jdbc:postgresql://localhost:5432/carolinawings_db" />
+        <env name="DB_URL" value="localhost:5432/carolinawings_db" />
         <env name="DB_USERNAME" value="cwsadmin" />
       </envs>
       <method v="2" />
     </configuration>
     <configuration name="WebappApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <envs>
         <env name="DB_USERNAME" value="cwsadmin" />
         <env name="DB_PASSWORD" value="CarolinaWings123!" />
@@ -104,7 +125,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="7c1801fc-8ddf-4abe-a1b4-cc155d1deb38" name="Changes" comment="" />
+      <changelist id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore" />
       <created>1745946301283</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -118,6 +139,8 @@
       <workItem from="1746111566765" duration="308000" />
       <workItem from="1746111943505" duration="663000" />
       <workItem from="1746118252701" duration="8491000" />
+      <workItem from="1746128700315" duration="1841000" />
+      <workItem from="1746143838641" duration="22000" />
     </task>
     <servers />
   </component>
