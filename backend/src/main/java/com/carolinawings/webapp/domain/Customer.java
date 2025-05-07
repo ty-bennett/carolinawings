@@ -2,7 +2,11 @@ package com.carolinawings.webapp.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,12 +17,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="users")
-public class Customer {
+public class Customer implements UserDetails{
+	private static final long serialVersionUID = 7309123450785917473L;
 	//Identifying information
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String passwordHash;
+	private String email;
+	private String password;
 	private String phoneNumber;
 	//Are they a member of mailing list
 	private Boolean newsletterMember;
@@ -33,17 +39,23 @@ public class Customer {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getName() {
+	public String getUsername() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setUsername(String name) {
 		this.name = name;
 	}
-	public String getPasswordHash() {
-		return passwordHash;
+	public String getPassword() {
+		return password;
 	}
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -70,5 +82,9 @@ public class Customer {
 		this.orderHistory = orderHistory;
 	}
 	
-	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
