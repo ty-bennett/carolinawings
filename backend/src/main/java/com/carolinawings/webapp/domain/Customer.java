@@ -4,87 +4,67 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name="users")
+@Table(name="customers")
 public class Customer implements UserDetails{
-	private static final long serialVersionUID = 7309123450785917473L;
 	//Identifying information
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Id @GeneratedValue(strategy = GenerationType.UUID)
+	@Getter
+	@Setter
+	@Nonnull
+	private UUID id;
+	@Getter
+	@Setter
+	@NonNull
+	@Column(nullable = false)
 	private String name;
+	@Getter
+	@Setter
+	@Nonnull
 	private String email;
+	@Getter
+	@Setter
+    @Nonnull
 	private String password;
+	@Getter
+	@Setter
 	private String phoneNumber;
 	//Are they a member of mailing list
+	@Getter
+	@Setter
+	@Nonnull 
 	private Boolean newsletterMember;
 	//keep track of how old account is
-	private LocalDate dateJoined;	
+	@Getter
+	@Setter
+	@Nonnull 
+	private LocalDate dateJoined;
 	//Keep track of orders with a list of orders
-	@OneToMany()
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "customers", cascade = CascadeType.ALL)
+
 	private List<CustomerOrder> orderHistory = new ArrayList<CustomerOrder>();
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getUsername() {
-		return name;
-	}
-	public void setUsername(String name) {
-		this.name = name;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-	public Boolean getNewsletterMember() {
-		return newsletterMember;
-	}
-	public void setNewsletterMember(Boolean newsletterMember) {
-		this.newsletterMember = newsletterMember;
-	}
-	public LocalDate getDateJoined() {
-		return dateJoined;
-	}
-	public void setDateJoined(LocalDate dateJoined) {
-		this.dateJoined = dateJoined;
-	}
-	public List<CustomerOrder> getOrderHistory() {
-		return orderHistory;
-	}
-	public void setOrderHistory(List<CustomerOrder> orderHistory) {
-		this.orderHistory = orderHistory;
-	}
-	
+
+	//implemented methods for UserDetails service
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	//implemented methods for username
+	@Override
+	public String getUsername() {
+		return this.email;
 	}
 }
