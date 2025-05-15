@@ -2,69 +2,54 @@ package com.carolinawings.webapp.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.NonNull;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 
 @Entity
 @Table(name="customers")
-public class Customer implements UserDetails{
+public class Customer {
 	//Identifying information
-	@Id @GeneratedValue(strategy = GenerationType.UUID)
-	@Getter
-	@Setter
-	@Nonnull
-	private UUID id;
-	@Getter
-	@Setter
-	@NonNull
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
 	@Column(nullable = false)
+	@Getter
+	@Setter
+	//UUID of user
+	private UUID id;
+    @Column(nullable = false)
+	@Getter
+	@Setter
+	//name of user
 	private String name;
+	@Column(nullable = false)
 	@Getter
 	@Setter
-	@Nonnull
+	//email of users
 	private String email;
+	@Column(nullable = false)
 	@Getter
 	@Setter
-    @Nonnull
 	private String password;
+	@Column(nullable = false)
 	@Getter
 	@Setter
 	private String phoneNumber;
 	//Are they a member of mailing list
+	@Column(nullable = false)
 	@Getter
 	@Setter
-	@Nonnull 
 	private Boolean newsletterMember;
 	//keep track of how old account is
+	@Column(nullable = false)
 	@Getter
 	@Setter
-	@Nonnull 
 	private LocalDate dateJoined;
 	//Keep track of orders with a list of orders
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "customers", cascade = CascadeType.ALL)
-
 	private List<CustomerOrder> orderHistory = new ArrayList<CustomerOrder>();
-
-	//implemented methods for UserDetails service
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
-	}
-	//implemented methods for username
-	@Override
-	public String getUsername() {
-		return this.email;
-	}
 }

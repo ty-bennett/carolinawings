@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Customer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
     </list>
@@ -75,6 +76,7 @@
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
+      "postgresql",
       "h2"
     ]
   }
@@ -147,6 +149,7 @@
       <workItem from="1746143838641" duration="22000" />
       <workItem from="1746762664805" duration="2292000" />
       <workItem from="1747020968853" duration="2175000" />
+      <workItem from="1747331629334" duration="1325000" />
     </task>
     <servers />
   </component>
@@ -156,6 +159,17 @@
       <list>
         <option value="$PROJECT_DIR$/frontend/src/components/Footer.jsx" />
       </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
     </option>
   </component>
 </project>
