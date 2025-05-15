@@ -1,3 +1,7 @@
+/*
+written by Ty Bennett
+ */
+
 package com.carolinawings.webapp.domain;
 
 import java.time.LocalDate;
@@ -11,45 +15,32 @@ import lombok.Setter;
 
 @Entity
 @Table(name="customers")
+@Getter
+@Setter
 public class Customer {
 	//Identifying information
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(nullable = false)
-	@Getter
-	@Setter
 	//UUID of user
 	private UUID id;
     @Column(nullable = false)
-	@Getter
-	@Setter
 	//name of user
 	private String name;
 	@Column(nullable = false)
-	@Getter
-	@Setter
 	//email of users
 	private String email;
 	@Column(nullable = false)
-	@Getter
-	@Setter
 	private String password;
 	@Column(nullable = false)
-	@Getter
-	@Setter
 	private String phoneNumber;
 	//Are they a member of mailing list
 	@Column(nullable = false)
-	@Getter
-	@Setter
 	private Boolean newsletterMember;
 	//keep track of how old account is
 	@Column(nullable = false)
-	@Getter
-	@Setter
 	private LocalDate dateJoined;
 	//Keep track of orders with a list of orders
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-	@Getter
-	@Setter
 	private List<CustomerOrder> orderHistory = new ArrayList<CustomerOrder>();
 }
