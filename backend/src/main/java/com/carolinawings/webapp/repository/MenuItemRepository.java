@@ -2,8 +2,11 @@ package com.carolinawings.webapp.repository;
 
 import com.carolinawings.webapp.domain.MenuItem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import java.util.Optional;
 
-public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
+@Repository
+public interface   MenuItemRepository extends JpaRepository<MenuItem, Integer> {
+    Optional<MenuItem> findByName(String name);
 }
