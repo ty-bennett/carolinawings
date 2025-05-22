@@ -5,12 +5,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/MenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/MenuDataSeeder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/factory/MenuItemFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/Carolina Wings_files/carolinawingslogo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/Carolina Wings_files/client" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/Carolina Wings_files/fork-and-knife-meal-svgrepo-com.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/Carolina Wings_files/main.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/Carolina Wings_files/woodtexture.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/assets/index-DCAZ6a7E.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/assets/index-y38ETFVm.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/Carolina Wings_files/client" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/Carolina Wings_files/woodtexture.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/backgroundimage.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/ballentine.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/cayce.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/lexington.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/redbank.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/saucesbg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/backgroundImages/woodtexture.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/carolinawings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/carolinawingslogo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/facebooklogo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/cold beer.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/foh_sunset.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/grilled chix salad.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/ribs_with_beer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/small and wings and smokehouse burger.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/smokehouse_burger.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/wing_in_ranch.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/foodimages/wings and chips.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/fork-and-knife-meal-svgrepo-com.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/fork_and_knife.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/instagramlogo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/yellow_heart.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/HelloController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/MenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/FrontendController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/MenuItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/MenuDataSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/MenuDataSeeder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,6 +98,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "JavaScript Debug.index.html.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -78,7 +112,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/benne/Desktop/code/GitHub/carolinawings",
+    "last_opened_file_path": "C:/Users/benne/Desktop/code/GitHub/carolinawings/backend/src/main/resources/static",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -94,7 +128,21 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected="Spring Boot.OrderSystemApplication">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\benne\Desktop\code\GitHub\carolinawings\backend\src\main\resources\static" />
+      <recent name="C:\Users\benne\Desktop\code\GitHub\carolinawings\backend\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\benne\Desktop\code\GitHub\carolinawings\backend\src\main\resources\static" />
+      <recent name="C:\Users\benne\Desktop\code\GitHub\carolinawings\backend\src\main\resources" />
+      <recent name="C:\Users\benne\Desktop\code\GitHub\carolinawings\backend\src\main\resources\static\dist" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.index.html">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/carolinawings/webapp/static/dist/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
     <configuration name="mvnw" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -129,9 +177,15 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="JavaScript Debug.index.html" />
       <item itemvalue="Shell Script.mvnw" />
       <item itemvalue="Spring Boot.OrderSystemApplication" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -166,6 +220,7 @@
       <workItem from="1747336693356" duration="4117000" />
       <workItem from="1747543478505" duration="706000" />
       <workItem from="1747628679434" duration="5133000" />
+      <workItem from="1747881930436" duration="5343000" />
     </task>
     <servers />
   </component>
