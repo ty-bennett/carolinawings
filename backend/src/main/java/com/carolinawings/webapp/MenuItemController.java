@@ -19,7 +19,7 @@ public class MenuItemController {
     }
 
     @GetMapping
-    public List<MenuItem> getAll() {
+    public List<MenuItem> findAllMenuItems() {
         return menuRepository.findAll();
     }
 }

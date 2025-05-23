@@ -12,7 +12,7 @@ public class FrontendController {
 
     @RequestMapping(value = "/")
     public String home() {
-        return "type";
+        return "type"; 
     }
 }
 
