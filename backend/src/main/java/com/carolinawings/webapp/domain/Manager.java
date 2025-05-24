@@ -9,7 +9,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name="managers")
 public class Manager {
@@ -19,35 +23,14 @@ public class Manager {
 	private String password;
 	private Double phoneNumber;
 	private String location;
-	
-	public Long getManagerId() {
-		return managerId;
-	}
-	public void setManagerId(Long managerId) {
-		this.managerId = managerId;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
+
+	public Manager() {}
+
+	public Manager(String name, String password, Double phoneNumber, String location) {
 		this.name = name;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
 		this.password = password;
-	}
-	public Double getPhoneNumber() {
-		return phoneNumber;
-	}
-	public void setPhoneNumber(Double phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
 		this.location = location;
 	}
+
 }

@@ -5,11 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/ApplicationConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/UserRepository" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/JwtService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/OrderSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/OrderSystemApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/CustomerOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/CustomerOrder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Manager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/MenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,39 +66,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "JavaScript Debug.index.html.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Shell Script.mvnw.executor": "Run",
-    "Spring Boot.OrderSystemApplication.executor": "Run",
-    "Spring Boot.WebappApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/benne/Desktop/code/GitHub/carolinawings/backend/src/main/resources/static",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Shell Script.mvnw.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.OrderSystemApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.WebappApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/benne/Desktop/code/GitHub/carolinawings/backend/src/main/resources/static&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql",
-      "h2"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;,
+      &quot;h2&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\benne\Desktop\code\GitHub\carolinawings\backend\src\main\resources\static" />
@@ -187,6 +193,7 @@
       <workItem from="1747628679434" duration="5133000" />
       <workItem from="1747881930436" duration="5366000" />
       <workItem from="1748048897658" duration="3476000" />
+      <workItem from="1748120228604" duration="3602000" />
     </task>
     <servers />
   </component>

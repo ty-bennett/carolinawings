@@ -4,11 +4,15 @@ Written by Ty Bennett
 package com.carolinawings.webapp.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "menu_items")
-
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +27,6 @@ public class MenuItem {
     @Column(nullable = false)
     private String category;
 
-    public MenuItem() {}
-
     public MenuItem(String name, String description, String imageURL, BigDecimal price, String category) {
         this.name = name;
         this.description = description;
@@ -32,52 +34,5 @@ public class MenuItem {
         this.price = price;
         this.category = category;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public MenuItem() {}
 }

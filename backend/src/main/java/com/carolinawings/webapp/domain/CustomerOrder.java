@@ -37,6 +37,5 @@ public class CustomerOrder {
 	//User assigned order to
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
-
 	private User user;
 }
