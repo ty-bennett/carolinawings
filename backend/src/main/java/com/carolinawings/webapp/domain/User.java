@@ -14,10 +14,10 @@ import lombok.Setter;
 
 
 @Entity
-@Table(name="customers")
+@Table(name="users")
 @Getter
 @Setter
-public class Customer {
+public class User {
 	//Identifying information
     @Id
 	@GeneratedValue(strategy = GenerationType.UUID)

@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/CustomerOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/CustomerOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/domain/Manager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -187,7 +186,7 @@
       <workItem from="1747543478505" duration="706000" />
       <workItem from="1747628679434" duration="5133000" />
       <workItem from="1747881930436" duration="5366000" />
-      <workItem from="1748048897658" duration="2941000" />
+      <workItem from="1748048897658" duration="3476000" />
     </task>
     <servers />
   </component>

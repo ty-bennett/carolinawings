@@ -14,17 +14,17 @@ import jakarta.persistence.Table;
 @Table(name="managers")
 public class Manager {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long managerid;
+	private Long managerId;
 	private String name;
 	private String password;
 	private Double phoneNumber;
 	private String location;
 	
-	public Long getManagerid() {
-		return managerid;
+	public Long getManagerId() {
+		return managerId;
 	}
-	public void setManagerid(Long managerid) {
-		this.managerid = managerid;
+	public void setManagerId(Long managerId) {
+		this.managerId = managerId;
 	}
 	public String getName() {
 		return name;
