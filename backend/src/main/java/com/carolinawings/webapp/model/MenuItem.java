@@ -1,7 +1,7 @@
 /*
 Written by Ty Bennett
  */
-package com.carolinawings.webapp.domain;
+package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

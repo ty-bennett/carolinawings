@@ -2,7 +2,7 @@
 written by Ty Bennett
  */
 
-package com.carolinawings.webapp.domain;
+package com.carolinawings.webapp.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +13,6 @@ import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CollectionIdMutability;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

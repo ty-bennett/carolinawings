@@ -1,7 +1,7 @@
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.repository.MenuItemRepository;
-import com.carolinawings.webapp.domain.MenuItem;
+import com.carolinawings.webapp.model.MenuItem;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 

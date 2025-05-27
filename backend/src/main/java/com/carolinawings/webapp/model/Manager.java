@@ -1,7 +1,7 @@
 /*
  * Ty Bennett
  */
-package com.carolinawings.webapp.domain;
+package com.carolinawings.webapp.model;
 
 //Imports 
 import jakarta.persistence.Entity;

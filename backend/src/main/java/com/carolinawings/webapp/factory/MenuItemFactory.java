@@ -3,7 +3,7 @@ Ty Bennett
  */
 package com.carolinawings.webapp.factory;
 
-import com.carolinawings.webapp.domain.MenuItem;
+import com.carolinawings.webapp.model.MenuItem;
 
 import java.math.BigDecimal;
 

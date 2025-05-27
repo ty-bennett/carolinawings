@@ -1,6 +1,6 @@
 package com.carolinawings.webapp;
 
-import com.carolinawings.webapp.domain.MenuItem;
+import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

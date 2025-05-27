@@ -2,7 +2,7 @@
  * Ty Bennett
  */
 
-package com.carolinawings.webapp.domain;
+package com.carolinawings.webapp.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

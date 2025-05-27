@@ -1,6 +1,6 @@
 package com.carolinawings.webapp.config;
 
-import com.carolinawings.webapp.domain.MenuItem;
+import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.factory.MenuItemFactory;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import org.springframework.boot.CommandLineRunner;
