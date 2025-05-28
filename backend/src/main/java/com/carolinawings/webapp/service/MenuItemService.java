@@ -3,7 +3,6 @@ package com.carolinawings.webapp.service;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.model.MenuItem;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class MenuItemService {
@@ -14,7 +13,7 @@ public class MenuItemService {
         this.menuItemRepository = menuItemRepository;
     }
 
-    public Optional<MenuItem> findByName(String name) {
-        return menuItemRepository.findByName(name);
+    public Iterable<MenuItem> getAllById() {
+        return menuItemRepository.findAll();
     }
 }

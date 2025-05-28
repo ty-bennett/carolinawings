@@ -45,7 +45,7 @@ public class User implements UserDetails {
 	@Column(nullable = false)
 	private LocalDate dateJoined;
 	//Keep track of orders with a list of orders
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<CustomerOrder> orderHistory = new ArrayList<>();
 	//give verification code upon signup
 	@Column(nullable = false, name = "verification_code")

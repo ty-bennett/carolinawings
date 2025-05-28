@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface MenuItemRepository extends CrudRepository<MenuItem, Long> {
-    Optional<MenuItem> findByName(String name);
+public interface MenuItemRepository extends CrudRepository<MenuItem, Integer> {
+    Optional<MenuItem> findById(Integer id);
 }

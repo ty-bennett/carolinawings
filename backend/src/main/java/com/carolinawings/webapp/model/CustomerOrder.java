@@ -36,6 +36,6 @@ public class CustomerOrder {
 	private BigDecimal orderAmount;
 	//User assigned order to
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 }

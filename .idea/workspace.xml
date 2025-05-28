@@ -5,7 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/FrontendController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/MenuItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/controller/MenuItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/OrderSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/OrderSystemApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/CustomerOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/CustomerOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/MenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/UserRepository" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MenuSection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MenuSection.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Home.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +54,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-core/6.4.5/spring-security-core-6.4.5-sources.jar!/org/springframework/security/core/userdetails/UserDetails.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/SecurityConfig.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -186,6 +205,9 @@
       <workItem from="1748120228604" duration="3696000" />
       <workItem from="1748205344990" duration="929000" />
       <workItem from="1748318060194" duration="657000" />
+      <workItem from="1748390023079" duration="2370000" />
+      <workItem from="1748394486419" duration="1847000" />
+      <workItem from="1748397246583" duration="2775000" />
     </task>
     <servers />
   </component>

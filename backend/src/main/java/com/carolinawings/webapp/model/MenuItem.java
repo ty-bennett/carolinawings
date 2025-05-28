@@ -35,4 +35,8 @@ public class MenuItem {
         this.category = category;
     }
     public MenuItem() {}
+
+    public String toString() {
+        return this.name+" "+this.description+" "+this.imageURL+" "+this.price+" "+this.category;
+    }
 }
