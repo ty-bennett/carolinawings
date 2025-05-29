@@ -1,15 +1,19 @@
 import menuItem from "../components/MenuItem.module.css";
 
-const MenuItem = ({isFavorite, isVegetarian, name, description, price, periods }) =>
+const MenuItem = ({isVegetarian, name, description, price}) =>
 {
   return(
     <div className={menuItem.cardcontainer}>
-      {isFavorite ? <img src="yellow_heart.png" width="64" height="64"/> : <img src=""/>}
-      {isVegetarian ?
-        <span>Ⓥ</span> : <span></span>}
-      <span>{name.toUpperCase()}</span>
+      <div className={menuItem.headercontainer}>
+        <h3 className={menuItem.header}>{name.toUpperCase()}</h3>
+        <p className={menuItem.price}>{price}</p>
+      </div>
+      {isVegetarian ? <p>Ⓥ</p> : ""} 
+      <p className={menuItem.description}>{description}</p>
     </div>
   );
 }
+
+
 
 export default MenuItem;

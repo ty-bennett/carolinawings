@@ -5,7 +5,37 @@
   flex-direction: column;
 }
 
+.headercontainer{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 .cardheader {
   display: flex;
-  flex-direction: row;
+  align-self: center;
+  justify-self: center;
+  margin: 0;
+  padding: 0;
 }
+
+.header {
+  font-family: "Oswald";
+  color:white;
+  margin: 0;
+  padding: 0;
+}
+
+.price {
+  justify-self: right;
+  align-items: right;
+  color: white
+}
+
+.description {
+  font-family: "Public Sans";
+  color: white;
+
+}
+
+
+

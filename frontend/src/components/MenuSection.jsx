@@ -1,32 +1,53 @@
 import MenuItem from "../components/MenuItem"
-import section from "../components/MenuSection";
+import section from "../components/MenuSection.module.css";
 import {useEffect, useState} from "react";
 
 const MenuSection = () => {
   const [menuItems, setMenuItems] = useState([]) 
-  
+  const [isError, setIsError] = useState(false);
+  const shareables = menuItems.filter(item => item.category === "Shareables")
+
   useEffect(() => {
-    fetch('localhost:8080/api/v1/menu')
-    .then(response => {
-      if(!response.ok) {
-        throw new Error('failed to fetch menu!');
-      }
-      return response.json();
-    })
-    .then(data => setMenuItems(data))
-    .catch(error => console.error(error));
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/menu');
+        const data = await response.json(); 
+        setMenuItems(data);
+        console.log(data);
+      } catch (error) {
+        console.error("error fetching data!", error);
+        setIsError(true);
+      }  
+    };
+
+    fetchData();
+  
   }, []);
 
+  if(isError)
+  {
+    return (
+      <h2 style={{color: "red"}}>Something went wrong...</h2>
+    )
+  }
+  
   return(
     <>
-      <div className={section.contentcontainer}> 
-        <h1 className={section.title}>Shareables</h1>
+      <div className={section.contentcontainer}>
+        <img className={section.quesadilla} src="../public/foodimages/quesadilla.jpg"/>
+        <h1 className={section.sectiontitle}>SHAREABLES</h1>
         <div className={section.rowcontainer}>   
-        <ul>
-			{menuItems.map(item => (
-				<li key={item.name}>{item.name} - ${item.category} </li>
-			))}
-        </ul> 
+          <ul>
+          {shareables.map(item => (
+              <MenuItem
+                key={item.id} 
+                name={item.name}
+                price={item.price}
+                description={item.description}
+              >
+              </MenuItem>
+          ))}
+          </ul> 
         </div>
       </div>
     </>

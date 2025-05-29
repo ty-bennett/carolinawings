@@ -3,16 +3,37 @@
 .contentcontainer {
   display: flex;
   flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  background-color: black;
+  height:auto;
+  width: 100%;
+  flex-wrap: nowrap;
+  margin: 0;
+  padding: 0;
 }
 
 .rowcontainer {
   display:flex;
   flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 33%;
+  margin: 0;
+  padding: 0;
 }
 
 .sectiontitle {
   font-family: "Oswald", sans-serif;
-  font-size: 30px;
+  font-size: 40px;
   text-align: center;
-  color: #bf9515
+  color: #bf9515;
+  letter-spacing: 0.15px;
+  margin: 0;
+  padding: 0;
+}
+
+.quesadilla {
+  margin-top: 5rem; 
 }

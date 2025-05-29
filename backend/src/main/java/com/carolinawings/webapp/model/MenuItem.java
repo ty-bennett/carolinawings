@@ -26,17 +26,19 @@ public class MenuItem {
     private BigDecimal price;
     @Column(nullable = false)
     private String category;
+    private boolean enabled;
 
-    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category) {
+    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;
         this.price = price;
         this.category = category;
+        this.enabled = enabled;
     }
     public MenuItem() {}
 
     public String toString() {
-        return this.name+" "+this.description+" "+this.imageURL+" "+this.price+" "+this.category;
+        return this.name+" "+this.description+" "+this.imageURL+" "+this.price+" "+this.category + " " + this.enabled;
     }
 }
