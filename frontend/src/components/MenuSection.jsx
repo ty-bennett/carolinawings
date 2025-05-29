@@ -1,5 +1,6 @@
 import MenuItem from "../components/MenuItem"
 import section from "../components/MenuSection";
+import {useEffect, useState} from "react";
 
 const MenuSection = () => {
   const [menuItems, setMenuItems] = useState([]) 
@@ -23,7 +24,7 @@ const MenuSection = () => {
         <div className={section.rowcontainer}>   
         <ul>
 			{menuItems.map(item => (
-				<li key={item.id}>{item.name} - ${item.price}</li>
+				<li key={item.name}>{item.name} - ${item.category} </li>
 			))}
         </ul> 
         </div>
