@@ -36,14 +36,15 @@ const MenuSection = () => {
       <div className={section.contentcontainer}>
         <img className={section.quesadilla} src="../public/foodimages/quesadilla.jpg"/>
         <h1 className={section.sectiontitle}>SHAREABLES</h1>
-        <div className={section.rowcontainer}>   
-          <ul>
+        <div className={section.cardcontainer}>   
+          <ul className={section.rowcontainer}>
           {shareables.map(item => (
               <MenuItem
                 key={item.id} 
                 name={item.name}
                 price={item.price}
                 description={item.description}
+                className={section.card}
               >
               </MenuItem>
           ))}
