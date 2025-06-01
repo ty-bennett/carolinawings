@@ -3,6 +3,8 @@
 .cardcontainer {
   display: flex;
   flex-direction: column;
+  max-width: 32%;
+  background-color: rgb(75,0,0);
 }
 
 .headercontainer{
@@ -24,7 +26,8 @@
 .price {
   justify-self: right;
   align-items: right;
-  color: white
+  color: white;
+  padding: 10px;
 }
 
 .description {

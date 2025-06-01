@@ -5,7 +5,8 @@ import {useEffect, useState} from "react";
 const MenuSection = () => {
   const [menuItems, setMenuItems] = useState([]) 
   const [isError, setIsError] = useState(false);
-  const shareables = menuItems.filter(item => item.category === "Shareables")
+  const shareables = menuItems.filter(item => item.category === "Shareables");
+
 
   useEffect(() => {
     const fetchData = async () => {
