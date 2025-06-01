@@ -4,6 +4,7 @@ import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.model.MenuItem;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,11 +13,12 @@ public class MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
 
-    public MenuItemService(MenuItemRepository menuItemRepository) {
+    public MenuItemService(MenuItemRepository menuItemRepository)
+    {
         this.menuItemRepository = menuItemRepository;
     }
 
-    public Iterable<MenuItem> getAllById()
+    public List<MenuItem> getAllById()
     {
         return menuItemRepository.findAll();
     }
