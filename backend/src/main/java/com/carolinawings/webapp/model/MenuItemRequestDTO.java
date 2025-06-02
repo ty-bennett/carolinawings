@@ -12,9 +12,4 @@ public class MenuItemRequestDTO
     String price;
     String category;
     String enabled;
-
-
-
-    
-    
 }
