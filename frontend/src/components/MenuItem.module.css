@@ -3,8 +3,8 @@
 .cardcontainer {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  
+  width: 500px;
+  height: 200px;
   background-color: rgb(75,0,0);
 }
 
@@ -40,9 +40,9 @@
 
 .card {
   display: flex;
-  justify-self: space-between;
+  justify-self: space-evenly;
   margin: 0;     /* Space between cards */
-  width: 100%;
+  width: 1/3vw; 
 }
 
 

@@ -111,7 +111,7 @@ public class MenuDataSeeder {
 
             }
             else {
-                System.out.println("<UNK> Menu items seeded.");
+                System.out.println("Menu items already seeded.");
             }
         };
     }

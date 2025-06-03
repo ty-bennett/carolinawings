@@ -47,13 +47,13 @@ const MenuSection = () => {
           <ul className={section.rowcontainer}>
           {shareables.map(item => (
               <MenuItem
+                className={section.card}
                 key={item.id} 
                 name={item.name}
                 price={item.price}
                 description={item.description}
-                className={section.card}
               >
-              </MenuItem>
+                </MenuItem>
           ))}
           </ul> 
         </div>
