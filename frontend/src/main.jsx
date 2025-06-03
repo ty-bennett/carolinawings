@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home.jsx';
 import Menu from './pages/Menu.jsx';
@@ -7,6 +8,8 @@ import Specials from './pages/Specials.jsx';
 import Catering from './pages/Catering.jsx';
 import Locations from './pages/Locations.jsx';
 import Contact from './pages/Contact.jsx';
+
+
 export default function App() {
   return (
     <BrowserRouter>
