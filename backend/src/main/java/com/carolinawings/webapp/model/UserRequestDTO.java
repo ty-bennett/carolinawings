@@ -7,4 +7,5 @@ public class UserRequestDTO
     String name;
     String password;
     String newsletterMember;
+    String enabled;
 }

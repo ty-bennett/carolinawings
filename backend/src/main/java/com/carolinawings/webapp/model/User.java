@@ -5,23 +5,19 @@ written by Ty Bennett
 package com.carolinawings.webapp.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import jakarta.*;
 
 @Entity
 @Table(name="users")
 @Getter
 @Setter
-public class User implements UserDetails {
+public class User {
 	//Identifying information
     @Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -32,6 +28,7 @@ public class User implements UserDetails {
 	//name of user
 	private String name;
 	@Column(nullable = false, unique = true)
+	@Email
 	//email of users
 	private String email;
 	@Column(nullable = false)
@@ -47,10 +44,11 @@ public class User implements UserDetails {
 	//Keep track of orders with a list of orders
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<CustomerOrder> orderHistory = new ArrayList<>();
+	private Boolean enabled;
 
 	public User() {}
 
-	public User(String name, String email, String password, String phoneNumber, Boolean newsletterMember) {
+	public User(String name, String email, String password, String phoneNumber, Boolean newsletterMember, Boolean enabled) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -58,40 +56,6 @@ public class User implements UserDetails {
 		this.newsletterMember = newsletterMember;
 		this.dateJoined = LocalDate.now();
 		this.orderHistory = new ArrayList<>();
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of();
-	}
-
-	@Override
-	public String getUsername() {
-		return this.email;
-	}
-
-	@Override
-	public String getPassword() {
-		return this.password;
-	}
-
-    @Override
-	public boolean isEnabled() {
-		return this.enabled;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
+		this.enabled = enabled;
 	}
 }

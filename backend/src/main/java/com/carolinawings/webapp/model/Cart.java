@@ -1,9 +1,6 @@
 package com.carolinawings.webapp.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,8 +12,10 @@ public class Cart {
     @GeneratedValue
     private Long id;
     @Column(nullable = false)
+    @ElementCollection
     private List<MenuItem> cart = new ArrayList<>();
     private LocalDateTime orderCreated;
     private LocalDateTime pickupTime;
+    @OneToOne
     private User userAssignedTo;
 }

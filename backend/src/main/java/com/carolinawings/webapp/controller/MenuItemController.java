@@ -30,20 +30,20 @@ public class MenuItemController
         return menuItemService.getById(id);
     }
 
-    @PostMapping("/api/v1/menu/add/item")
+    @PostMapping("/api/v1/auth/menu/add/item")
     public void addMenuItem(@RequestBody MenuItem menuItem)
     {
         System.out.println(menuItem);
         menuItemService.addMenuItem(menuItem);
     }
 
-    @PutMapping("/api/v1/menu/edit/item")
+    @PutMapping("/api/v1/auth/menu/edit/item")
     public void updateMenuItem(@RequestBody MenuItem menuItem)
     {
         menuItemService.updateMenuItem(menuItem);
     }
 
-    @DeleteMapping("api/v1/menu/delete/{menuItem}")
+    @DeleteMapping("api/v1/auth/menu/delete/{menuItem}")
     public void deleteMenuItem(@PathVariable MenuItem menuItem)
     {
         menuItemService.deleteMenuItem(menuItem.getId());

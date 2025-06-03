@@ -27,8 +27,6 @@ public class UserService {
         return users.stream().map(UserMapper::toDTO).toList();
     }
 
-
-
     public User save(User user)
     {
         return userRepository.save(user);
