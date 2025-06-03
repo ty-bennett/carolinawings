@@ -11,7 +11,6 @@ import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.*;
 
 @Entity
 @Table(name="users")
@@ -28,7 +27,6 @@ public class User {
 	//name of user
 	private String name;
 	@Column(nullable = false, unique = true)
-	@Email
 	//email of users
 	private String email;
 	@Column(nullable = false)

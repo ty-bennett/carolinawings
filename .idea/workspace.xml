@@ -5,26 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf4ee51c-037d-4127-82b0-5acdaafee2ce" name="Changes" comment="update ignore">
-<<<<<<< HEAD
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/MenuDataSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/config/MenuDataSeeder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/MenuItem.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MenuItem.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/MenuSection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MenuSection.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/MenuSection.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MenuSection.module.css" afterDir="false" />
-=======
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/dto/UserResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/mapper/UserMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/MenuItemRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/controller/MenuItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/controller/MenuItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/Manager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/carolinawings/webapp/service/UserService.java" afterDir="false" />
->>>>>>> d4b6446e4a9662e711cd7a28f5831e74e0aad0ea
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,11 +200,8 @@
       <workItem from="1748394486419" duration="1847000" />
       <workItem from="1748397246583" duration="2775000" />
       <workItem from="1748528045452" duration="11816000" />
-<<<<<<< HEAD
       <workItem from="1748640857538" duration="1758000" />
-=======
       <workItem from="1748746023179" duration="4095000" />
->>>>>>> d4b6446e4a9662e711cd7a28f5831e74e0aad0ea
     </task>
     <servers />
   </component>

@@ -2,3 +2,7 @@ node_modules
 .idea/
 backend/src/main/resources/application.properties
 /.metadata/
+.idea/*
+.idea
+
+

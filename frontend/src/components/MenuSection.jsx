@@ -6,6 +6,12 @@ const MenuSection = () => {
   const [menuItems, setMenuItems] = useState([]) 
   const [isError, setIsError] = useState(false);
   const shareables = menuItems.filter(item => item.category === "Shareables");
+  const soupsAndSalads = menuItems.filter(item => item.category ==="Soups and Salads");
+  const wingsAndTender = menuItems.filter(item => item.category ==="Wings and Tenders");
+  const ribsBBQSeafood = menuItems.filter(item => item.category === "Ribs, BBQ, Seafood");
+  const burgers = menuItems.filter(item => item.category === "Burgers");
+  const sandwichesAndWrap = menuItems.filter(item => item.category === "Sandwiches And Wraps");
+  const sideItems = menuItems.filter(item => item.cateogry === "Side Items");
 
 
   useEffect(() => {
@@ -35,9 +41,9 @@ const MenuSection = () => {
   return(
     <>
       <div className={section.contentcontainer}>
-        <img className={section.quesadilla} src="../public/foodimages/quesadilla.jpg"/>
+        <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
         <h1 className={section.sectiontitle}>SHAREABLES</h1>
-        <div className={section.cardcontainer}>   
+        <div className={section.cardscontainer}>   
           <ul className={section.rowcontainer}>
           {shareables.map(item => (
               <MenuItem

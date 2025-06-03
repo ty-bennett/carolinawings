@@ -3,7 +3,8 @@
 .cardcontainer {
   display: flex;
   flex-direction: column;
-  max-width: 32%;
+  max-width: 500px;
+  
   background-color: rgb(75,0,0);
 }
 
@@ -16,31 +17,32 @@
 .header {
   font-family: "Oswald";
   color:white;
-  margin: 0;
-  padding: 0;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
+  justify-self: center;
+  align-self: center;
+  font-size: 24px;
+  padding: 10px;
 }
 
 .price {
   justify-self: right;
   align-items: right;
   color: white;
-  padding: 10px;
+  padding: 20px;
 }
 
 .description {
   font-family: "Public Sans";
   color: white;
-
+  font-size: 18px;
+  margin: 5px;
+  padding: 5px;
 }
 
 .card {
-  flex: 1 1 30%; /* Grow, shrink, basis 30% for 3 per row with some gap */
-  max-width: 32%; /* Prevent overflow */
-  margin: 1%;     /* Space between cards */
-  box-sizing: border-box;
+  display: flex;
+  justify-self: space-between;
+  margin: 0;     /* Space between cards */
+  width: 100%;
 }
 
 

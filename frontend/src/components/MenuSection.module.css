@@ -6,7 +6,7 @@
   justify-self: center;
   align-items: center;
   background-color: black;
-  height:auto;
+  height: 100%;
   width: 100%;
   flex-wrap: nowrap;
   margin: 0;
@@ -17,13 +17,17 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; /* Allow wrapping */
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: space-between;
   width: 100%;
   margin: 0;
   padding: 0;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 3rem;
+}
+
+.cardscontainer{
+  display:flex;
+  flex-direction:column;
+  flex: auto;
 }
 
 .sectiontitle {
@@ -37,6 +41,6 @@
 }
 
 .quesadilla {
-  margin-top: 5rem;
+  margin-top: 8rem;
   margin-bottom: 2rem; 
 }

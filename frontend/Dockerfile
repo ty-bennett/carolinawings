@@ -1,7 +1,7 @@
 FROM node:latest
-WORKDIR /app
+WORKDIR /
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 6969 
-CMD ["npm", "run", "dev"] 
+EXPOSE 4000 
+CMD ["npm", "run", "build"] 

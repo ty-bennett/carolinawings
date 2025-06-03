@@ -12,8 +12,6 @@ public class Cart {
     @GeneratedValue
     private Long id;
     @Column(nullable = false)
-    @ElementCollection
-    private List<MenuItem> cart = new ArrayList<>();
     private LocalDateTime orderCreated;
     private LocalDateTime pickupTime;
     @OneToOne
