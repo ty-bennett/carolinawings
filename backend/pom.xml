@@ -11,7 +11,7 @@
 	<groupId>com.carolinawings</groupId>
 	<artifactId>webapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>webapp</name>
 	<description>Fullstack web application with ordering system and ticket printing integration for Carolina Wings &amp; RibHouse</description>
 	<url/>
