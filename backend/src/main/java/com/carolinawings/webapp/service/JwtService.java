@@ -4,8 +4,6 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
-import lombok.Value;
-import org.springframework.stereotype.Service;
 
 //@Service
 //public class JwtService {

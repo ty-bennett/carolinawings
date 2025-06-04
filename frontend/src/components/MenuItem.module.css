@@ -4,23 +4,27 @@
   display: flex;
   flex-direction: column;
   width: 500px;
-  height: 200px;
+  height: 300px;
   background-color: rgb(75,0,0);
+  border-radius: 10px;
+  box-shadow: 0em 0em 5em 1em rgba(75, 0, 0, 0.1);
+  margin: 20px;
 }
 
 .headercontainer{
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-direction: row;
+  width: 100%;
 }
 
 .header {
   font-family: "Oswald";
   color:white;
-  justify-self: center;
-  align-self: center;
   font-size: 24px;
-  padding: 10px;
+  padding: 10px; 
+  width: 100%`;
 }
 
 .price {
@@ -38,11 +42,15 @@
   padding: 5px;
 }
 
-.card {
-  display: flex;
-  justify-self: space-evenly;
-  margin: 0;     /* Space between cards */
-  width: 1/3vw; 
+ul {
+  list-style: none;;
+}
+
+.dots {
+  letter-spacing: 5px;
+  overflow: hidden;
+  color: white;
+  font-family: "Public Sans";
 }
 
 

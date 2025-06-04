@@ -7,7 +7,6 @@ import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

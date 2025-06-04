@@ -1,6 +1,5 @@
 package com.carolinawings.webapp.repository;
 
-import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.carolinawings.webapp.model.User;
 import org.springframework.stereotype.Repository;
