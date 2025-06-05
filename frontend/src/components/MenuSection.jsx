@@ -41,7 +41,7 @@ const MenuSection = () => {
             description={
               <>
                 <ul className={section.quesadillaul}>
-                  <li>Cheese<span className={section.dots}>....................................</span></li>
+                  <li>Cheese...................................8.99</li>
                   <li>Chicken</li>
                   <li>Southwest Chicken</li>
                   <li>Brisket tossed in Pig Sauce</li>

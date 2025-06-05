@@ -37,3 +37,9 @@
   margin-bottom: 2rem; 
 }
 
+.dots {
+  letter-spacing: 5px;
+  overflow: hidden;
+  color: white;
+  font-family: "Open Sans", sans-serif;
+}

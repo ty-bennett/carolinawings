@@ -13,9 +13,9 @@ const MenuItem = ({ isVegetarian, isSpicy, isFavorite, name, description, price 
           <h3 
             className={menuItem.header}
           >
-            {isSpicy ? <FaPepperHot style={{ marginRight: '5px'}}/> : ""}
-            {isFavorite ? <BsFillBookmarkStarFill style={{ marginRight: '5px'}} color="#bf9515"/> : ""}
-            {isVegetarian ? <LuVegan style={{ marginRight: '5px'}} color="#2E6F40"/> : ""}
+            {isSpicy ? <FaPepperHot style={{ marginRight: '5px', paddingTop: '10px'}}/> : ""}
+            {isFavorite ? <BsFillBookmarkStarFill style={{ marginRight: '5px' }}color="#bf9515"/> : ""}
+            {isVegetarian ? <LuVegan style={{ marginRight: '5px' }} color="#2E6F40"/> : ""}
             {name.toUpperCase()}
           </h3>
           <p className={menuItem.price}>{price}</p>
