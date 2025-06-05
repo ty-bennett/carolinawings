@@ -17,27 +17,19 @@ const MenuSection = () => {
           />
          
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={false}
-            isFavorite={false}
             name="Catfish Fingers"
             description="Fresh catfish filets sliced, hand-battered & fried. Served with a side of CW's Remoulade Sauce."
             price="$10.99"
           />
 
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={false}
-            isFavorite={false}
             name="Texas Tumbleweeds"
-            description="Hand-rolled & fried tortillas stuffed with seasoned chicken, black beans, cheese & corn."
+            description="Hand-rolled & fried tortillas stuffed with seasoned chicken, black beans, cheese & corn. Served with a side of our homemade southwest sauce."
             price="$9.99"
           />
 
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={false}
-            isFavorite={false}
+            isFavorite={true}
             name="Quesadillas"
             description={
               <>
@@ -54,46 +46,33 @@ const MenuSection = () => {
           />
 
           <MenuItem 
-            isVegetarian={true}
-            isSpicy={true}
-            isFavorite={false}
             name="Chips & Salsa"
             description="Medium spice salsa and freshly fried tortilla chips."
             price="$4.99"
           />
 
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={true}
-            isFavorite={true}
             name="Ultimate Nachos"
             description={
               <>
                 <p>Tortilla chips covered in shredded cheese, tomatoes & jalapeños. Served with a side of sour cream & salsa.</p>
                 <p>Choose your topping:</p>
                 <ul>
-                  <li>Rob's Chili</li>
-                  <li>Buffalo Chicken</li>
-                  <li>Pulled Pork</li>
+                  <li>Rob's Chili..................$9.99</li>
+                  <li><FaPepperHot />Buffalo Chicken..................$10.99</li>
+                  <li>Pulled Pork........................$10.99</li>
                 </ul>
               </>
             }
-            price="$10.99"
           />
 
           <MenuItem 
-            isVegetarian={true}
-            isSpicy={false}
-            isFavorite={false}
             name="Mozzarella Sticks"
             description="Classic fried mozzarella sticks."
             price="$7.99"
           />
 
           <MenuItem 
-            isVegetarian={true}
-            isSpicy={false}
-            isFavorite={false}
             name="Fried Pickles"
             description="Hand-battered and fried dill pickle chips."
             price="$7.99"
@@ -101,34 +80,27 @@ const MenuSection = () => {
 
           <MenuItem 
             isVegetarian={true}
-            isSpicy={false}
-            isFavorite={false}
             name="Fried Mushrooms"
             description="Fried mushrooms served with dipping sauce."
             price="$7.99"
           />
 
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={false}
-            isFavorite={true}
             name="Rib Bites"
             description="4-5 Bones of our award-winning baby back ribs."
             price="$8.99"
           />
 
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={false}
-            isFavorite={false}
-            name="Loaded Fries/Tots"
+            isFavorite={true}
+            name="Loaded Wing Chips/Fries/Tots"
             description={
               <>
-                <p>Your choice of French fries or wing chips, topped with:</p>
+                <p>Your choice of French fries, wing chips, or tater tots topped with:</p>
                 <ul>
-                  <li>Cheese & Bacon – $8.99</li>
-                  <li>Garlic Parmesan – $7.99</li>
-                  <li>Cheese and Chili – $8.99</li>
+                  <li>Cheese & Bacon..............$8.99</li>
+                  <li>Garlic Parmesan.............$7.99</li>
+                  <li>Cheese and Chili............$8.99</li>
                 </ul>
               </>
             }
@@ -136,9 +108,6 @@ const MenuSection = () => {
           />
 
           <MenuItem 
-            isVegetarian={false}
-            isSpicy={false}
-            isFavorite={true}
             name="Carolina Sampler"
             description="Fried mushrooms, mozzarella sticks, hand-battered tenders & fried pickles all on a bed of our legendary wing chips. No substitutions please."
             price="$13.99"
