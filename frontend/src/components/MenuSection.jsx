@@ -1,3 +1,4 @@
+import { FaPepperHot } from "react-icons/fa";
 import MenuItem from "../components/MenuItem"
 import section from "../components/MenuSection.module.css";
 
@@ -41,11 +42,11 @@ const MenuSection = () => {
             description={
               <>
                 <ul className={section.quesadillaul}>
-                  <li>Cheese...................................8.99</li>
-                  <li>Chicken</li>
-                  <li>Southwest Chicken</li>
-                  <li>Brisket tossed in Pig Sauce</li>
-                  <li>Buffalo Chicken</li>
+                  <li>Cheese...................................$8.99</li>
+                  <li>Chicken..................................$10.99</li>
+                  <li>Southwest Chicken.........................$10.99</li>
+                  <li>Brisket tossed in Pig Sauce................$10.99</li>
+                  <li><FaPepperHot />Buffalo Chicken.................$10.99</li>
                 </ul>
               </>
             }
