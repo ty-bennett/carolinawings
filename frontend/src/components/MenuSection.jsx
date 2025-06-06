@@ -1,5 +1,6 @@
 import { FaPepperHot } from "react-icons/fa";
 import MenuItem from "../components/MenuItem"
+import Footer from "../components/Footer"
 import section from "../components/MenuSection.module.css";
 
 const MenuSection = () => {
@@ -34,11 +35,11 @@ const MenuSection = () => {
             description={
               <>
                 <ul className={section.quesadillaul}>
-                  <li>Cheese...................................$8.99</li>
-                  <li>Chicken..................................$10.99</li>
-                  <li>Southwest Chicken.........................$10.99</li>
-                  <li>Brisket tossed in Pig Sauce................$10.99</li>
-                  <li><FaPepperHot />Buffalo Chicken.................$10.99</li>
+                  <li className={section.menuItem}>Cheese...................................$8.99</li>
+                  <li className={section.menuItem}>Chicken..................................$10.99</li>
+                  <li className={section.menuItem}>Southwest Chicken.........................$10.99</li>
+                  <li className={section.menuItem}>Brisket tossed in Pig Sauce................$10.99</li>
+                  <li className={section.menuItem}><FaPepperHot />Buffalo Chicken.................$10.99</li>
                 </ul>
               </>
             }
@@ -112,9 +113,64 @@ const MenuSection = () => {
             description="Fried mushrooms, mozzarella sticks, hand-battered tenders & fried pickles all on a bed of our legendary wing chips. No substitutions please."
             price="$13.99"
           />
-
           </div>
+          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <h1 className={section.sectiontitle}>SOUPS & SALADS</h1>
+          <div className={section.menuitemcontainer}>
+            <MenuItem
+              name="test"
+              description={"placeholder"}
+              price="$0.00"
+            />
+          </div>
+          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <h1 className={section.sectiontitle}>WINGS & TENDERS</h1>
+          <div className={section.menuitemcontainer}>
+            <MenuItem
+              name="test"
+              description={"placeholder"}
+              price="$0.00"
+            />
+          </div>
+          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <h1 className={section.sectiontitle}>RIBS, BBQ, SEAFOOD</h1>
+          <div className={section.menuitemcontainer}>
+            <MenuItem
+              name="test"
+              description={"placeholder"}
+              price="$0.00"
+            />
+          </div>
+          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <h1 className={section.sectiontitle}>BURGERS</h1>
+          <div className={section.menuitemcontainer}>
+            <MenuItem
+              name="test"
+              description={"placeholder"}
+              price="$0.00"
+            />
+          </div>
+          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <h1 className={section.sectiontitle}>SANDWICHES & WRAPS</h1>
+          <div className={section.menuitemcontainer}>
+            <MenuItem
+              name="test"
+              description={"placeholder"}
+              price="$0.00"
+            />
+          </div>
+          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <h1 className={section.sectiontitle}>SIDE ITEMS</h1>
+          <div className={section.menuitemcontainer}>
+            <MenuItem
+              name="test"
+              description={"placeholder"}
+              price="$0.00"
+            />
+          </div>
+          
       </div>
+      <Footer />
     </>
   );
 }

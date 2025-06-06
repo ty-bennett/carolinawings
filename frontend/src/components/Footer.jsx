@@ -1,6 +1,6 @@
 import footer from './Footer.module.css';
 
-function Footer() {
+const Footer = () => {
   return (
     <div className={footer.footercontainer}>
       <div className={footer.locationcontainer}>
