@@ -36,11 +36,11 @@ const MenuSection = () => {
             description={
               <>
                 <ul className={section.quesadillaul}>
-                  <li className={section.menuItem}>Cheese...................................$8.99</li>
-                  <li className={section.menuItem}>Chicken..................................$10.99</li>
-                  <li className={section.menuItem}>Southwest Chicken.........................$10.99</li>
-                  <li className={section.menuItem}>Brisket tossed in Pig Sauce................$10.99</li>
-                  <li className={section.menuItem}><FaPepperHot />Buffalo Chicken.................$10.99</li>
+                  <li>Cheese................................................$8.99</li>
+                  <li>Chicken.............................................$10.99</li>
+                  <li>Southwest Chicken..........................$10.99</li>
+                  <li>Brisket tossed in Pig Sauce............$10.99</li>
+                  <li><FaPepperHot />&nbsp;Buffalo Chicken...........................$10.99</li>
                 </ul>
               </>
             }
@@ -58,8 +58,7 @@ const MenuSection = () => {
             description={
               <>
                 <p>Tortilla chips covered in shredded cheese, tomatoes & jalapeños. Served with a side of sour cream & salsa.</p>
-                <p>Choose your topping:</p>
-                <ul>
+                  <ul className={section.quesadillaul}>
                   <li>Rob's Chili..................$9.99</li>
                   <li><FaPepperHot />Buffalo Chicken..................$10.99</li>
                   <li>Pulled Pork........................$10.99</li>
@@ -100,9 +99,9 @@ const MenuSection = () => {
               <>
                 <p>Your choice of French fries, wing chips, or tater tots topped with:</p>
                 <ul>
-                  <li>Cheese & Bacon..............$8.99</li>
-                  <li>Garlic Parmesan.............$7.99</li>
-                  <li>Cheese and Chili............$8.99</li>
+                  <li>Cheese & Bacon..................$8.99</li>
+                  <li>Garlic Parmesan...................$7.99</li>
+                  <li>Cheese and Chili..................$8.99</li>
                 </ul>
               </>
             }

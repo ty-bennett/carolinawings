@@ -4,17 +4,15 @@
 .cardcontainer {
   display: flex;
   flex-direction: column;
-  width: 500px;
-  height: 300px;
+  width: 400px;
+  height: 230px;
   background-color: black;
   border-radius: 10px;
-  margin: 20px;
 }
 
 .headercontainer{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-end; 
   flex-direction: row;
   width: 100%;
 }
@@ -23,23 +21,31 @@
   font-family: "Open Sans";
   font-weight: 200;
   color:white;
-  font-size: 24px;
-  padding: 10px; 
+  font-size: 22px;
   width: 100%;
+  margin: 0;
 }
 
 .price {
-  justify-self: right;
-  align-items: right;
+  display: flex;
   font-weight: 200;
   color: white;
-  padding: 20px;
+  padding-top: 2px;
+  margin: 0;
 }
 
 .description {
   font-family: "Open Sans";
   color: white;
-  font-size: 18px;
+  font-size: 16px;
+  margin: 5px;
+  padding: 5px;
+}
+
+.description p{
+  font-family: "Open Sans";
+  color: white;
+  font-size: 16px;
   margin: 5px;
   padding: 5px;
 }
@@ -47,27 +53,3 @@
 ul {
   list-style: none;
 }
-
-.menuItem span:first-child {
-  position: relative;
-  padding-right: 12px;
-}
-
-.menuItem span:first-child::after {
-  content: "................................................................................";
-  position: absolute;
-  left: 0;
-  right: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  pointer-events: none;
-  color: #ccc; /* subtle dot color */
-}
-
-.menuItem {
-  position: relative;
-}
-
-
-
-
