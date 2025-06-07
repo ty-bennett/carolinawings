@@ -21,6 +21,7 @@
 
 .header {
   font-family: "Open Sans";
+  font-weight: 200;
   color:white;
   font-size: 24px;
   padding: 10px; 
@@ -30,6 +31,7 @@
 .price {
   justify-self: right;
   align-items: right;
+  font-weight: 200;
   color: white;
   padding: 20px;
 }

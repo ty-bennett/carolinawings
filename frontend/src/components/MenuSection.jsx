@@ -1,6 +1,7 @@
 import { FaPepperHot } from "react-icons/fa";
 import MenuItem from "../components/MenuItem"
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import Map from "../components/Map";
 import section from "../components/MenuSection.module.css";
 
 const MenuSection = () => {
@@ -114,7 +115,7 @@ const MenuSection = () => {
             price="$13.99"
           />
           </div>
-          <img className={section.quesadilla} src="/foodimages/quesadilla.jpg"/>
+          <img className={section.quesadilla} src="/foodimages/grilledchixsalad.jpg"/>
           <h1 className={section.sectiontitle}>SOUPS & SALADS</h1>
           <div className={section.menuitemcontainer}>
             <MenuItem
@@ -170,6 +171,7 @@ const MenuSection = () => {
           </div>
           
       </div>
+      <Map />
       <Footer />
     </>
   );
