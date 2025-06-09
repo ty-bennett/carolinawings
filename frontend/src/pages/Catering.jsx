@@ -1,4 +1,4 @@
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBar"
 
 const Catering = () => {
   return (
@@ -7,7 +7,7 @@ const Catering = () => {
         <NavBar />
       </main>
     </>
-   );
+  );
 }
 
 export default Catering;
