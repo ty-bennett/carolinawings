@@ -5,43 +5,28 @@ written by Ty Bennett
 package com.carolinawings.webapp.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name="users")
-@Getter
-@Setter
 public class User {
 	//Identifying information
     @Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(nullable = false, unique = true)
 	//UUID of user
 	private UUID id;
-    @Column(nullable = false)
 	//name of user
 	private String name;
-	@Column(nullable = false, unique = true)
 	//email of users
 	private String email;
-	@Column(nullable = false)
 	private String password;
-	@Column(nullable = false)
 	private String phoneNumber;
 	//Are they a member of mailing list
-	@Column(nullable = false)
 	private Boolean newsletterMember;
 	//keep track of how old account is
-	@Column(nullable = false)
 	private LocalDate dateJoined;
-	//Keep track of orders with a list of orders
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<CustomerOrder> orderHistory = new ArrayList<>();
+	//set status of User
 	private Boolean enabled;
 
 	public User() {}
@@ -53,7 +38,96 @@ public class User {
 		this.phoneNumber = phoneNumber;
 		this.newsletterMember = newsletterMember;
 		this.dateJoined = LocalDate.now();
-		this.orderHistory = new ArrayList<>();
 		this.enabled = enabled;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public Boolean getNewsletterMember() {
+		return newsletterMember;
+	}
+
+	public void setNewsletterMember(Boolean newsletterMember) {
+		this.newsletterMember = newsletterMember;
+	}
+
+	public LocalDate getDateJoined() {
+		return dateJoined;
+	}
+
+	public void setDateJoined(LocalDate dateJoined) {
+		this.dateJoined = dateJoined;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", newsletterMember=" + newsletterMember +
+				", dateJoined=" + dateJoined +
+				", enabled=" + enabled +
+				'}';
+	}
+
+	public boolean equals(User u) {
+        return u != null &&
+				this.id.equals(u.id) &&
+				this.name.equals(u.name) &&
+				this.email.equals(u.email) &&
+				this.password.equals(u.password) &&
+				this.phoneNumber.equals(u.phoneNumber) &&
+				this.newsletterMember.equals(u.newsletterMember) &&
+				this.dateJoined.equals(u.dateJoined) &&
+				this.enabled.equals(u.enabled);
 	}
 }

@@ -1,9 +1,8 @@
 import { CCarousel, CCarouselItem, CImage } from "@coreui/react";
 import carousel from "../components/FoodCarousel.module.css";
-import 'boostrap/dist/css/boostrap.min.css';
 
 
-export const FoodCarousel = () => {
+const FoodCarousel = () => {
   return (
     <CCarousel controls indicators dark>
 
@@ -31,3 +30,4 @@ export const FoodCarousel = () => {
   );
 }
 
+export default FoodCarousel;

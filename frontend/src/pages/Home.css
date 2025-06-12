@@ -1,4 +1,6 @@
 /* body styling */
+@import "tailwindcss";
+
 
 body {
   height: auto;
@@ -11,7 +13,7 @@ body::-webkit-scrollbar {
   width: 5px;
   height: 8px;
   background: transparent;
-  background-color: rgba(76,0,0, 50);
+  background-color: rgba(76, 0, 0, 50);
 }
 
 html {

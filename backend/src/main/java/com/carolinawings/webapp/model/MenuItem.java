@@ -9,8 +9,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "menu_items")
 public class MenuItem {
