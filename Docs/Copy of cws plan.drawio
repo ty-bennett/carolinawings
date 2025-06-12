@@ -1,0 +1,171 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.1.4">
+  <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
+    <mxGraphModel dx="2515" dy="825" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-1" value="Company&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;-address&lt;/div&gt;&lt;div&gt;- logo&lt;/div&gt;&lt;div&gt;-contact info&lt;/div&gt;&lt;div&gt;- type of company&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="10" y="50" width="175" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-4" value="Restaurant&lt;div&gt;- id&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;- address&lt;/div&gt;&lt;div&gt;- role: GM&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="210" width="120" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-5" value="Menu&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;- menuItems&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="360" y="20" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-6" value="Order&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-number&lt;/div&gt;&lt;div&gt;-orderTimePlaced&lt;/div&gt;&lt;div&gt;-estimatedPickupTime&lt;/div&gt;&lt;div&gt;-customerAssignedTo&lt;/div&gt;&lt;div&gt;-totalPrice&lt;/div&gt;&lt;div&gt;- MenuItems&lt;/div&gt;&lt;div&gt;-status&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="10" y="170" width="232.5" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-7" value="MenuItem&lt;div&gt;- id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-description&lt;/div&gt;&lt;div&gt;-photo&lt;/div&gt;&lt;div&gt;-category&lt;/div&gt;&lt;div&gt;-price&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="530" y="40" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-10" value="User&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-email&lt;/div&gt;&lt;div&gt;-phone#&lt;/div&gt;&lt;div&gt;-address&lt;/div&gt;&lt;div&gt;- paymentInfo&lt;/div&gt;&lt;div&gt;-role&lt;/div&gt;&lt;div&gt;-enabled&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="242.5" y="160" width="110" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-11" value="Role&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-permission&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="450" y="200" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-12" value="Permission&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="580" y="200" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="EtVPezGHj9L9BdaMWmfn-15" target="EtVPezGHj9L9BdaMWmfn-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="330" y="510" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="350" y="405" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-15" value="Platform Admin" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="380" y="375" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-18" value="Company Admin" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="290" y="490" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="EtVPezGHj9L9BdaMWmfn-18" target="EtVPezGHj9L9BdaMWmfn-22" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="620" as="targetPoint" />
+            <mxPoint x="290" y="520" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="EtVPezGHj9L9BdaMWmfn-22" target="EtVPezGHj9L9BdaMWmfn-24" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-22" value="Restaurant Admin" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="160" y="570" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="EtVPezGHj9L9BdaMWmfn-24" target="EtVPezGHj9L9BdaMWmfn-26" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-24" value="General manager" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="160" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-26" value="assistant manager" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="160" y="780" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-33" value="Role Table" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="500" y="480" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-39" value="Restaurant admin" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="EtVPezGHj9L9BdaMWmfn-33" vertex="1">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-34" value="GM" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="EtVPezGHj9L9BdaMWmfn-33" vertex="1">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-35" value="Assistant Manager" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="EtVPezGHj9L9BdaMWmfn-33" vertex="1">
+          <mxGeometry y="90" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-38" value="Customer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="EtVPezGHj9L9BdaMWmfn-33" vertex="1">
+          <mxGeometry y="120" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-40" value="Customer" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="170" y="900" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-42" value="DB Table Design" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="870" y="10" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-43" value="Entity Design and Roles" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-60" y="10" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-44" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="916.25" y="200" width="120" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-45" value="Company_Restaurants&lt;div&gt;-companyId&lt;/div&gt;&lt;div&gt;-restaurantId&lt;/div&gt;&lt;div&gt;-R1&lt;/div&gt;&lt;div&gt;-R2&lt;/div&gt;&lt;div&gt;-R3&lt;/div&gt;&lt;div&gt;-R4&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1130" y="50" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-47" value="Restaurant_Menu&lt;div&gt;-restaurantId&lt;/div&gt;&lt;div&gt;-menuId&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1125" y="220" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-48" value="&lt;div&gt;Menu_MenuItems&lt;/div&gt;&lt;div&gt;-menuId&lt;/div&gt;&lt;div&gt;-menuItemId&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1125" y="390" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-51" value="Order_MenuItems&lt;div&gt;-orderId&lt;/div&gt;&lt;div&gt;-menuItemId&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1125" y="560" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-53" value="User_Role&lt;div&gt;-userId&lt;/div&gt;&lt;div&gt;-roleId&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1490" y="50" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-57" value="&lt;div&gt;Role_Permissions&lt;/div&gt;&lt;div&gt;-roleId&lt;/div&gt;&lt;div&gt;-permissionId&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1480" y="170" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-58" value="RESTful Endpoint Design" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="890" y="910" width="151" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-59" value="Company&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;-address&lt;/div&gt;&lt;div&gt;- logo&lt;/div&gt;&lt;div&gt;-contact info&lt;/div&gt;&lt;div&gt;- type of company&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="881.25" y="1010" width="175" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-60" value="Restaurant&lt;div&gt;- id&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;- address&lt;/div&gt;&lt;div&gt;- restaurantAdmin&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="908.75" y="1130" width="120" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-61" value="Menu&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;- menuItems&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="888.75" y="1250" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-62" value="MenuItem&lt;div&gt;- id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-description&lt;/div&gt;&lt;div&gt;-photo&lt;/div&gt;&lt;div&gt;-category&lt;/div&gt;&lt;div&gt;-price&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="888.75" y="1360" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-63" value="Order&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-number&lt;/div&gt;&lt;div&gt;-orderTimePlaced&lt;/div&gt;&lt;div&gt;-estimatedPickupTime&lt;/div&gt;&lt;div&gt;-customerAssignedTo&lt;/div&gt;&lt;div&gt;-totalPrice&lt;/div&gt;&lt;div&gt;- MenuItems&lt;/div&gt;&lt;div&gt;-status&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="860" y="1460" width="232.5" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-64" value="POST /companies&lt;div&gt;GET /companies&lt;/div&gt;&lt;div&gt;GET /companies/{id}&lt;/div&gt;&lt;div&gt;DELETE /companies/{id}&lt;/div&gt;&lt;div&gt;PATCH / PUT /companies/{id}&lt;/div&gt;&lt;div&gt;POST /companies/{id}/restaurants&lt;/div&gt;&lt;div&gt;GET /companies/&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{id}/&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;restaurants&lt;/span&gt;&lt;/div&gt;&lt;div&gt;GET /companies/{id}/restaurants/{id}&lt;/div&gt;&lt;div&gt;DELETE /companies/&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{id}/&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;restaurants{id}&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="990" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="EtVPezGHj9L9BdaMWmfn-65" value="POST /restaurants&lt;div&gt;GET /restaurants&lt;/div&gt;&lt;div&gt;GET /restaurants/{id}&lt;/div&gt;&lt;div&gt;DELETE /restaurants/{id}&lt;/div&gt;&lt;div&gt;PATCH / PUT /restaurants/{id}&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="1056.25" y="1140" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-1" value="Company&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;-address&lt;/div&gt;&lt;div&gt;- logo&lt;/div&gt;&lt;div&gt;-contact info&lt;/div&gt;&lt;div&gt;- type of company&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="901.25" y="50" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-4" value="" style="group;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1145" y="10" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="zUKz9clo8UDm79mnHPOb-4">
+          <mxGeometry y="2.5" width="120" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-2" value="&lt;h2&gt;Join table&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="zUKz9clo8UDm79mnHPOb-4">
+          <mxGeometry x="10" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-5" value="&lt;div&gt;Restaurant&lt;div&gt;- id&lt;/div&gt;&lt;div&gt;- name&lt;/div&gt;&lt;div&gt;- address&lt;/div&gt;&lt;div&gt;- restaurantAdmin&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="901.25" y="215" width="150" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-6" value="Menu&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;name&lt;/div&gt;&lt;div&gt;description&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="901.25" y="345" width="150" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-7" value="MenuItem&lt;div&gt;- id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-description&lt;/div&gt;&lt;div&gt;-photo&lt;/div&gt;&lt;div&gt;-category&lt;/div&gt;&lt;div&gt;-price&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="901.25" y="470" width="150" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-8" value="Order&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-number&lt;/div&gt;&lt;div&gt;-orderTimePlaced&lt;/div&gt;&lt;div&gt;-estimatedPickupTime&lt;/div&gt;&lt;div&gt;-customerAssignedTo&lt;/div&gt;&lt;div&gt;-totalPrice&lt;/div&gt;&lt;div&gt;-status&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="901.25" y="590" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-9" value="User&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-email&lt;/div&gt;&lt;div&gt;-phone#&lt;/div&gt;&lt;div&gt;-address&lt;/div&gt;&lt;div&gt;- paymentInfo&lt;/div&gt;&lt;div&gt;-role&lt;/div&gt;&lt;div&gt;-enabled&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="25" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-12" value="Role&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;&lt;div&gt;-permission&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="190" width="150" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="zUKz9clo8UDm79mnHPOb-13" value="Permission&lt;div&gt;-id&lt;/div&gt;&lt;div&gt;-name&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="310" width="150" height="95" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
