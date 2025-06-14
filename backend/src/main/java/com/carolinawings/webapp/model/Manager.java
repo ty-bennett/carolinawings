@@ -75,4 +75,14 @@ public class Manager {
 				&& this.password.equals(m.password)
 				&& this.phoneNumber.equals(m.phoneNumber);
 	}
+
+	public String toString() {
+		return "Manager{" +
+				"managerId=" + managerId +
+				", email='" + email + '\'' +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", phoneNumber=" + phoneNumber +
+				'}';
+	}
 }

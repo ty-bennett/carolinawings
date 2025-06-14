@@ -2,7 +2,7 @@
 Written by Ty Bennett
 */
 
-package com.carolinawings.webapp.model;
+package com.carolinawings.webapp.dto;
 
 public class MenuItemRequestDTO
 {

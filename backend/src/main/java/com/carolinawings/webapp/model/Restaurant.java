@@ -6,10 +6,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "restaurants")
 public class Restaurant {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String address;
@@ -48,9 +48,13 @@ public class Restaurant {
         this.restaurantAdmin = restaurantAdmin;
     }
 
-    public boolean equals(Object o) {
-        if (!(o instanceof Restaurant that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(address, that.address) && Objects.equals(restaurantAdmin, that.restaurantAdmin);
+    public boolean equals(Restaurant r)
+    {
+        return r != null &&
+            this.getId().equals(r.getId()) &&
+            this.getName().equals(r.getName()) &&
+            this.getAddress().equals(r.getAddress()) &&
+            this.getRestaurantAdmin().equals(r.getRestaurantAdmin());
     }
 
     public String toString() {

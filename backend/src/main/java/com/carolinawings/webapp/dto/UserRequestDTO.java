@@ -1,4 +1,4 @@
-package com.carolinawings.webapp.model;
+package com.carolinawings.webapp.dto;
 
 public class UserRequestDTO
 {

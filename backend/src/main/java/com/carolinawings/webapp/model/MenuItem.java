@@ -88,7 +88,6 @@ public class MenuItem {
         this.enabled = enabled;
     }
 
-    @java.lang.Override
     public String toString() {
         return "MenuItem{" +
                 "id=" + id +
@@ -108,8 +107,8 @@ public class MenuItem {
            this.name.equals(m.getName()) &&
            this.description.equals(m.getDescription()) &&
            this.imageURL.equals(m.getImageURL()) &&
-           this.price.equals.(m.getPrice()) &&
+           this.price.equals(m.getPrice()) &&
            this.category.equals(m.getCategory()) &&
-           this.enabled.equals(m.isEnabled());
+           this.enabled == (m.isEnabled());
     }
 }
