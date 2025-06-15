@@ -54,7 +54,6 @@ CREATE TABLE orders (
 CREATE TABLE order_menuitems (
                                  order_id UUID NOT NULL,
                                  menu_item_id BIGINT NOT NULL,
-                                 quantity INT NOT NULL DEFAULT 1,
                                  PRIMARY KEY (order_id, menu_item_id),
                                  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
                                  FOREIGN KEY (menu_item_id) REFERENCES menu_items(id) ON DELETE CASCADE
@@ -63,7 +62,12 @@ CREATE TABLE order_menuitems (
 CREATE TABLE users (
                        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                        username VARCHAR(255) NOT NULL UNIQUE,
-                       email VARCHAR(255) NOT NULL UNIQUE
+                       email VARCHAR(255) NOT NULL UNIQUE,
+                       password VARCHAR(255) NOT NULL,
+                       newsletterMember BOOLEAN NOT NULL,
+                       dateJoined TIMESTAMP NOT NULL DEFAULT now(),
+                       enabled BOOLEAN NOT NULL
+
 );
 
 CREATE TABLE user_orders (
@@ -76,7 +80,8 @@ CREATE TABLE user_orders (
 
 CREATE TABLE roles (
                        id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                       name VARCHAR(255) NOT NULL UNIQUE
+                       name VARCHAR(255) NOT NULL UNIQUE,
+                       description VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE user_roles (

@@ -15,12 +15,12 @@ public class Company {
     private String name;
     private String address;
     private String logoURL;
-    private Double phoneNumber;
+    private String phoneNumber;
     private String industry;
 
     public Company() {}
 
-    public Company(Long id, String name, String address, String logoURL, Double phoneNumber, String industry) {
+    public Company(Long id, String name, String address, String logoURL, String phoneNumber, String industry) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -53,11 +53,11 @@ public class Company {
         this.address = address;
     }
 
-    public Double getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Double phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

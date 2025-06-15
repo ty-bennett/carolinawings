@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    List<Company> getCompanies();
-    Company getCompany();
-    Optional<Company> getCompanyById(Long id);
-    ResponseEntity deleteCompanyById(Long id);
+    List<Company> findAll();
+    Optional<Company> findCompanyById(Long id);
 }

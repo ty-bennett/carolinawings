@@ -17,7 +17,7 @@ public class MenuItemService {
         this.menuItemRepository = menuItemRepository;
     }
 
-    public List<MenuItem> getAllById()
+    public List<MenuItem> getAllMenuItems()
     {
         return menuItemRepository.findAll();
     }

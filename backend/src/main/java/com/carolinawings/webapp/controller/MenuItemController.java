@@ -7,7 +7,6 @@ import com.carolinawings.webapp.model.MenuItem;
 import java.util.List;
 import java.util.Optional;
 @RestController
-@RequestMapping
 public class MenuItemController
 {
     private final MenuItemService menuItemService;
@@ -24,9 +23,9 @@ public class MenuItemController
     @GetMapping("/menuitems")
     public List<MenuItem> getAllMenuItems()
     {
-        return menuItemService.getAllById();
+        return menuItemService.getAllMenuItems();
     }
-    @GetMapping("menuitems/{id}")
+    @GetMapping("/menuitems/{id}")
     public Optional<MenuItem> getMenuItemById(@PathVariable Integer id)
     {
         return menuItemService.getById(id);
