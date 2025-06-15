@@ -1,3 +1,7 @@
+/*
+Ty Bennett
+*/
+
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
@@ -11,7 +15,12 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "menus", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "menu_menuitems",
+            joinColumns = @JoinColumn(name = "menu_id"),
+            inverseJoinColumns = @JoinColumn(name = "menu_item_id")
+    )
     private List<MenuItem> menuItemsList;
 
     public Menu() {}

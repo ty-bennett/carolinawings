@@ -1,8 +1,10 @@
+/*
+Ty Bennett
+*/
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity

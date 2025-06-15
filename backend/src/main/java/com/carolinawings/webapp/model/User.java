@@ -1,5 +1,5 @@
 /*
-written by Ty Bennett
+Written by Ty Bennett
  */
 
 package com.carolinawings.webapp.model;

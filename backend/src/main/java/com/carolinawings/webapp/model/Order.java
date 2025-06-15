@@ -1,5 +1,5 @@
 /*
- * Ty Bennett
+ Written by Ty Bennett
  */
 
 package com.carolinawings.webapp.model;
@@ -28,6 +28,6 @@ public class Order {
 	//price of order
 	private BigDecimal orderAmount;
 	//User assigned order to
-	@ManyToOne()
+	@ManyToOne
 	private User user;
 }

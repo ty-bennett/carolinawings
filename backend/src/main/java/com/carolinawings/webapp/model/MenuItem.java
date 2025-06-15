@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "menu_items")
@@ -21,6 +22,8 @@ public class MenuItem {
     private BigDecimal price;
     private String category;
     private boolean enabled;
+    @ManyToMany(mappedBy = "menuItemsList")
+    private List<Menu> menuItemsList;
 
     public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
         this.name = name;

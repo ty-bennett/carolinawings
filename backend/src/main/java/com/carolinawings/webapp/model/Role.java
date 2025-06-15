@@ -1,3 +1,6 @@
+/*
+Ty Bennett
+*/
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
@@ -12,7 +15,12 @@ public class Role {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(mappedBy = "roles")
+    @ManyToMany
+    @JoinTable(
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
     private Set<Permission> permissionsList;
 
     public Role() {}
