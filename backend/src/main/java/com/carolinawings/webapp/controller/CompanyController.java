@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 public class CompanyController {
-    private CompanyService companyService;
+  //  private CompanyService companyService;
 
     //TODO: create company service
     public CompanyController() {}

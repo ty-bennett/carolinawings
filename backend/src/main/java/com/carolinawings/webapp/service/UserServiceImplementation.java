@@ -1,4 +1,6 @@
-
+/*
+Ty Bennett
+*/
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.UserResponseDTO;
@@ -13,9 +15,9 @@ import java.util.UUID;
 
 
 @Service
-public class UserService {
+public class UserServiceImplementation {
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository)
+    public UserServiceImplementation(UserRepository userRepository)
     {
         this.userRepository = userRepository;
     }
