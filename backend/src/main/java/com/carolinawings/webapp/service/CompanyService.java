@@ -1,8 +1,14 @@
 package com.carolinawings.webapp.service;
 
-import org.springframework.stereotype.Service;
+import com.carolinawings.webapp.model.Company;
+import org.springframework.http.ResponseEntity;
 
-@Service
+import java.util.List;
+import java.util.Optional;
+
 public interface CompanyService {
-
+    List<Company> getAllCompanies();
+    ResponseEntity<Optional<Company>> getCompanyById(Long id);
+    ResponseEntity<Company> createCompany(Company company);
+    boolean deleteCompanyById(Long id);
 }

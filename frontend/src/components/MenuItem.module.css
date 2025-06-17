@@ -4,26 +4,31 @@
 .cardcontainer {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 420px;
   height: 230px;
   background-color: black;
   border-radius: 10px;
 }
 
-.headercontainer{
+.headercontainer {
   display: flex;
-  align-items: flex-end; 
+  align-items: flex-end;
   flex-direction: row;
+
   width: 100%;
 }
 
 .header {
   font-family: "Open Sans";
   font-weight: 400;
-  color:white;
-  font-size: 22px;
+  color: white;
+  font-size: 20px;
   width: 100%;
   margin: 0;
+}
+
+.header svg {
+  display: inline-block;
 }
 
 .price {
@@ -40,14 +45,18 @@
   font-size: 16px;
 }
 
-.description p{
+.description p {
   font-family: "Open Sans";
   color: white;
   font-size: 16px;
-  margin: 5px;
-  padding: 5px;
 }
 
 ul {
   list-style: none;
+  padding-left: 2em;
+}
+
+ul li {
+  display: flex;
+  padding-left: 5px;
 }
