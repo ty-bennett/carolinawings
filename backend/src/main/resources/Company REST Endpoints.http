@@ -12,4 +12,4 @@ Content-Type: application/json
 
 ### DELETE request to delete a company by id
 
-DELETE localhost:8080/admin/companies/1
+DELETE localhost:8080/admin/companies/2

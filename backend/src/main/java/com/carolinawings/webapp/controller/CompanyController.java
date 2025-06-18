@@ -20,10 +20,10 @@ public class CompanyController {
 
     //TODO: create company service
     @GetMapping("/companies")
-    public List<Company> getCompanies() {
+    public ResponseEntity<List<Company>> getCompanies() {
 
        //TODO: reflect creation of service with methods
-        return companyServiceImplementation.getAllCompanies();
+        return new ResponseEntity<>(companyServiceImplementation.getAllCompanies(), HttpStatus.OK);
     }
 
     @GetMapping("/companies/{id}")
@@ -38,13 +38,13 @@ public class CompanyController {
         return companyServiceImplementation.createCompany(c);
     }
     @DeleteMapping("/admin/companies/{id}")
-    public ResponseEntity<Void> deleteCompany(@PathVariable Long id)
+    public ResponseEntity<String> deleteCompany(@PathVariable Long id)
     {
-        boolean deleted = companyServiceImplementation.deleteById(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build(); // 204 No Content
+        boolean exists = companyServiceImplementation.deleteById(id);
+        if (exists) {
+            return new ResponseEntity<>("Company with id: "+ id + "deleted successfully!", HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();  // 404 Not Found
+            return new ResponseEntity<>("Company with id: "+id+"not found.", HttpStatus.NOT_FOUND);
         }
     }
 }

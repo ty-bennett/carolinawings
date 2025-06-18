@@ -28,6 +28,8 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public ResponseEntity<Company> createCompany(Company company) {
+        if(companyRepository.existsById(company.getId()))
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         return new ResponseEntity<Company>(companyRepository.save(company), HttpStatus.CREATED);
     }
 
