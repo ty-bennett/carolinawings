@@ -1,33 +1,11 @@
-import { CCarousel, CCarouselItem, CImage } from "@coreui/react";
-import carousel from "../components/FoodCarousel.module.css";
-
 
 const FoodCarousel = () => {
   return (
-    <CCarousel controls indicators dark>
-
-      <CCarouselItem>
-        <CImage className={carousel.image} src={"foodimages/smokehouse_burger.png"} alt="smokehouse burger" />
-      </CCarouselItem>
-
-      <CCarouselItem>
-        <CImage className={carousel.image} src={"foodimages/wings and chips.jpg"} alt="wings and wing chips" />
-      </CCarouselItem>
-
-      <CCarouselItem>
-        <CImage className={carousel.image} src={"foodimages/ribs_with_beer.png"} alt="wings and wing chips" />
-      </CCarouselItem>
-
-      <CCarouselItem>
-        <CImage className={carousel.image} src={"foodimages/wing_in_ranch.png"} alt="wings and wing chips" />
-      </CCarouselItem>
-
-      <CCarouselItem>
-        <CImage className={carousel.image} src={"foodimages/wings and chips.jpg"} alt="wings and wing chips" />
-      </CCarouselItem>
-
-    </CCarousel>
+    <div className="p-4 bg-gray-100 rounded shadow-md">
+      <p className="text-xl font-semibold text-gray-800">shiii balls</p>
+    </div>
   );
-}
+};
 
 export default FoodCarousel;
+

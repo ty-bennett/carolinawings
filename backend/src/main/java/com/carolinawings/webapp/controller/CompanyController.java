@@ -40,7 +40,7 @@ public class CompanyController {
     @DeleteMapping("/admin/companies/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id)
     {
-        boolean deleted = companyServiceImplementation.deleteCompanyById(id);
+        boolean deleted = companyServiceImplementation.deleteById(id);
         if (deleted) {
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {

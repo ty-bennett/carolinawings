@@ -10,5 +10,5 @@ public interface CompanyService {
     List<Company> getAllCompanies();
     ResponseEntity<Optional<Company>> getCompanyById(Long id);
     ResponseEntity<Company> createCompany(Company company);
-    boolean deleteCompanyById(Long id);
+    boolean deleteById(Long id);
 }

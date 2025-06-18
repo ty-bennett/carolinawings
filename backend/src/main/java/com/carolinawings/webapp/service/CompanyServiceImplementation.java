@@ -36,16 +36,13 @@ public class CompanyServiceImplementation implements CompanyService {
         return new ResponseEntity<>(companyRepository.findCompanyById(id), HttpStatus.OK);
     }
 
-    public boolean deleteCompanyById(Long id)
+    public boolean deleteById(Long id)
     {
-        if(!companyRepository.existsById(id))
-        {
-            return false;
-        }
-        else
-        {
-            companyRepository.deleteCompanyById(id);
+        if(companyRepository.existsById(id)) {
+            companyRepository.deleteById(id);
             return true;
+        } else {
+            return false;
         }
     }
 
