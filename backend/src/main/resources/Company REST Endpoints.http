@@ -1,0 +1,15 @@
+### POST request to create a company
+POST localhost:8080/admin/companies
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings - Redbank",
+  "address": "Red Bank, SC",
+  "logoURL": "https://example.com/logo.png",
+  "phoneNumber": "8038080488",
+  "industry": "Food Service"
+}
+
+### DELETE request to delete a company by id
+
+DELETE localhost:8080/admin/companies/1

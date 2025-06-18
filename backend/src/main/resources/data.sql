@@ -4,12 +4,12 @@ INSERT INTO users (
     email,
     password,
     phone_number,
-    newsletter_member,
-    date_joined,
+    newslettermember,
+    datejoined,
     enabled
 ) VALUES
       (
-          '1e7f0b49-c61d-4ed1-aede-31a2b02347a9',
+          '1e7f0b49-c61d-4ed1-aede-31a2b02349a9',
           'Emily Clark',
           'emily.clark@example.com',
           '$2a$10$Vb92NpZLf5nY/1Dm3T6gXOvp8LQdHBQy7PmBqNNtYxZVPvSDdT4Iq',  -- "password123"
