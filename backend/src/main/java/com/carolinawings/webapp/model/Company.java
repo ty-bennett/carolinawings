@@ -20,8 +20,7 @@ public class Company {
 
     public Company() {}
 
-    public Company(Long id, String name, String address, String logoURL, String phoneNumber, String industry) {
-        this.id = id;
+    public Company(String name, String address, String logoURL, String phoneNumber, String industry) {
         this.name = name;
         this.address = address;
         this.logoURL = logoURL;

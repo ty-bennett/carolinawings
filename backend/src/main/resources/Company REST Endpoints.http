@@ -1,5 +1,8 @@
+### Get company to get All companies
+GET http://localhost:8080/companies
+
 ### POST request to create a company
-POST localhost:8080/admin/companies
+POST http://localhost:8080/admin/companies
 Content-Type: application/json
 
 {
@@ -12,4 +15,17 @@ Content-Type: application/json
 
 ### DELETE request to delete a company by id
 
-DELETE localhost:8080/admin/companies/2
+DELETE localhost:8080/admin/companies/8
+
+### PUT new company property
+
+PUT http://localhost:8080/admin/companies/9
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings - Ballentine",
+  "address": "Ballentine, SC",
+  "logoURL": "https://example.com/logo.png",
+  "phoneNumber": "123456789",
+  "industry": "Food Service"
+}

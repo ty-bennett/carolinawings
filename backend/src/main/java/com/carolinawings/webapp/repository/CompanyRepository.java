@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> findAll();
     Optional<Company> findCompanyById(Long id);
-    @Override
-    void deleteById(@PathVariable Long id);
-
+    void deleteById(Long id);
+    <S extends Company> S save(S entity);
+    boolean existsByName(String name);
 }

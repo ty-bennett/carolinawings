@@ -2,11 +2,10 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.model.Company;
 import com.carolinawings.webapp.repository.CompanyRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,18 +26,18 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public ResponseEntity<Company> createCompany(Company company) {
-        if(companyRepository.existsById(company.getId()))
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        return new ResponseEntity<Company>(companyRepository.save(company), HttpStatus.CREATED);
+    public String createCompany(Company company) {
+        companyRepository.save(company);
+        return "Company with id " +company.getId()+" added successfully";
     }
 
     @Override
-    public ResponseEntity<Optional<Company>> getCompanyById(Long id) {
-        return new ResponseEntity<>(companyRepository.findCompanyById(id), HttpStatus.OK);
+    public Optional<Company> getCompanyById(Long id) {
+        return companyRepository.findCompanyById(id);
     }
 
-    public boolean deleteById(Long id)
+    @Override
+    public boolean deleteCompanyById(Long id)
     {
         if(companyRepository.existsById(id)) {
             companyRepository.deleteById(id);
@@ -48,4 +47,26 @@ public class CompanyServiceImplementation implements CompanyService {
         }
     }
 
+    @Override
+    public Company updateCompany(Company company, Long id)
+    {
+        Optional<Company> companyToUpdate = companyRepository.findAll().stream()
+            .filter(c -> c.getId().equals(id))
+            .findFirst();
+
+        if(companyToUpdate.isPresent())
+        {
+            Company existingCompany = companyToUpdate.get();
+            existingCompany.setName(company.getName());
+            existingCompany.setId(company.getId());
+            existingCompany.setAddress(company.getAddress());
+            existingCompany.setLogoURL(company.getLogoURL());
+            existingCompany.setPhoneNumber(company.getPhoneNumber());
+            existingCompany.setIndustry(company.getIndustry());
+            return existingCompany;
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+        }
+    }
 }

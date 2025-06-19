@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface CompanyService {
     List<Company> getAllCompanies();
-    ResponseEntity<Optional<Company>> getCompanyById(Long id);
-    ResponseEntity<Company> createCompany(Company company);
-    boolean deleteById(Long id);
+    Optional<Company> getCompanyById(Long id);
+    String createCompany(Company company);
+    boolean deleteCompanyById(Long id);
+    Company updateCompany(Company company, Long id);
 }
