@@ -1,5 +1,9 @@
 ### Get company to get All companies
-GET http://localhost:8080/companies
+GET http://localhost:8080/admin/companies
+
+### Get to get a company by ID
+
+GET http://localhost:8080/admin/companies/1
 
 ### POST request to create a company
 POST http://localhost:8080/admin/companies
@@ -15,11 +19,11 @@ Content-Type: application/json
 
 ### DELETE request to delete a company by id
 
-DELETE localhost:8080/admin/companies/8
+DELETE localhost:8080/admin/companies/1
 
 ### PUT new company property
 
-PUT http://localhost:8080/admin/companies/9
+PUT http://localhost:8080/admin/companies/2
 Content-Type: application/json
 
 {

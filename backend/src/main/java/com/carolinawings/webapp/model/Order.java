@@ -11,9 +11,12 @@ import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 @Entity //will  CREATE TABLE ORDER () in SQL based on Class name
 @Table(name = "orders")
+@Getter
+@Setter
 public class Order {
 	//a unique identifier given to each order upon creation
 	@Id

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/admin")
 public class CompanyController {
     private final CompanyServiceImplementation companyServiceImplementation;
 
@@ -32,26 +33,23 @@ public class CompanyController {
         return new ResponseEntity<>(companyServiceImplementation.getCompanyById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/companies")
+    @PostMapping("/companies")
     public ResponseEntity<String> createCompany(@RequestBody Company c)
     {
         companyServiceImplementation.createCompany(c);
         return new ResponseEntity<>("Company created successfully with id: "+c.getId(), HttpStatus.CREATED);
     }
-    @DeleteMapping("/admin/companies/{id}")
-    public ResponseEntity<String> deleteCompany(@PathVariable Long id)
+    @DeleteMapping("/companies/{id}")
+    public ResponseEntity<String> deleteCompanyId(@PathVariable Long id)
     {
         try {
-            if(companyServiceImplementation.deleteCompanyById(id)) {
-                return new ResponseEntity<>(companyServiceImplementation.getCompanyById(id).toString()+" deleted successfully", HttpStatus.OK);
-            }
-            else return new ResponseEntity<>("Company not found with id "+ id, HttpStatus.NOT_FOUND);
-            } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(companyServiceImplementation.deleteCompanyById(id), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }
     }
 
-    @PutMapping("/admin/companies/{id}")
+    @PutMapping("/companies/{id}")
     public ResponseEntity<String> updateCompany(@RequestBody Company company,
                                                 @PathVariable Long id)
     {

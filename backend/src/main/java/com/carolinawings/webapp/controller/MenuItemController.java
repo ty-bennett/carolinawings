@@ -23,11 +23,11 @@ public class MenuItemController
     @GetMapping("/menuitems")
     public List<MenuItem> getAllMenuItems()
     {
-        return menuItemService.getAllMenuItems();
+        return menuItemService.findAllMenuItems();
     }
     @GetMapping("/menuitems/{id}")
     public Optional<MenuItem> getMenuItemById(@PathVariable Integer id)
     {
-        return menuItemService.getById(id);
+        return menuItemService.findMenuItemById(id);
     }
 }

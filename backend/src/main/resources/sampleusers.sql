@@ -1,0 +1,60 @@
+-- INSERT INTO users (
+--     id,
+--     name,
+--     email,
+--     password,
+--     phone_number,
+--     newslettermember,
+--     datejoined,
+--     enabled
+-- ) VALUES
+--       (
+--           '1e7f0b49-c61d-4ed1-aede-31a2b02349a9',
+--           'Emily Clark',
+--           'emily.clark@example.com',
+--           '$2a$10$Vb92NpZLf5nY/1Dm3T6gXOvp8LQdHBQy7PmBqNNtYxZVPvSDdT4Iq',  -- "password123"
+--           '+1234567890',
+--           TRUE,
+--           '2024-02-01',
+--           TRUE
+--       ),
+--       (
+--           '0a4d79e5-5638-4d8a-9e53-4be8e7dbb3a7',
+--           'Michael Lee',
+--           'michael.lee@example.com',
+--           '$2a$10$Vb92NpZLf5nY/1Dm3T6gXOvp8LQdHBQy7PmBqNNtYxZVPvSDdT4Iq',
+--           '+1987654321',
+--           FALSE,
+--           '2024-03-10',
+--           TRUE
+--       ),
+--       (
+--           'c379e77d-c832-4f5f-8a8e-27d45e4a9f1d',
+--           'Sophia Martinez',
+--           'sophia.martinez@example.com',
+--           '$2a$10$Vb92NpZLf5nY/1Dm3T6gXOvp8LQdHBQy7PmBqNNtYxZVPvSDdT4Iq',
+--           '+1098765432',
+--           TRUE,
+--           '2024-04-20',
+--           TRUE
+--       ),
+--       (
+--           'f1549cb7-04ee-4d5c-96ca-066a7fca6ab3',
+--           'David Johnson',
+--           'david.johnson@example.com',
+--           '$2a$10$Vb92NpZLf5nY/1Dm3T6gXOvp8LQdHBQy7PmBqNNtYxZVPvSDdT4Iq',
+--           '+1123456789',
+--           FALSE,
+--           '2024-05-05',
+--           TRUE
+--       ),
+--       (
+--           'e2bfe4b8-c5f4-4223-84d3-2a507fa9b6de',
+--           'Olivia Brown',
+--           'olivia.brown@example.com',
+--           '$2a$10$Vb92NpZLf5nY/1Dm3T6gXOvp8LQdHBQy7PmBqNNtYxZVPvSDdT4Iq',
+--           '+1212345678',
+--           TRUE,
+--           '2024-05-15',
+--           TRUE
+--       );

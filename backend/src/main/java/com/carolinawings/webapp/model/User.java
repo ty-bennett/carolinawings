@@ -7,6 +7,7 @@ package com.carolinawings.webapp.model;
 import java.time.LocalDate;
 import java.util.UUID;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 
 @Entity
 @Table(name="users")
@@ -19,6 +20,7 @@ public class User {
 	//name of user
 	private String name;
 	//email of users
+	@Email(message = "Email should be valid")
 	private String email;
 	private String password;
 	private String phoneNumber;

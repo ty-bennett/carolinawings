@@ -1,3 +1,7 @@
+/*
+Written by Ty Bennett
+*/
+
 package com.carolinawings.webapp.service;
 //public class CustomUserDetailsService implements UserDetailsService {
 //    @Override

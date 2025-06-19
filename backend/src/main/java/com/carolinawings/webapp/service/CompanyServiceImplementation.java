@@ -1,3 +1,7 @@
+/*
+Written by Ty Bennett
+*/
+
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.model.Company;
@@ -33,40 +37,30 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public Optional<Company> getCompanyById(Long id) {
-        return companyRepository.findCompanyById(id);
+        return companyRepository.findById(id);
     }
 
     @Override
-    public boolean deleteCompanyById(Long id)
-    {
-        if(companyRepository.existsById(id)) {
-            companyRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
+    public String deleteCompanyById(Long id) {
+        if (!companyRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found");
         }
+        companyRepository.deleteById(id);
+        return "Company with id " + id + " deleted successfully";
     }
 
-    @Override
-    public Company updateCompany(Company company, Long id)
-    {
-        Optional<Company> companyToUpdate = companyRepository.findAll().stream()
-            .filter(c -> c.getId().equals(id))
-            .findFirst();
 
-        if(companyToUpdate.isPresent())
-        {
-            Company existingCompany = companyToUpdate.get();
-            existingCompany.setName(company.getName());
-            existingCompany.setId(company.getId());
-            existingCompany.setAddress(company.getAddress());
-            existingCompany.setLogoURL(company.getLogoURL());
-            existingCompany.setPhoneNumber(company.getPhoneNumber());
-            existingCompany.setIndustry(company.getIndustry());
-            return existingCompany;
-        }
-        else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-        }
+    @Override
+    public Company updateCompany(Company company, Long id) {
+        return companyRepository.findById(id)
+                .map(existingCompany -> {
+                    existingCompany.setName(company.getName());
+                    existingCompany.setAddress(company.getAddress());
+                    existingCompany.setLogoURL(company.getLogoURL());
+                    existingCompany.setPhoneNumber(company.getPhoneNumber());
+                    existingCompany.setIndustry(company.getIndustry());
+                    return companyRepository.save(existingCompany);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
     }
 }
