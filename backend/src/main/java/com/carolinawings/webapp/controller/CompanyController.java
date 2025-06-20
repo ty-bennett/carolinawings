@@ -37,7 +37,7 @@ public class CompanyController {
     public ResponseEntity<String> createCompany(@RequestBody Company c)
     {
         companyServiceImplementation.createCompany(c);
-        return new ResponseEntity<>("Company created successfully with id: "+c.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>("Company created successfully: \n" +c, HttpStatus.CREATED);
     }
     @DeleteMapping("/companies/{id}")
     public ResponseEntity<String> deleteCompanyId(@PathVariable Long id)
