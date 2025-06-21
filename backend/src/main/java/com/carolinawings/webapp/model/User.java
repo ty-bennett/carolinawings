@@ -7,6 +7,7 @@ package com.carolinawings.webapp.model;
 import java.time.LocalDate;
 import java.util.UUID;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 
 @Entity

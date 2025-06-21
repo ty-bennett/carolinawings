@@ -1,8 +1,10 @@
+/*
+Ty Bennett
+*/
+
 package com.carolinawings.webapp.controller;
 
-import com.carolinawings.webapp.service.MenuItemService;
 import com.carolinawings.webapp.service.MenuItemServiceImplementation;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +28,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems/{id}")
-    public ResponseEntity<Optional<MenuItem>> getMenuItemById(Integer id) {
+    public ResponseEntity<Optional<MenuItem>> getMenuItemById(@PathVariable Integer id) {
         return new ResponseEntity<>(menuItemServiceImplementation.findMenuItemById(id), HttpStatus.OK);
     }
 
