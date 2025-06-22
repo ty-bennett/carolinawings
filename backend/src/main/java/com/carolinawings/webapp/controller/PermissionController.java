@@ -4,11 +4,12 @@ Ty Bennett
 
 package com.carolinawings.webapp.controller;
 
-import com.carolinawings.webapp.service.PermissionService;
+import com.carolinawings.webapp.service.PermissionServiceImplementation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.carolinawings.webapp.model.Permission;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,50 +17,50 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/admin")
 public class PermissionController{
-    private final PermissionServicemanagerServiceImplementation;
+    private final PermissionServiceImplementation permissionServiceImplementation;
 
-    public ManagerController(ManagerServiceImplementation managerServiceImplementation)
+    public PermissionController(PermissionServiceImplementation permissionServiceImplementation)
     {
-        this.managerServiceImplementation = managerServiceImplementation;
+        this.permissionServiceImplementation = permissionServiceImplementation;
     }
 
-    @GetMapping("/managers")
-    public ResponseEntity<List<Manager>> getManagers()
+    @GetMapping("/permissions")
+    public ResponseEntity<List<Permission>> getPermissions()
     {
-        return new ResponseEntity<>(managerServiceImplementation.getAllManagers(), HttpStatus.OK);
+        return new ResponseEntity<>(permissionServiceImplementation.getPermissions(), HttpStatus.OK);
     }
 
-    @GetMapping("managers/{id}")
-    public ResponseEntity<Optional<Manager>> getManagerById(@PathVariable Long id)
+    @GetMapping("/permissions/{id}")
+    public ResponseEntity<Optional<Permission>> getPermissionById(@PathVariable Long id)
     {
-        return new ResponseEntity<>(managerServiceImplementation.getManagerById(id), HttpStatus.OK);
+        return new ResponseEntity<>(permissionServiceImplementation.getPermissionById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/managers")
-    public ResponseEntity<String> createManager(@RequestBody Manager m)
+    @PostMapping("/permissions")
+    public ResponseEntity<String> createManager(@RequestBody Permission p)
     {
-        managerServiceImplementation.createManager(m);
-        return new ResponseEntity<>("Manager created successfully \n" + m, HttpStatus.CREATED);
+        permissionServiceImplementation.createPermission(p);
+        return new ResponseEntity<>("Permission created successfully \n" + p, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/managers/{id}")
-    public ResponseEntity<String> deleteManagerById(@PathVariable Long id)
+    @DeleteMapping("/permissions/{id}")
+    public ResponseEntity<String> deletePermissionsById(@PathVariable Long id)
     {
         try {
-            return new ResponseEntity<>(managerServiceImplementation.deleteManagerById(id), HttpStatus.OK);
+            return new ResponseEntity<>(permissionServiceImplementation.deletePermission(id), HttpStatus.OK);
         } catch (ResponseStatusException e)
         {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }
     }
 
-    @PutMapping("/managers/{id}")
-    public ResponseEntity<String> updateManager(@RequestBody Manager m,
+    @PutMapping("/permissions/{id}")
+    public ResponseEntity<String> updatePermissions(@RequestBody Permission p,
                                                 @PathVariable Long id)
     {
         try {
-            managerServiceImplementation.updateManager(m, id);
-            return new ResponseEntity<>("Edited manager with id: "+id+" \n" +m, HttpStatus.OK);
+            permissionServiceImplementation.updatePermission(p, id);
+            return new ResponseEntity<>("Edited manager with id: "+id+" \n" +p, HttpStatus.OK);
         } catch(ResponseStatusException e)
         {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());

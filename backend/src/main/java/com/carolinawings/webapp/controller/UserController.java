@@ -5,6 +5,7 @@ package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.model.User;
 //import com.carolinawings.webapp.service.UserService;
+import com.carolinawings.webapp.service.UserServiceImplementation;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,32 +15,38 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-//@RestController
-//@RequestMapping("/admin")
-//public class UserController {
-//    private UserService userServiceImplementation;
-//    @Autowired
-//    public UserController(UserService userServiceImpl)
-//    {
-//        this.userServiceImplementation = userServiceImpl;
-//    }
-//
-//    @PostMapping("/users")
-//    public ResponseEntity<String> createUser(@RequestBody User u)
-//    {
-//        try {
-//            String status = userServiceImplementation.save(u);
-//            return new ResponseEntity<>(status, HttpStatus.OK);
-//        } catch (ResponseStatusException r)
-//        {
-//            return new ResponseEntity<>(r.getReason(), r.getStatusCode());
-//        }
-//    }
+@RestController
+@RequestMapping("/admin/restaurant")
+public class UserController {
+    private final UserServiceImplementation userServiceImplementation;
 
-//    @GetMapping("/users")
-//    public List<User> getAllUsers()
-//    {
-//        return userService.getAllUsers();
-//    }
-//}
+    public UserController(UserServiceImplementation userServiceImplementation)
+    {
+        this.userServiceImplementation = userServiceImplementation;
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userServiceImplementation.findAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable UUID id)
+    {
+        return new ResponseEntity<>(userServiceImplementation.findUserById(id), HttpStatus.OK);
+    }
+
+
+
+    @PostMapping("/users")
+    public ResponseEntity<String> createUser(@RequestBody User u)
+    {
+        userServiceImplementation.createUser(u);
+        return new ResponseEntity<>("User with id" + u.getId()+"created successfully \n "+ u, HttpStatus.OK);
+    }
+
+
+}
