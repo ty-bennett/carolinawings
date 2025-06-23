@@ -1,6 +1,7 @@
 package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.service.CompanyServiceImplementation;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CompanyController {
     }
 
     @PostMapping("/companies")
-    public ResponseEntity<String> createCompany(@RequestBody Company c)
+    public ResponseEntity<String> createCompany(@Valid @RequestBody Company c)
     {
         companyServiceImplementation.createCompany(c);
         return new ResponseEntity<>("Company created successfully: \n" +c, HttpStatus.CREATED);

@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class OrderServiceImplementation implements OrderService {
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
     public OrderServiceImplementation(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;

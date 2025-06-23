@@ -9,6 +9,7 @@ import java.util.UUID;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="users")
@@ -23,6 +24,7 @@ public class User {
 	//email of users
 	@Email(message = "Email should be valid")
 	private String email;
+	@Size(min=8, max=50, message = "Password must be at least 8 characters long")
 	private String password;
 	private String phoneNumber;
 	//Are they a member of mailing list

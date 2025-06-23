@@ -2,6 +2,7 @@
 Written by Ty Bennett
 */
 
+
 package com.carolinawings.webapp.dto;
 
 import lombok.AllArgsConstructor;
@@ -11,11 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItemRequestDTO
-{
-    String name;
-    String description;
-    String price;
-    String category;
-    String enabled;
+public class CompanyDTO {
+    private String companyName;
+    private String companyAddress;
+    private String companyPhone;
+    private String managerName;
 }
