@@ -10,6 +10,7 @@ POST http://localhost:8080/admin/companies
 Content-Type: application/json
 
 {
+  "name": "Carolina Wings - Redbank",
   "address": "Red Bank, SC",
   "logoURL": "https://example.com/logo.png",
   "phoneNumber": "8038080488",
