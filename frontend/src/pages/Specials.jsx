@@ -8,12 +8,16 @@ const Specials = () => {
     <>
       <main>
         <NavBar />
-        <h1 className="bg-[rgb(75,0,0)] mt-2 text-white text-center">Lunch Specials</h1>
-        <div className="bg-[rgb(75,0,0)] py-4 text-white text-center mt-10">
-          <p className="py-4">Happy Hour 4-7 PM</p>
+        <div className="py-12 mt-2 h-full">
+          <h1 className="bg-[rgb(75,0,0)] text-white text-center">Lunch Specials</h1>
+        </div>
+        <div className="bg-[rgb(75,0,0)] py-2 text-white text-center mt-2">
+          <p className="py-4 font-oswald">Happy Hour 4-7 PM</p>
         </div>
         <div className={catering.carousel}>
           <FoodCarousel />
+        </div>
+        <div>
         </div>
       </main>
     </>
