@@ -5,17 +5,19 @@ Ty Bennett
 package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.service.MenuItemServiceImplementation;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.carolinawings.webapp.model.MenuItem;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/admin")
 public class MenuItemController {
+
     private final MenuItemServiceImplementation menuItemServiceImplementation;
 
     public MenuItemController(MenuItemServiceImplementation menuItemServiceImplementation) {
@@ -23,7 +25,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems")
-    public ResponseEntity<List<MenuItem>> getAllMenuItems() {
+    public ResponseEntity<List<MenuItem>> getMenuItems() {
         return new ResponseEntity<>(menuItemServiceImplementation.findAllMenuItems(), HttpStatus.OK);
     }
 
@@ -33,30 +35,20 @@ public class MenuItemController {
     }
 
     @PostMapping("/menuitems")
-    public ResponseEntity<String> createMenuItem(@RequestBody MenuItem m) {
-        menuItemServiceImplementation.createMenuItem(m);
-        return new ResponseEntity<>("Menu item created successfully " + m, HttpStatus.CREATED);
+    public ResponseEntity<String> createMenuItem(@Valid @RequestBody MenuItem menuItem) {
+        menuItemServiceImplementation.createMenuItem(menuItem);
+        return new ResponseEntity<>("Menu item created successfully:\n" + menuItem, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/menuitems/{id}")
     public ResponseEntity<String> deleteMenuItemById(@PathVariable Integer id) {
-        try {
-            return new ResponseEntity<>(menuItemServiceImplementation.deleteMenuItem(id), HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-
-        }
+        return new ResponseEntity<>(menuItemServiceImplementation.deleteMenuItem(id), HttpStatus.OK);
     }
+
     @PutMapping("/menuitems/{id}")
-    public ResponseEntity<String> updateMenuItem(@RequestBody MenuItem menuItem,
-                                                 @PathVariable Integer id)
-    {
-       try {
-           menuItemServiceImplementation.updateMenuItem(menuItem, id);
-           return new ResponseEntity<>("company edited with existing id" + id, HttpStatus.OK);
-       } catch (ResponseStatusException e) {
-           return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-       }
+    public ResponseEntity<String> updateMenuItem(@Valid @RequestBody MenuItem menuItem,
+                                                 @PathVariable Integer id) {
+        menuItemServiceImplementation.updateMenuItem(menuItem, id);
+        return new ResponseEntity<>("Menu item edited with existing id: " + id, HttpStatus.OK);
     }
-
 }

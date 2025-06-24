@@ -4,6 +4,8 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Role;
 import com.carolinawings.webapp.repository.RoleRepository;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,29 @@ import java.util.Optional;
 @Service
 public class RoleServiceImplementation implements RoleService {
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    public RoleServiceImplementation(RoleRepository roleRepository) {
+    public RoleServiceImplementation(RoleRepository roleRepository)
+    {
         this.roleRepository = roleRepository;
     }
 
     @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public List<Role> getAllRoles()
+    {
+        List<Role> roles = roleRepository.findAll();
+        if(roles.isEmpty())
+            throw new APIException("No roles present");
+        return roles;
+    }
+
+    @Override
+    public String createRole(Role role) {
+        Role savedRole = roleRepository.findByName(role.getName());
+        if(savedRole != null)
+            throw new APIException("Role with the name " + role.getName() + " already exists");
+        roleRepository.save(role);
+        return "Role with id " + role.getId() + " added successfully";
     }
 
     @Override
@@ -33,29 +49,16 @@ public class RoleServiceImplementation implements RoleService {
     }
 
     @Override
-    public String createRole(Role role) {
-        roleRepository.save(role);
-        return "Role created with id: " + role.getId();
-    }
-
-    @Override
     public String deleteRole(Long id) {
-        if(!roleRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found");
-        }
-        roleRepository.deleteById(id);
-        return "Role deleted with id: " + id;
+        Role r = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role", "roleId", id));
+        roleRepository.delete(r);
+        return "Role with id " + id + " deleted successfully";
     }
 
     @Override
     public Role updateRole(Role role, Long id) {
-        return roleRepository.findById(id)
-                .map(existingRole -> {
-                    existingRole.setName(role.getName());
-                    existingRole.setDescription(role.getDescription());
-                    existingRole.setPermissionsList(role.getPermissionsList());
-                    return roleRepository.save(existingRole);
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
+        Role savedRole = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role", "roleId", id));
+        role.setId(id);
+        return roleRepository.save(savedRole);
     }
 }

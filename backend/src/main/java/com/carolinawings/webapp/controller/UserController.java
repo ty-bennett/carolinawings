@@ -6,6 +6,7 @@ package com.carolinawings.webapp.controller;
 import com.carolinawings.webapp.model.User;
 //import com.carolinawings.webapp.service.UserService;
 import com.carolinawings.webapp.service.UserServiceImplementation;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,34 +20,40 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/admin/restaurant")
+@RequestMapping("/admin")
 public class UserController {
+
     private final UserServiceImplementation userServiceImplementation;
 
-    public UserController(UserServiceImplementation userServiceImplementation)
-    {
+    public UserController(UserServiceImplementation userServiceImplementation) {
         this.userServiceImplementation = userServiceImplementation;
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<>(userServiceImplementation.findAllUsers(), HttpStatus.OK);
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userServiceImplementation.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable UUID id)
-    {
-        return new ResponseEntity<>(userServiceImplementation.findUserById(id), HttpStatus.OK);
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable UUID id) {
+        return new ResponseEntity<>(userServiceImplementation.getUserById(id), HttpStatus.OK);
     }
-
-
 
     @PostMapping("/users")
-    public ResponseEntity<String> createUser(@RequestBody User u)
-    {
-        userServiceImplementation.createUser(u);
-        return new ResponseEntity<>("User with id" + u.getId()+"created successfully \n "+ u, HttpStatus.OK);
+    public ResponseEntity<String> createUser(@Valid @RequestBody User user) {
+        userServiceImplementation.createUser(user);
+        return new ResponseEntity<>("User created successfully:\n" + user, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUserById(@PathVariable UUID id) {
+        return new ResponseEntity<>(userServiceImplementation.deleteUser(id), HttpStatus.OK);
+    }
 
+    @PutMapping("/users/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable UUID id,
+                                             @Valid @RequestBody User user) {
+        userServiceImplementation.updateUser(id, user);
+        return new ResponseEntity<>("User edited with existing id: " + id, HttpStatus.OK);
+    }
 }

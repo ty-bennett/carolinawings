@@ -4,6 +4,8 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.repository.MenuRepository;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,29 @@ import java.util.Optional;
 @Service
 public class MenuServiceImplementation implements MenuService {
 
-    private MenuRepository menuRepository;
+    private final MenuRepository menuRepository;
 
-    public MenuServiceImplementation(MenuRepository menuRepository) {
+    public MenuServiceImplementation(MenuRepository menuRepository)
+    {
         this.menuRepository = menuRepository;
     }
 
     @Override
-    public List<Menu> getAllMenus() {
-        return menuRepository.findAll();
+    public List<Menu> getAllMenus()
+    {
+        List<Menu> menus = menuRepository.findAll();
+        if(menus.isEmpty())
+            throw new APIException("No menus present");
+        return menus;
+    }
+
+    @Override
+    public String createMenu(Menu menu) {
+        Menu savedMenu = menuRepository.findByName(menu.getName());
+        if(savedMenu != null)
+            throw new APIException("Menu with the name " + menu.getName() + " already exists");
+        menuRepository.save(menu);
+        return "Menu with id " + menu.getId() + " added successfully";
     }
 
     @Override
@@ -33,28 +49,16 @@ public class MenuServiceImplementation implements MenuService {
     }
 
     @Override
-    public String createMenu(Menu menu) {
-        menuRepository.save(menu);
-        return "Menu created with id "+menu.getId();
+    public String deleteMenuById(Long id) {
+        Menu m = menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", id));
+        menuRepository.delete(m);
+        return "Menu with id " + id + " deleted successfully";
     }
 
     @Override
     public Menu updateMenu(Menu menu, Long id) {
-        return menuRepository.findById(id)
-                .map(existingMenu -> {
-                    existingMenu.setName(menu.getName());
-                    existingMenu.setMenuItemsList(existingMenu.getMenuItemsList());
-                    return menuRepository.save(existingMenu);
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Menu not found"));
-    }
-
-    @Override
-    public String deleteMenuById(Long id) {
-        if(!menuRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Menu not found");
-        }
-        menuRepository.deleteById(id);
-        return "Menu deleted with id "+id;
+        Menu savedMenu = menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", id));
+        menu.setId(id);
+        return menuRepository.save(savedMenu);
     }
 }

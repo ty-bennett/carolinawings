@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 //Repository Annotation
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager,Long>{
+    Manager findByName(String name);
 //    //Return all managers endpoint
 //    List<Manager> findAll();
 //    //Find a manager by their ID

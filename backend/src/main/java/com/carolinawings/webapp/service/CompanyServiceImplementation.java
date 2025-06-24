@@ -4,6 +4,8 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Company;
 import com.carolinawings.webapp.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +20,26 @@ import java.util.Optional;
 public class CompanyServiceImplementation implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    @Autowired
+
     public CompanyServiceImplementation(CompanyRepository companyRepository)
     {
         this.companyRepository = companyRepository;
     }
 
     @Override
-    public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+    public List<Company> getAllCompanies()
+    {
+        List<Company> companies = companyRepository.findAll();
+        if(companies.isEmpty())
+            throw new APIException("No companies present");
+        return companies;
     }
 
     @Override
     public String createCompany(Company company) {
+        Company savedCompany = companyRepository.findByName(company.getName());
+        if(savedCompany != null)
+            throw new APIException("Company with the name "+ company.getName() + " already exists");
         companyRepository.save(company);
         return "Company with id " +company.getId()+" added successfully";
     }
@@ -42,25 +51,16 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public String deleteCompanyById(Long id) {
-        if (!companyRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found");
-        }
-        companyRepository.deleteById(id);
+        Company c = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId", id));
+        companyRepository.delete(c);
         return "Company with id " + id + " deleted successfully";
     }
 
 
     @Override
     public Company updateCompany(Company company, Long id) {
-        return companyRepository.findById(id)
-                .map(existingCompany -> {
-                    existingCompany.setName(company.getName());
-                    existingCompany.setAddress(company.getAddress());
-                    existingCompany.setLogoURL(company.getLogoURL());
-                    existingCompany.setPhoneNumber(company.getPhoneNumber());
-                    existingCompany.setIndustry(company.getIndustry());
-                    return companyRepository.save(existingCompany);
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
+        Company savedCompany = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId: ", id));
+        company.setId(id);
+        return companyRepository.save(savedCompany);
     }
 }

@@ -4,6 +4,8 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Manager;
 import com.carolinawings.webapp.repository.ManagerRepository;
 import org.springframework.http.HttpStatus;
@@ -15,15 +17,30 @@ import java.util.Optional;
 
 @Service
 public class ManagerServiceImplementation implements ManagerService {
-    private ManagerRepository managerRepository;
 
-    public ManagerServiceImplementation(final ManagerRepository managerRepository) {
+    private final ManagerRepository managerRepository;
+
+    public ManagerServiceImplementation(ManagerRepository managerRepository)
+    {
         this.managerRepository = managerRepository;
     }
 
     @Override
-    public List<Manager> getAllManagers() {
-        return managerRepository.findAll();
+    public List<Manager> getAllManagers()
+    {
+        List<Manager> managers = managerRepository.findAll();
+        if(managers.isEmpty())
+            throw new APIException("No managers present");
+        return managers;
+    }
+
+    @Override
+    public String createManager(Manager manager) {
+        Manager savedManager = managerRepository.findByName(manager.getName());
+        if(savedManager != null)
+            throw new APIException("Manager with the name " + manager.getName() + " already exists");
+        managerRepository.save(manager);
+        return "Manager with id " + manager.getManagerId() + " added successfully";
     }
 
     @Override
@@ -32,29 +49,16 @@ public class ManagerServiceImplementation implements ManagerService {
     }
 
     @Override
-    public String createManager(Manager manager) {
-        managerRepository.save(manager);
-        return "Manager with id: "+manager.getManagerId()+" created";
-    }
-
-    @Override
     public String deleteManagerById(Long id) {
-        if(!managerRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manager with id: "+id+" does not exist");
-        }
-        managerRepository.deleteById(id);
-        return "Manager with id: "+id+" deleted";
+        Manager m = managerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Manager", "managerId", id));
+        managerRepository.delete(m);
+        return "Manager with id " + id + " deleted successfully";
     }
 
     @Override
     public Manager updateManager(Manager manager, Long id) {
-       return managerRepository.findById(id)
-               .map(existingManager -> {
-                   existingManager.setName(manager.getName());
-                   existingManager.setEmail(manager.getEmail());
-                   existingManager.setPhoneNumber(manager.getPhoneNumber());
-                   return managerRepository.save(existingManager);
-               })
-               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manager not found"));
+        Manager savedManager = managerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Manager", "managerId", id));
+        manager.setManagerId(id);
+        return managerRepository.save(savedManager);
     }
 }

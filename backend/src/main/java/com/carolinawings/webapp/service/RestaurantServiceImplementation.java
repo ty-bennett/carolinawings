@@ -1,55 +1,61 @@
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+@Service
 public class RestaurantServiceImplementation implements RestaurantService {
 
-    private RestaurantRepository restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository) {
+    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository)
+    {
         this.restaurantRepository = restaurantRepository;
     }
 
     @Override
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.findAll();
-    }
-
-    @Override
-    public Optional<Restaurant> getRestaurantById(Long id) {
-        return restaurantRepository.findById(id);
+    public List<Restaurant> getAllRestaurants()
+    {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        if(restaurants.isEmpty())
+            throw new APIException("No restaurants present");
+        return restaurants;
     }
 
     @Override
     public String createRestaurant(Restaurant restaurant) {
+        Restaurant savedRestaurant = restaurantRepository.findByName(restaurant.getName());
+        if(savedRestaurant != null)
+            throw new APIException("Restaurant with the name " + restaurant.getName() + " already exists");
         restaurantRepository.save(restaurant);
-        return "Restaurant with id" + restaurant.getId() + " created";
+        return "Restaurant with id " + restaurant.getId() + " added successfully";
     }
 
     @Override
-    public String deleteRestaurant(Long id) {
-       if (!restaurantRepository.existsById(id)) {
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant with id" + id + " not found");
-       }
-       restaurantRepository.deleteById(id);
-       return "Restaurant with id" + id + " deleted";
+    public Optional<Restaurant> getRestaurantById(UUID id) {
+        return restaurantRepository.findById(id);
     }
 
     @Override
-    public Restaurant updateRestaurant(Restaurant restaurant, Long id) {
-        return restaurantRepository.findById(id)
-                .map(existingRestaurant -> {
-                    existingRestaurant.setName(restaurant.getName());
-                    existingRestaurant.setAddress(restaurant.getAddress());
-                    existingRestaurant.setRestaurantAdmin(restaurant.getRestaurantAdmin());
-                    return restaurantRepository.save(existingRestaurant);
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant with id" + id + " not found"));
+    public String deleteRestaurant(UUID id) {
+        Restaurant r = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", id));
+        restaurantRepository.delete(r);
+        return "Restaurant with id " + id + " deleted successfully";
+    }
+
+    @Override
+    public Restaurant updateRestaurant (Restaurant restaurant, UUID id) {
+        Restaurant savedRestaurant = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", id));
+        restaurant.setId(id);
+        return restaurantRepository.save(savedRestaurant);
     }
 }

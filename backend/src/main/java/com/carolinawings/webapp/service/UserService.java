@@ -13,8 +13,8 @@ import java.util.UUID;
 
 @Service
 public interface UserService {
-    List<User> findAllUsers();
-    Optional<User> findUserById(UUID id);
+    List<User> getAllUsers();
+    Optional<User> getUserById(UUID id);
     String createUser(User user);
     String deleteUser(UUID id);
     User updateUser(UUID id, User user);

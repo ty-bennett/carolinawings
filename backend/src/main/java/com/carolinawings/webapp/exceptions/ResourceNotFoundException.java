@@ -1,6 +1,11 @@
 package com.carolinawings.webapp.exceptions;
 
 
+import com.carolinawings.webapp.model.Restaurant;
+import jakarta.annotation.Resource;
+
+import java.util.UUID;
+
 public class ResourceNotFoundException extends  RuntimeException {
     String resourceName;
     String field;
@@ -18,6 +23,11 @@ public class ResourceNotFoundException extends  RuntimeException {
         super(String.format("%s not found with %s: %d", resourceName, field, fieldId));
         this.resourceName = resourceName;
         this.field = field;
+    }
+
+    public ResourceNotFoundException(String resourceName, String field, UUID id)
+    {
+        super(String.format("%s not found with %s: %s", resourceName, field, id.toString()));
     }
 
     public ResourceNotFoundException() {}

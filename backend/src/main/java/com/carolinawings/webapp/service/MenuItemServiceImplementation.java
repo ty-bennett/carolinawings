@@ -1,5 +1,7 @@
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.model.MenuItem;
 import org.springframework.http.HttpStatus;
@@ -12,44 +14,45 @@ import java.util.Optional;
 @Service
 public class MenuItemServiceImplementation implements MenuItemService {
 
-    private MenuItemRepository menuItemRepository;
+    private final MenuItemRepository menuItemRepository;
 
     public MenuItemServiceImplementation(MenuItemRepository menuItemRepository) {
        this.menuItemRepository = menuItemRepository;
     }
-
-    @Override
-    public List<MenuItem> findAllMenuItems() {
-        return menuItemRepository.findAll();
-    }
-
-    @Override
-    public Optional<MenuItem> findMenuItemById(Integer id) {
-        return menuItemRepository.findById(id);
+    public List<MenuItem> findAllMenuItems ()
+    {
+        List<MenuItem> items = menuItemRepository.findAll();
+        if(items.isEmpty())
+            throw new APIException("No Menu Items present");
+        return items;
     }
 
     @Override
     public String createMenuItem(MenuItem menuItem) {
+        MenuItem savedMenuItem = menuItemRepository.findByName(menuItem.getName());
+        if(savedMenuItem != null)
+            throw new APIException("Company with the name "+ menuItem.getName() + " already exists");
         menuItemRepository.save(menuItem);
-        return "Menu item created with id: " + menuItem.getId();
+        return "Company with id " +menuItem.getId()+" added successfully";
+    }
+
+    @Override
+    public Optional<MenuItem> findMenuItemById (Integer id) {
+        return menuItemRepository.findById(id);
     }
 
     @Override
     public String deleteMenuItem(Integer id) {
-        if(!menuItemRepository.existsById(id))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Menu item with id: " + id + " does not exist");
-        menuItemRepository.deleteById(id);
-        return "Menu item with id: " + id + " deleted";
+        MenuItem menuItem = menuItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId", Long.valueOf(id)));
+        menuItemRepository.delete(menuItem);
+        return "Menu Item with id " + id + " deleted successfully";
     }
 
+
+    @Override
     public MenuItem updateMenuItem(MenuItem menuItem, Integer id) {
-        return menuItemRepository.findById(id)
-                .map(existingMenuItem -> {
-                    existingMenuItem.setName(menuItem.getName());
-                    existingMenuItem.setDescription(menuItem.getDescription());
-                    existingMenuItem.setPrice(menuItem.getPrice());
-                    return menuItemRepository.save(existingMenuItem);
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Menu item with id: " + id + " does not exist"));
+        MenuItem savedMenuItem = menuItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId: ", Long.valueOf(id)));
+        menuItem.setId(id);
+        return menuItemRepository.save(savedMenuItem);
     }
 }

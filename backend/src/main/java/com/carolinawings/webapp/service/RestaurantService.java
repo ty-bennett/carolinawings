@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public interface RestaurantService {
     List<Restaurant> getAllRestaurants();
-    Optional<Restaurant> getRestaurantById(Long id);
+    Optional<Restaurant> getRestaurantById(UUID id);
     String createRestaurant(Restaurant restaurant);
-    String deleteRestaurant(Long id);
-    Restaurant updateRestaurant(Restaurant restaurant, Long id);
+    String deleteRestaurant(UUID id);
+    Restaurant updateRestaurant(Restaurant restaurant, UUID id);
 }

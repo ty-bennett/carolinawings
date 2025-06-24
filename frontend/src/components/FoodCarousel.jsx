@@ -1,11 +1,22 @@
+/*
+  Written by Ty Bennett
+*/
 
-const FoodCarousel = () => {
+import { Carousel } from "@material-tailwind/react";
+import { useEffect, useState, useRef } from "react";
+import { ChevronLeftIcon, ChevronRightIcon,} from "@heroicons/react/24/solid";
+
+export default function FoodCarousel() {
+
   return (
-    <div className="p-4 bg-gray-100 rounded shadow-md">
-      <p className="text-xl font-semibold text-gray-800">shiii balls</p>
-    </div>
+    <main>
+      <Carousel>
+        <img src="/foodimages/bbqsand.jpeg"
+        alt="image 1"
+        className="h-full w-full object-cover" />
+      </Carousel>
+    </main>
   );
 };
 
-export default FoodCarousel;
 

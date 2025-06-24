@@ -7,16 +7,18 @@ package com.carolinawings.webapp.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 @Entity //will  CREATE TABLE ORDER () in SQL based on Class name
 @Table(name = "orders")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 	//a unique identifier given to each order upon creation
 	@Id
@@ -33,4 +35,6 @@ public class Order {
 	//User assigned order to
 	@ManyToOne
 	private User user;
+	@OneToMany
+	private List<MenuItem> listOfMenuItems;
 }

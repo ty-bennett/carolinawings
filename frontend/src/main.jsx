@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import './index.css';
+import { ThemeProvider } from '@material-tailwind/react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home.jsx';
 import Menu from './pages/Menu.jsx';
@@ -13,18 +14,18 @@ import Contact from './pages/Contact.jsx';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/">
-          <Route index element={<Home />} />
-          <Route path="/menu" element={<Menu />} />
-          <Route path="/specials" element={<Specials />} />
-          <Route path="/catering" element={<Catering />} />
-          <Route path="/locations" element={<Locations />} />
-          <Route path="/contact" element={<Contact />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route index element={<Home />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/specials" element={<Specials />} />
+            <Route path="/catering" element={<Catering />} />
+            <Route path="/locations" element={<Locations />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
   );
 }
 

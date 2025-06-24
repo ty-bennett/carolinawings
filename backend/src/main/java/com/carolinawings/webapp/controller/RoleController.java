@@ -1,6 +1,5 @@
 package com.carolinawings.webapp.controller;
 
-import com.carolinawings.webapp.model.Permission;
 import com.carolinawings.webapp.model.Role;
 import com.carolinawings.webapp.service.RoleServiceImplementation;
 import org.springframework.http.HttpStatus;

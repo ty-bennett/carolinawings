@@ -1,5 +1,6 @@
 package com.carolinawings.webapp.controller;
 
+import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.repository.CompanyRepository;
 import com.carolinawings.webapp.service.CompanyServiceImplementation;
@@ -18,16 +19,13 @@ import java.util.Optional;
 @RequestMapping("/admin")
 public class CompanyController {
     private final CompanyServiceImplementation companyServiceImplementation;
-    private final CompanyRepository companyRepository;
 
     public CompanyController(CompanyServiceImplementation companyServiceImplementation, CompanyRepository companyRepository) {
         this.companyServiceImplementation = companyServiceImplementation;
-        this.companyRepository = companyRepository;
     }
 
     @GetMapping("/companies")
     public ResponseEntity<List<Company>> getCompanies() {
-
         return new ResponseEntity<>(companyServiceImplementation.getAllCompanies(), HttpStatus.OK);
     }
 
@@ -47,19 +45,14 @@ public class CompanyController {
     @DeleteMapping("/companies/{id}")
     public ResponseEntity<String> deleteCompanyId(@PathVariable Long id)
     {
-        Company c = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId", id));
-        companyServiceImplementation.deleteCompanyById(id);
+        return new ResponseEntity<>(companyServiceImplementation.deleteCompanyById(id), HttpStatus.OK);
     }
 
     @PutMapping("/companies/{id}")
-    public ResponseEntity<String> updateCompany(@RequestBody Company company,
+    public ResponseEntity<String> updateCompany(@Valid @RequestBody Company company,
                                                 @PathVariable Long id)
     {
-        try {
             companyServiceImplementation.updateCompany(company, id);
             return new ResponseEntity<>("Company edited with existing id:" + id, HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        }
     }
 }
