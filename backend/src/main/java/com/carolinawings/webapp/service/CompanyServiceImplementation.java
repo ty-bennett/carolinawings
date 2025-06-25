@@ -4,14 +4,15 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.CompanyDTO;
+import com.carolinawings.webapp.dto.CompanyResponse;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Company;
 import com.carolinawings.webapp.repository.CompanyRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,8 @@ import java.util.Optional;
 public class CompanyServiceImplementation implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public CompanyServiceImplementation(CompanyRepository companyRepository)
     {
@@ -27,40 +30,49 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public List<Company> getAllCompanies()
+    public CompanyResponse getAllCompanies()
     {
         List<Company> companies = companyRepository.findAll();
         if(companies.isEmpty())
             throw new APIException("No companies present");
-        return companies;
+        List<CompanyDTO> companyDTOS = companies.stream()
+                .map(company -> modelMapper.map(company, CompanyDTO.class))
+                .toList();
+
+        return new CompanyResponse(companyDTOS);
     }
 
     @Override
-    public String createCompany(Company company) {
+    public CompanyDTO createCompany(CompanyDTO companyDTO) {
+        Company company = modelMapper.map(companyDTO, Company.class);
         Company savedCompany = companyRepository.findByName(company.getName());
         if(savedCompany != null)
             throw new APIException("Company with the name "+ company.getName() + " already exists");
-        companyRepository.save(company);
-        return "Company with id " +company.getId()+" added successfully";
+        Company returnCompany = companyRepository.save(company);
+        return modelMapper.map(returnCompany, CompanyDTO.class);
     }
 
     @Override
-    public Optional<Company> getCompanyById(Long id) {
-        return companyRepository.findById(id);
+    public Optional<CompanyDTO> getCompanyById(Long id) {
+        Optional<Company> company = companyRepository.findById(id);
+        return company.map((element) -> modelMapper.map(element, CompanyDTO.class));
     }
 
     @Override
-    public String deleteCompanyById(Long id) {
+    public CompanyDTO deleteCompanyById(Long id) {
         Company c = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId", id));
         companyRepository.delete(c);
-        return "Company with id " + id + " deleted successfully";
+        return modelMapper.map(c, CompanyDTO.class);
     }
 
 
     @Override
-    public Company updateCompany(Company company, Long id) {
-        Company savedCompany = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId: ", id));
+    public CompanyDTO updateCompany(CompanyDTO companyDTO, Long id) {
+        Company savedCompany = companyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company", "companyId: ", id));
+        Company company = modelMapper.map(companyDTO, Company.class);
         company.setId(id);
-        return companyRepository.save(savedCompany);
+        Company savedCompanyToRepo = companyRepository.save(company);
+        return modelMapper.map(savedCompanyToRepo, CompanyDTO.class);
     }
 }
