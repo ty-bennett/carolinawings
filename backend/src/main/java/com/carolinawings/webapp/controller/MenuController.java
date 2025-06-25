@@ -1,13 +1,18 @@
+/*
+Written by Ty Bennett
+*/
+
 package com.carolinawings.webapp.controller;
 
-import com.carolinawings.webapp.model.Menu;
+import com.carolinawings.webapp.config.ApplicationConstants;
+import com.carolinawings.webapp.dto.MenuDTO;
+import com.carolinawings.webapp.dto.MenuResponse;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,44 +24,45 @@ public class MenuController {
         this.menuServiceImplementation = menuServiceImplementation;
     }
 
-    @GetMapping("/menus")
-    public ResponseEntity<List<Menu>> getAllMenus () {
-
+    // Get all menus
+    @GetMapping("/menus/all")
+    public ResponseEntity<MenuResponse> getMenus() {
         return new ResponseEntity<>(menuServiceImplementation.getAllMenus(), HttpStatus.OK);
     }
 
-    //gets a company by its id and returns a list to the user
+    // Get all menus and paginate results
+    @GetMapping("/menus")
+    public ResponseEntity<MenuResponse> getMenus(
+            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize) {
+        return new ResponseEntity<>(menuServiceImplementation.getAllMenusPage(pageNumber, pageSize), HttpStatus.OK);
+    }
+
+    // Get a menu by its id and return it
     @GetMapping("/menus/{id}")
-    public ResponseEntity<Optional<Menu>> getMenuById(@PathVariable Long id)
-    {
+    public ResponseEntity<Optional<MenuDTO>> getMenuById(@PathVariable Long id) {
         return new ResponseEntity<>(menuServiceImplementation.getMenuById(id), HttpStatus.OK);
     }
 
+    // Create a menu with valid object in request
     @PostMapping("/menus")
-    public ResponseEntity<String> createMenu(Menu menu)
-    {
-        menuServiceImplementation.createMenu(menu);
-        return new ResponseEntity<>("Company created successfully: \n" + menu, HttpStatus.CREATED);
-    }
-    @DeleteMapping("/menus/{id}")
-    public ResponseEntity<String> deleteMenu(@PathVariable Long id)
-    {
-        try {
-            return new ResponseEntity<>(menuServiceImplementation.deleteMenuById(id), HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        }
+    public ResponseEntity<MenuDTO> createMenu(@Valid @RequestBody MenuDTO menuDTO) {
+        MenuDTO savedMenuDTO = menuServiceImplementation.createMenu(menuDTO);
+        return new ResponseEntity<>(savedMenuDTO, HttpStatus.CREATED);
     }
 
+    // Delete a menu using its id
+    @DeleteMapping("/menus/{id}")
+    public ResponseEntity<MenuDTO> deleteMenuById(@PathVariable Long id) {
+        MenuDTO deletedMenu = menuServiceImplementation.deleteMenu(id);
+        return new ResponseEntity<>(deletedMenu, HttpStatus.OK);
+    }
+
+    // Change info in a menu
     @PutMapping("/menus/{id}")
-    public ResponseEntity<String> updateMenu(@RequestBody Menu menu,
-                                                @PathVariable Long id)
-    {
-        try {
-            menuServiceImplementation.updateMenu(menu, id);
-            return new ResponseEntity<>("Company edited with existing id:" + id, HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        }
+    public ResponseEntity<MenuDTO> updateMenu(@Valid @RequestBody MenuDTO menuDTO,
+                                              @PathVariable Long id) {
+        MenuDTO savedMenuDTO = menuServiceImplementation.updateMenu(menuDTO, id);
+        return new ResponseEntity<>(savedMenuDTO, HttpStatus.OK);
     }
 }

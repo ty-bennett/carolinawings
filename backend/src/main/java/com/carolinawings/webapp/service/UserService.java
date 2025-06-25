@@ -4,18 +4,16 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.model.User;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.carolinawings.webapp.dto.UserResponse;
+import com.carolinawings.webapp.dto.UserResponseDTO;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
 public interface UserService {
-    List<User> getAllUsers();
-    Optional<User> getUserById(UUID id);
-    String createUser(User user);
-    String deleteUser(UUID id);
-    User updateUser(UUID id, User user);
+    UserResponse getAllUsers();
+    UserResponse getAllUsersPaged(Integer page, Integer pageSize);
+    Optional<UserResponseDTO> getUserById(UUID id);
+    UserResponseDTO createUser(UserResponseDTO user);
+    UserResponseDTO deleteUser(UUID id);
+    UserResponseDTO updateUser(UserResponseDTO user, UUID id);
 }

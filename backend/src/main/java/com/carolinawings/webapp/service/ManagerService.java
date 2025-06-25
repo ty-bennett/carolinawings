@@ -4,17 +4,19 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.model.Manager;
 import org.springframework.stereotype.Service;
+import com.carolinawings.webapp.dto.ManagerDTO;
+import com.carolinawings.webapp.dto.ManagerResponse;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @Service
 public interface ManagerService {
-    List<Manager> getAllManagers();
-    Optional<Manager> getManagerById(Long id);
-    String createManager(Manager manager);
-    String deleteManagerById(Long id);
-    Manager updateManager(Manager manager, Long id);
+    ManagerResponse getAllManagers();
+    ManagerResponse getAllManagersPage(int pageNumber, int pageSize);
+    ManagerDTO createManager(ManagerDTO managerDTO);
+    Optional<ManagerDTO> getManagerById(Long id);
+    ManagerDTO deleteManager(Long id);
+    ManagerDTO updateManager(ManagerDTO managerDTO, Long id);
 }

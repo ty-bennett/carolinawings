@@ -1,6 +1,7 @@
 package com.carolinawings.webapp.exceptions;
 
 
+import com.carolinawings.webapp.dto.APIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,14 +27,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> myResourceNotFoundException(ResourceNotFoundException e) {
-        String errorMessage = e.getMessage();
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    public ResponseEntity<APIResponse> myResourceNotFoundException(ResourceNotFoundException e) {
+        String message = e.getMessage();
+        APIResponse response = new APIResponse(message, false);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(APIException.class)
-    public ResponseEntity<String> myAPIException(APIException e) {
-        String errorMessage = e.getMessage();
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    public ResponseEntity<APIResponse> myAPIException(APIException e) {
+        String message = e.getMessage();
+        APIResponse response = new APIResponse(message, false);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

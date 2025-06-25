@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface CompanyService {
     CompanyResponse getAllCompanies();
+    CompanyResponse getAllCompaniesPaged(Integer page, Integer pageSize);
     Optional<CompanyDTO> getCompanyById(Long id);
     CompanyDTO createCompany(CompanyDTO company);
     CompanyDTO deleteCompanyById(Long id);

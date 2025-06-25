@@ -2,20 +2,18 @@
 Written by Ty Bennett
 */
 
-
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.model.Menu;
-import org.springframework.stereotype.Service;
+import com.carolinawings.webapp.dto.MenuDTO;
+import com.carolinawings.webapp.dto.MenuResponse;
 
-import java.util.List;
 import java.util.Optional;
 
-@Service
 public interface MenuService {
-    List<Menu> getAllMenus();
-    Optional<Menu> getMenuById(Long id);
-    String createMenu(Menu menu);
-    Menu updateMenu(Menu menu, Long id);
-    String deleteMenuById(Long id);
+    MenuResponse getAllMenus();
+    MenuResponse getAllMenusPage(Integer page, Integer pageSize);
+    Optional<MenuDTO> getMenuById(Long id);
+    MenuDTO createMenu(MenuDTO menu);
+    MenuDTO deleteMenu(Long id);
+    MenuDTO updateMenu(MenuDTO menu, Long id);
 }

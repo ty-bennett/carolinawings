@@ -2,19 +2,18 @@
 Written by Ty Bennett
 */
 
-
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.model.Role;
-import org.springframework.stereotype.Service;
-import java.util.List;
+import com.carolinawings.webapp.dto.RoleDTO;
+import com.carolinawings.webapp.dto.RoleResponse;
+
 import java.util.Optional;
 
-@Service
 public interface RoleService {
-    List<Role> getAllRoles();
-    Optional<Role> getRoleById(Long id);
-    String createRole(Role role);
-    String deleteRole(Long id);
-    Role updateRole(Role role, Long id);
+    RoleResponse getAllRoles();
+    RoleResponse getAllRolesPaged(Integer page, Integer pageSize);
+    Optional<RoleDTO> getRoleById(Long id);
+    RoleDTO createRole(RoleDTO role);
+    RoleDTO deleteRole(Long id);
+    RoleDTO updateRole(RoleDTO role, Long id);
 }

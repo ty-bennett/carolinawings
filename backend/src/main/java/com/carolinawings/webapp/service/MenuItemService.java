@@ -4,17 +4,18 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.model.MenuItem;
+import com.carolinawings.webapp.dto.MenuItemDTO;
+import com.carolinawings.webapp.dto.MenuItemResponse;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface MenuItemService {
-    List<MenuItem> findAllMenuItems();
-    Optional<MenuItem> findMenuItemById(Integer id);
-    String createMenuItem(MenuItem menuItem);
-    String deleteMenuItem(Integer id);
-    MenuItem updateMenuItem(MenuItem menuItem, Integer id);
+    MenuItemResponse getAllMenuItems();
+    MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize);
+    MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection);
+    Optional<MenuItemDTO> getMenuItemById(Integer id);
+    MenuItemDTO createMenuItem(MenuItemDTO menuItem);
+    MenuItemDTO deleteMenuItem(Integer id);
+    MenuItemDTO updateMenuItem(MenuItemDTO menuItem, Integer id);
 }

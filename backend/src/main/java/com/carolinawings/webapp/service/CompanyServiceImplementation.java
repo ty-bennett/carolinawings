@@ -12,6 +12,9 @@ import com.carolinawings.webapp.model.Company;
 import com.carolinawings.webapp.repository.CompanyRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +43,25 @@ public class CompanyServiceImplementation implements CompanyService {
                 .toList();
 
         return new CompanyResponse(companyDTOS);
+    }
+
+    public CompanyResponse getAllCompaniesPaged(Integer pageNumber, Integer pageSize) {
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Page<Company> companies = companyRepository.findAll(pageDetails);
+        List<Company> companiesPageable = companies.getContent();
+        if(companiesPageable.isEmpty())
+            throw new APIException("No companies present");
+        List<CompanyDTO> companyDTOS = companiesPageable.stream()
+                .map(company -> modelMapper.map(company, CompanyDTO.class))
+                .toList();
+        CompanyResponse cR = new CompanyResponse();
+        cR.setContent(companyDTOS);
+        cR.setPageNumber(companies.getNumber());
+        cR.setPageSize(companies.getSize());
+        cR.setTotalElements(companies.getTotalElements());
+        cR.setTotalPages(companies.getTotalPages());
+        cR.setLastPage(companies.isLast());
+        return cR;
     }
 
     @Override

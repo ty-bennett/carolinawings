@@ -1,14 +1,13 @@
 package com.carolinawings.webapp.controller;
 
+import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.CompanyDTO;
 import com.carolinawings.webapp.dto.CompanyResponse;
-import com.carolinawings.webapp.repository.CompanyRepository;
 import com.carolinawings.webapp.service.CompanyServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.carolinawings.webapp.model.Company;
 
 import java.util.Optional;
 
@@ -17,22 +16,23 @@ import java.util.Optional;
 public class CompanyController {
     private final CompanyServiceImplementation companyServiceImplementation;
 
-    public CompanyController(CompanyServiceImplementation companyServiceImplementation, CompanyRepository companyRepository) {
+    public CompanyController(CompanyServiceImplementation companyServiceImplementation) {
         this.companyServiceImplementation = companyServiceImplementation;
     }
 
-
-    @GetMapping("/echo")
-    public ResponseEntity<String> echoMessage(@RequestParam(name="message", required = false) String message) {
-        //public ResponseEntity<String> echoMessage (@RequestParam(name="message", defaultValue="Hello carolina wings") String message) {
-        return new ResponseEntity<>("Echoed message: "+ message, HttpStatus.OK);
-    }
-
-
-
-    @GetMapping("/companies")
+    //Get all companies
+    @GetMapping("/companies/all")
     public ResponseEntity<CompanyResponse> getCompanies() {
         return new ResponseEntity<>(companyServiceImplementation.getAllCompanies(),HttpStatus.OK);
+    }
+
+    //Get all companies and paginate results
+
+    @GetMapping("/companies")
+    public ResponseEntity<CompanyResponse> getCompanies(
+            @RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize ) {
+        return new ResponseEntity<>(companyServiceImplementation.getAllCompaniesPaged(pageNumber, pageSize),HttpStatus.OK);
     }
 
     //gets a company by its id and returns a list to the user
@@ -42,12 +42,15 @@ public class CompanyController {
         return new ResponseEntity<>(companyServiceImplementation.getCompanyById(id), HttpStatus.OK);
     }
 
+    //Create a company with valid object in request
     @PostMapping("/companies")
     public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyDTO c)
     {
         CompanyDTO savedCompanyDTO = companyServiceImplementation.createCompany(c);
         return new ResponseEntity<>(savedCompanyDTO, HttpStatus.CREATED);
     }
+
+    //Delete a company using its id
     @DeleteMapping("/companies/{id}")
     public ResponseEntity<CompanyDTO> deleteCompanyId(@PathVariable Long id)
     {
@@ -55,6 +58,7 @@ public class CompanyController {
         return new ResponseEntity<>(deletedCompany, HttpStatus.OK);
     }
 
+    //change info in a company
     @PutMapping("/companies/{id}")
     public ResponseEntity<CompanyDTO> updateCompany(@Valid @RequestBody CompanyDTO companyDTO,
                                                 @PathVariable Long id)

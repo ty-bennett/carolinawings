@@ -9,16 +9,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyResponse {
-    private List<CompanyDTO> content;
+public class MenuResponse {
+    private List<MenuDTO> content;
     private Integer pageNumber;
     private Integer pageSize;
     private Long totalElements;
     private Integer totalPages;
     private boolean lastPage;
 
-    public CompanyResponse(List<CompanyDTO> content) {
+    public MenuResponse(List<MenuDTO> content) {
         this.content = content;
     }
-
 }

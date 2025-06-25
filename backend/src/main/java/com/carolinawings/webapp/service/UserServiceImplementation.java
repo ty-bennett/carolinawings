@@ -1,19 +1,21 @@
 /*
-Ty Bennett
+Written by Ty Bennett
 */
+
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.UserResponse;
 import com.carolinawings.webapp.dto.UserResponseDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
-import com.carolinawings.webapp.mapper.UserMapper;
 import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.UserRepository;
-import org.springframework.http.HttpStatus;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,45 +26,76 @@ public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImplementation(UserRepository userRepository)
-    {
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public UserServiceImplementation(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public List<User> getAllUsers()
-    {
+    public UserResponse getAllUsers() {
         List<User> users = userRepository.findAll();
         if(users.isEmpty())
             throw new APIException("No users present");
-        return users;
+        List<UserResponseDTO> userDTOS = users.stream()
+                .map(user -> modelMapper.map(user, UserResponseDTO.class))
+                .toList();
+
+        return new UserResponse(userDTOS);
     }
 
     @Override
-    public String createUser(User user) {
-        User savedUser = userRepository.findByName(user.getName());
+    public UserResponse getAllUsersPaged(Integer pageNumber, Integer pageSize) {
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Page<User> users = userRepository.findAll(pageDetails);
+        List<User> usersPageable = users.getContent();
+        if(usersPageable.isEmpty())
+            throw new APIException("No users present");
+        List<UserResponseDTO> userDTOS = usersPageable.stream()
+                .map(user -> modelMapper.map(user, UserResponseDTO.class))
+                .toList();
+        UserResponse uR = new UserResponse();
+        uR.setContent(userDTOS);
+        uR.setPageNumber(users.getNumber());
+        uR.setPageSize(users.getSize());
+        uR.setTotalElements(users.getTotalElements());
+        uR.setTotalPages(users.getTotalPages());
+        uR.setLastPage(users.isLast());
+        return uR;
+    }
+
+    @Override
+    public UserResponseDTO createUser(UserResponseDTO userDTO) {
+        User user = modelMapper.map(userDTO, User.class);
+        // Example check: unique username or email (adjust based on your User entity)
+        User savedUser = userRepository.findByEmail(user.getEmail());
         if(savedUser != null)
-            throw new APIException("User with the name " + user.getName() + " already exists");
-        userRepository.save(user);
-        return "User with id " + user.getId() + " added successfully";
+            throw new APIException("User with the email"+ user.getEmail() + " already exists");
+        User returnUser = userRepository.save(user);
+        return modelMapper.map(returnUser, UserResponseDTO.class);
     }
 
     @Override
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+    public Optional<UserResponseDTO> getUserById(UUID id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.map((element) -> modelMapper.map(element, UserResponseDTO.class));
     }
 
     @Override
-    public String deleteUser(UUID id) {
+    public UserResponseDTO deleteUser(UUID id) {
         User u = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "userId", id));
         userRepository.delete(u);
-        return "User with id " + id + " deleted successfully";
+        return modelMapper.map(u, UserResponseDTO.class);
     }
 
     @Override
-    public User updateUser(@PathVariable UUID id, @RequestBody User user) {
-        User savedUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "userId", id));
+    public UserResponseDTO updateUser(UserResponseDTO userDTO, UUID id) {
+        User savedUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId: ", id));
+        User user = modelMapper.map(userDTO, User.class);
         user.setId(id);
-        return userRepository.save(savedUser);
+        User savedUserToRepo = userRepository.save(user);
+        return modelMapper.map(savedUserToRepo, UserResponseDTO.class);
     }
 }

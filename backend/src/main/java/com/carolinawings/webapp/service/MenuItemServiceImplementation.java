@@ -1,12 +1,18 @@
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.MenuItemDTO;
+import com.carolinawings.webapp.dto.MenuItemResponse;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
-import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.model.MenuItem;
-import org.springframework.http.HttpStatus;
+import com.carolinawings.webapp.repository.MenuItemRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,43 +22,85 @@ public class MenuItemServiceImplementation implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public MenuItemServiceImplementation(MenuItemRepository menuItemRepository) {
-       this.menuItemRepository = menuItemRepository;
-    }
-    public List<MenuItem> findAllMenuItems ()
-    {
-        List<MenuItem> items = menuItemRepository.findAll();
-        if(items.isEmpty())
-            throw new APIException("No Menu Items present");
-        return items;
+        this.menuItemRepository = menuItemRepository;
     }
 
     @Override
-    public String createMenuItem(MenuItem menuItem) {
-        MenuItem savedMenuItem = menuItemRepository.findByName(menuItem.getName());
-        if(savedMenuItem != null)
-            throw new APIException("Company with the name "+ menuItem.getName() + " already exists");
-        menuItemRepository.save(menuItem);
-        return "Company with id " +menuItem.getId()+" added successfully";
+    public MenuItemResponse getAllMenuItems() {
+        List<MenuItem> menuItems = menuItemRepository.findAll();
+        if (menuItems.isEmpty())
+            throw new APIException("No menu items present");
+        List<MenuItemDTO> menuItemDTOS = menuItems.stream()
+                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
+                .toList();
+
+        return new MenuItemResponse(menuItemDTOS);
     }
 
     @Override
-    public Optional<MenuItem> findMenuItemById (Integer id) {
-        return menuItemRepository.findById(id);
+    public MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize) {
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Page<MenuItem> menuItems = menuItemRepository.findAll(pageDetails);
+        List<MenuItem> menuItemsPageable = menuItems.getContent();
+        if (menuItemsPageable.isEmpty())
+            throw new APIException("No menu items present");
+        List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
+                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
+                .toList();
+        return new MenuItemResponse(menuItemDTOS);
     }
 
     @Override
-    public String deleteMenuItem(Integer id) {
-        MenuItem menuItem = menuItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId", Long.valueOf(id)));
+    public MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection) {
+        Sort sortByAndOrder = sortDirection.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Page<MenuItem> menuItems = menuItemRepository.findAll(pageDetails);
+        List<MenuItem> menuItemsPageable = menuItems.getContent();
+        if (menuItemsPageable.isEmpty())
+            throw new APIException("No menu items present");
+        List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
+                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
+                .toList();
+        return new MenuItemResponse(menuItemDTOS);
+    }
+
+    @Override
+    public MenuItemDTO createMenuItem(MenuItemDTO menuItemDTO) {
+        MenuItem menuItem = modelMapper.map(menuItemDTO, MenuItem.class);
+        MenuItem existingMenuItem = menuItemRepository.findByName(menuItem.getName());
+        if (existingMenuItem != null)
+            throw new APIException("Menu item with the name " + menuItem.getName() + " already exists");
+        MenuItem savedMenuItem = menuItemRepository.save(menuItem);
+        return modelMapper.map(savedMenuItem, MenuItemDTO.class);
+    }
+
+    @Override
+    public Optional<MenuItemDTO> getMenuItemById(Integer id) {
+        Optional<MenuItem> menuItem = menuItemRepository.findById(id);
+        return menuItem.map(item -> modelMapper.map(item, MenuItemDTO.class));
+    }
+
+    @Override
+    public MenuItemDTO deleteMenuItem(Integer id) {
+        MenuItem menuItem = menuItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", Long.valueOf(id)));
         menuItemRepository.delete(menuItem);
-        return "Menu Item with id " + id + " deleted successfully";
+        return modelMapper.map(menuItem, MenuItemDTO.class);
     }
 
-
     @Override
-    public MenuItem updateMenuItem(MenuItem menuItem, Integer id) {
-        MenuItem savedMenuItem = menuItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "companyId: ", Long.valueOf(id)));
+    public MenuItemDTO updateMenuItem(MenuItemDTO menuItemDTO, Integer id) {
+        MenuItem existingMenuItem = menuItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", Long.valueOf(id)));
+        MenuItem menuItem = modelMapper.map(menuItemDTO, MenuItem.class);
         menuItem.setId(id);
-        return menuItemRepository.save(savedMenuItem);
+        MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
+        return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }
 }
