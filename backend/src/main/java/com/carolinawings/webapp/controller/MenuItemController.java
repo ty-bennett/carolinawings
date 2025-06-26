@@ -44,6 +44,14 @@ public class MenuItemController {
                                                             @RequestParam(name="sortOrder", defaultValue = ApplicationConstants.SORT_MENU_ITEMS_ORDER, required = false) String sortOrder) {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItemsSorted(pageNumber, pageSize, sortBy, sortOrder), HttpStatus.OK);
     }
+//
+//    @PostMapping("/admin/menus/{menuId}/menuitems")
+//    public ResponseEntity<MenuItemDTO> addMenuItemToMenu(@RequestBody MenuItem menuItem,
+//                                                         @PathVariable Long menuId)
+//    {
+//        MenuItemDTO menuItemDTO = menuItemServiceImplementation.addProductToMenu(menuId, menuItem);
+//        return menuItemDTO;
+//    }
 
 
     @GetMapping("/menuitems/{id}")

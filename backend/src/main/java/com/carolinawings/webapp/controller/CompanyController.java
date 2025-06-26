@@ -12,18 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/platform-admin")
 public class CompanyController {
     private final CompanyServiceImplementation companyServiceImplementation;
 
     public CompanyController(CompanyServiceImplementation companyServiceImplementation) {
         this.companyServiceImplementation = companyServiceImplementation;
-    }
-
-    //Get all companies
-    @GetMapping("/companies/all")
-    public ResponseEntity<CompanyResponse> getCompanies() {
-        return new ResponseEntity<>(companyServiceImplementation.getAllCompanies(),HttpStatus.OK);
     }
 
     //Get all companies and paginate results

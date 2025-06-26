@@ -4,8 +4,10 @@ import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
+import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.repository.MenuItemRepository;
+import com.carolinawings.webapp.repository.MenuRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,10 +22,14 @@ import java.util.Optional;
 @Service
 public class MenuItemServiceImplementation implements MenuItemService {
 
+    @Autowired
     private final MenuItemRepository menuItemRepository;
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private MenuRepository menuRepository;
 
     public MenuItemServiceImplementation(MenuItemRepository menuItemRepository) {
         this.menuItemRepository = menuItemRepository;
@@ -103,4 +109,11 @@ public class MenuItemServiceImplementation implements MenuItemService {
         MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
         return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }
+//
+//    @Override
+//    public MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem) {
+//        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
+//        menuItem.setMenu(menu);
+//      //  menuItem.set
+//    }
 }

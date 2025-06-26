@@ -6,6 +6,7 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
+import com.carolinawings.webapp.model.MenuItem;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface MenuItemService {
     MenuItemDTO createMenuItem(MenuItemDTO menuItem);
     MenuItemDTO deleteMenuItem(Integer id);
     MenuItemDTO updateMenuItem(MenuItemDTO menuItem, Integer id);
+
+ //   MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem);
 }

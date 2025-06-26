@@ -25,8 +25,8 @@ public class MenuItem {
     private BigDecimal price;
     private String category;
     private boolean enabled;
-    @ManyToMany(mappedBy = "menuItemsList")
-    private List<Menu> menuItemsList;
+    @ManyToOne
+    private Menu menu;
 
     public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
         this.name = name;

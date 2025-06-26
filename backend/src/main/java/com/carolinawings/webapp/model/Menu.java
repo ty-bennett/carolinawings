@@ -15,12 +15,7 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany
-    @JoinTable(
-            name = "menu_menuitems",
-            joinColumns = @JoinColumn(name = "menu_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_item_id")
-    )
+    @OneToMany
     private List<MenuItem> menuItemsList;
 
     public Menu() {}

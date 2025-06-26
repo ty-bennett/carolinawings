@@ -5,6 +5,7 @@ package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -15,8 +16,8 @@ public class Restaurant {
     private UUID id;
     private String name;
     private String address;
-    @OneToOne
-    private Manager restaurantAdmin;
+    @OneToMany
+    private Set<Manager> restaurantAdmin;
 
     public UUID getId() {
         return id;
@@ -42,11 +43,11 @@ public class Restaurant {
         this.address = address;
     }
 
-    public Manager getRestaurantAdmin() {
+    public Set<Manager> getRestaurantAdmin() {
         return restaurantAdmin;
     }
 
-    public void setRestaurantAdmin(Manager restaurantAdmin) {
+    public void setRestaurantAdmin(Set<Manager> restaurantAdmin) {
         this.restaurantAdmin = restaurantAdmin;
     }
 
