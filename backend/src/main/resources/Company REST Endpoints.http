@@ -1,12 +1,12 @@
 ### Get company to get All companies
-GET http://localhost:8080/admin/companies
+GET localhost:8080/platform-admin/companies
 
 ### Get to get a company by ID
 
-GET http://localhost:8080/admin/companies/1
+GET localhost:8080/platform-admin/companies/1
 
 ### POST request to create a company
-POST http://localhost:8080/admin/companies
+POST localhost:8080/platform-admin/companies
 Content-Type: application/json
 
 {
@@ -19,11 +19,11 @@ Content-Type: application/json
 
 ### DELETE request to delete a company by id
 
-DELETE localhost:8080/admin/companies/1
+DELETE localhost:8080/platform-admin/companies/1
 
 ### PUT new company property
 
-PUT http://localhost:8080/admin/companies/2
+PUT http://localhost:8080/platform-admin/companies/2
 Content-Type: application/json
 
 {
@@ -34,5 +34,35 @@ Content-Type: application/json
   "industry": "Food Service"
 }
 
-###
+### get the menu items and sort by their price ascending
 GET localhost:8080/admin/menuitems/sort?sortBy=price
+
+### add new menu item to a menu
+
+    ###First create menu
+
+POST localhost:8080/admin/menus
+Content-Type: application/json
+
+{
+  "name": "Lunch Specials",
+  "description": "lunch specials",
+  "menuItemsList": []
+}
+
+### Get menus
+
+GET localhost:8080/admin/menus
+
+### POst new menu item to menu
+POST localhost:8080/admin/menus/1/menuitems
+Content-Type: application/json
+
+{
+  "name": "Buffalo Wings",
+  "description": "Crispy chicken wings tossed in spicy buffalo sauce. Served with ranch.",
+  "imageURL": "https://example.com/images/buffalo-wings.jpg",
+  "price": 10.99,
+  "category": "Appetizer",
+  "enabled": true
+}

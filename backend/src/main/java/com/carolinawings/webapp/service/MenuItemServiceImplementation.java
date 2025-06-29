@@ -57,7 +57,14 @@ public class MenuItemServiceImplementation implements MenuItemService {
         List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
                 .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
                 .toList();
-        return new MenuItemResponse(menuItemDTOS);
+        MenuItemResponse mR = new MenuItemResponse();
+        mR.setContent(menuItemDTOS);
+        mR.setPageNumber(menuItems.getNumber());
+        mR.setPageSize(menuItems.getSize());
+        mR.setTotalPages(menuItems.getTotalPages());
+        mR.setTotalElements(mR.getTotalElements());
+        mR.setLastPage(mR.isLastPage());
+        return mR;
     }
 
     @Override
@@ -73,7 +80,14 @@ public class MenuItemServiceImplementation implements MenuItemService {
         List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
                 .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
                 .toList();
-        return new MenuItemResponse(menuItemDTOS);
+        MenuItemResponse mR = new MenuItemResponse();
+        mR.setContent(menuItemDTOS);
+        mR.setPageNumber(menuItems.getNumber());
+        mR.setPageSize(menuItems.getSize());
+        mR.setTotalPages(menuItems.getTotalPages());
+        mR.setTotalElements(mR.getTotalElements());
+        mR.setLastPage(mR.isLastPage());
+        return mR;
     }
 
     @Override
@@ -109,11 +123,17 @@ public class MenuItemServiceImplementation implements MenuItemService {
         MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
         return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }
-//
-//    @Override
-//    public MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem) {
-//        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-//        menuItem.setMenu(menu);
-//      //  menuItem.set
-//    }
+
+    public MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
+        if(menu.getMenuItemsList().contains(menuItem))
+        {
+            throw new APIException("Menu item already in list!");
+        }
+        menu.getMenuItemsList().addLast(menuItem);
+        menuItem.setMenu(menu);
+        menuItemRepository.save(menuItem);
+        menuRepository.save(menu);
+        return modelMapper.map(menuItem, MenuItemDTO.class);
+    }
 }

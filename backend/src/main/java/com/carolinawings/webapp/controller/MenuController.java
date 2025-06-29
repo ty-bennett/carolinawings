@@ -6,7 +6,10 @@ package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.MenuDTO;
+import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuResponse;
+import com.carolinawings.webapp.model.MenuItem;
+import com.carolinawings.webapp.service.MenuItemServiceImplementation;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,9 +22,11 @@ import java.util.Optional;
 @RequestMapping("/admin")
 public class MenuController {
     private final MenuServiceImplementation menuServiceImplementation;
+    private final MenuItemServiceImplementation menuItemServiceImplementation;
 
-    public MenuController(MenuServiceImplementation menuServiceImplementation) {
+    public MenuController(MenuServiceImplementation menuServiceImplementation, MenuItemServiceImplementation menuItemServiceImplementation) {
         this.menuServiceImplementation = menuServiceImplementation;
+        this.menuItemServiceImplementation = menuItemServiceImplementation;
     }
 
     // Get all menus
@@ -64,5 +69,12 @@ public class MenuController {
                                               @PathVariable Long id) {
         MenuDTO savedMenuDTO = menuServiceImplementation.updateMenu(menuDTO, id);
         return new ResponseEntity<>(savedMenuDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/menus/{id}/menuitems")
+    public ResponseEntity<MenuItemDTO> addProductToMenu(@PathVariable Long id, @Valid @RequestBody MenuItem menuItem)
+    {
+       MenuItemDTO responseMenuItem = menuItemServiceImplementation.addProductToMenu(id, menuItem);
+       return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
     }
 }
