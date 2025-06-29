@@ -133,7 +133,6 @@ public class MenuItemServiceImplementation implements MenuItemService {
         menu.getMenuItemsList().addLast(menuItem);
         menuItem.setMenu(menu);
         menuItemRepository.save(menuItem);
-        menuRepository.save(menu);
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
 }
