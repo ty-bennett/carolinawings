@@ -4,12 +4,29 @@ Ty Bennett
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
+
+    public enum Roles {
+       CUSTOMER,
+       ADMIN,
+       STAFF,
+       OWNER,
+       GUEST
+    }
+
     @Id
     @GeneratedValue
     private Long id;
@@ -22,47 +39,6 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissionsList;
-
-    public Role() {}
-
-    public Role(Long id, String name, String description, Set<Permission> permissionsList) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.permissionsList = permissionsList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set<Permission> getPermissionsList() {
-        return permissionsList;
-    }
-
-    public void setPermissionsList(Set<Permission> permissionsList) {
-        this.permissionsList = permissionsList;
-    }
 
     @Override
     public String toString() {

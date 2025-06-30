@@ -45,6 +45,9 @@ public class User {
     private Boolean enabled;
     @OneToMany
     private List<Order> orderHistoryList;
+    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    private Role role;
 
     @Override
     public String toString() {

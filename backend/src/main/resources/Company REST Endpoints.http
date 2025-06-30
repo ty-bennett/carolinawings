@@ -66,3 +66,26 @@ Content-Type: application/json
   "category": "Appetizer",
   "enabled": true
 }
+
+### Get menu by Menu Items by Menu
+
+GET localhost:8080/admin/menus/1/menuitems
+
+### update menuItem by MenuiD
+
+PUT localhost:8080/admin/menus/1/menuitems/1
+Content-Type: application/json
+
+{
+  "name": "Buffalo Wings - Extra Spicy",
+  "description": "Crispy chicken wings tossed in spicy buffalo sauce with extra heat. Served with blue cheese.",
+  "imageURL": "https://example.com/images/buffalo-wings-extra.jpg",
+  "price": "11.99",
+  "category": "Appetizer",
+  "enabled": "true"
+}
+
+### Delete menu item from menu
+
+DELETE localhost:8080/admin/menus/1/menuitems/1
+

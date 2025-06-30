@@ -5,10 +5,7 @@ Written by Ty Bennett
 package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.config.ApplicationConstants;
-import com.carolinawings.webapp.dto.MenuDTO;
-import com.carolinawings.webapp.dto.MenuItemDTO;
-import com.carolinawings.webapp.dto.MenuResponse;
-import com.carolinawings.webapp.model.MenuItem;
+import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.service.MenuItemServiceImplementation;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import jakarta.validation.Valid;
@@ -72,9 +69,30 @@ public class MenuController {
     }
 
     @PostMapping("/menus/{id}/menuitems")
-    public ResponseEntity<MenuItemDTO> addProductToMenu(@PathVariable Long id, @Valid @RequestBody MenuItemDTO menuItem)
+    public ResponseEntity<MenuItemDTO> addMenuItemToMenu(@PathVariable Long id, @Valid @RequestBody MenuItemDTO menuItem) {
+        MenuItemDTO responseMenuItem = menuItemServiceImplementation.addMenuItemToMenu(id, menuItem);
+        return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/menus/{id}/menuitems")
+    public ResponseEntity<MenuItemResponse> getMenuItemsByMenu(@PathVariable Long id,
+                                                               @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
+                                                               @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize) {
+        return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemsByMenu(id, pageNumber, pageSize), HttpStatus.OK);
+    }
+
+    @PutMapping("/menus/{id}/menuitems/{menuitemid}")
+    public ResponseEntity<MenuItemDTO> updateMenuItemByMenu(@PathVariable Long id, @PathVariable Integer menuitemid, @RequestBody MenuItemDTO dto)
     {
-       MenuItemDTO responseMenuItem = menuItemServiceImplementation.addProductToMenu(id, menuItem);
-       return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
+       MenuItemDTO responseMenuItem = menuItemServiceImplementation.updateMenuItemByMenu(id, menuitemid, dto);
+       return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/menus/{id}/menuitems/{menuitemid}")
+    public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Integer menuitemid)
+    {
+        MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
+        return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
     }
 }
+

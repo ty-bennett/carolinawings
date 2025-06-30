@@ -1,7 +1,6 @@
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.dto.MenuItemDTO;
-import com.carolinawings.webapp.dto.MenuItemResponse;
+import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
@@ -16,9 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuItemServiceImplementation implements MenuItemService {
@@ -125,7 +124,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
         return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }
 
-    public MenuItemDTO addProductToMenu(Long menuId, MenuItemDTO menuItem) {
+    public MenuItemDTO addMenuItemToMenu (Long menuId, MenuItemDTO menuItem) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
         List<MenuItemDTO> menuItemDTOS = menu.getMenuItemsList().stream().map((element) -> modelMapper.map(element, MenuItemDTO.class)).toList();
         if(menuItemDTOS.contains(menuItem))
@@ -138,4 +137,48 @@ public class MenuItemServiceImplementation implements MenuItemService {
         menuItemRepository.save(menuItemToAdd);
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
+
+    public MenuItemResponse getMenuItemsByMenu(Long menuId, Integer pageNumber, Integer pageSize) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
+        List<MenuItemDTO> responseMenuItem = menu.getMenuItemsList().stream().map((element) -> modelMapper.map(element, MenuItemDTO.class)).toList();
+        MenuItemResponse response = new MenuItemResponse();
+        response.setContent(responseMenuItem);
+        response.setPageSize(pageSize);
+        response.setPageNumber(pageNumber);
+        return response;
+    }
+
+    public MenuItemDTO updateMenuItemByMenu(Long menuId, Integer menuItemID, MenuItemDTO menuItemDTO) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
+
+        MenuItem menuItem = menuItemRepository.findById(menuItemID)
+                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", Long.valueOf(menuItemID)));
+
+        MenuItem menuItemMapped = modelMapper.map(menuItemDTO, MenuItem.class);
+        menuItemMapped.setId(menuItem.getId());
+        menuItemMapped.setMenu(menu);
+        MenuItem saved = menuItemRepository.save(menuItemMapped);
+        System.out.println("Mapped Menu ID: " + menuItemMapped.getMenu().getId());
+        return modelMapper.map(saved, MenuItemDTO.class);
+    }
+
+    public MenuItemDTO deleteMenuItemFromMenu(Long menuId, Integer menuItemID)
+    {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
+        MenuItem menuItem = menuItemRepository.findById(menuItemID).orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", menuItemID));
+
+        List<MenuItem> menuItemsList = menu.getMenuItemsList();
+        for(MenuItem m : menuItemsList)
+        {
+            if(m.getId().equals(menuItem.getId()))
+            {
+               menuItem.setMenu(null);
+               menuRepository.save(menu);
+               menuItemRepository.save(menuItem);
+            }
+        }
+        return modelMapper.map(menuItem, MenuItemDTO.class);
+    }
 }
+

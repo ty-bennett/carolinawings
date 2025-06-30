@@ -31,4 +31,8 @@ public class ResourceNotFoundException extends  RuntimeException {
     }
 
     public ResourceNotFoundException() {}
+
+    public ResourceNotFoundException(String resourceName, String field, Integer id) {
+        super(String.format("%s not found with %s %d", resourceName, field, id));
+    }
 }
