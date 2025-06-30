@@ -72,7 +72,7 @@ public class MenuController {
     }
 
     @PostMapping("/menus/{id}/menuitems")
-    public ResponseEntity<MenuItemDTO> addProductToMenu(@PathVariable Long id, @Valid @RequestBody MenuItem menuItem)
+    public ResponseEntity<MenuItemDTO> addProductToMenu(@PathVariable Long id, @Valid @RequestBody MenuItemDTO menuItem)
     {
        MenuItemDTO responseMenuItem = menuItemServiceImplementation.addProductToMenu(id, menuItem);
        return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);

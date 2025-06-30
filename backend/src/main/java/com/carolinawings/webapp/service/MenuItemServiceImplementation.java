@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuItemServiceImplementation implements MenuItemService {
@@ -124,15 +125,17 @@ public class MenuItemServiceImplementation implements MenuItemService {
         return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }
 
-    public MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem) {
+    public MenuItemDTO addProductToMenu(Long menuId, MenuItemDTO menuItem) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-        if(menu.getMenuItemsList().contains(menuItem))
+        List<MenuItemDTO> menuItemDTOS = menu.getMenuItemsList().stream().map((element) -> modelMapper.map(element, MenuItemDTO.class)).toList();
+        if(menuItemDTOS.contains(menuItem))
         {
             throw new APIException("Menu item already in list!");
         }
-        menu.getMenuItemsList().addLast(menuItem);
-        menuItem.setMenu(menu);
-        menuItemRepository.save(menuItem);
+        MenuItem menuItemToAdd = modelMapper.map(menuItem, MenuItem.class);
+        menu.getMenuItemsList().add(menuItemToAdd);
+        menuItemToAdd.setMenu(menu);
+        menuItemRepository.save(menuItemToAdd);
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
 }
