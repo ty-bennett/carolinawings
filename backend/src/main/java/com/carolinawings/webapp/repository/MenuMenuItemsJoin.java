@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface MenuMenuItemsJoin extends JpaRepository<MenuMenuItemsJoin, Long> {
+public interface MenuMenuItemsJoinRepository extends JpaRepository<MenuMenuItemsJoin, Long> {
         Optional<MenuMenuItemJoin> findMenuMenuItemsJoinBy(Long menuId, Integer menuItemId);
     }
 
