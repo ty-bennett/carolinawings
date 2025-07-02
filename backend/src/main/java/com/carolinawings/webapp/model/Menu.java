@@ -7,6 +7,7 @@ package com.carolinawings.webapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,8 +23,8 @@ public class Menu {
     private Long id;
     private String name;
     private String description;
-    @OneToMany
-    private List<MenuItem> menuItemsList;
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MenuMenuItemJoin> menuItemsList = new ArrayList<>();
 
     public String toString() {
         return "Menu{" +
@@ -41,5 +42,4 @@ public class Menu {
             this.getName().equals(m.getName()) &&
             this.getMenuItemsList().equals(m.getMenuItemsList());
     }
-
 }

@@ -131,10 +131,6 @@ public class MenuItemServiceImplementation implements MenuItemService {
         {
             throw new APIException("Menu item already in list!");
         }
-        MenuItem menuItemToAdd = modelMapper.map(menuItem, MenuItem.class);
-        menu.getMenuItemsList().add(menuItemToAdd);
-        menuItemToAdd.setMenu(menu);
-        menuItemRepository.save(menuItemToAdd);
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
 
@@ -148,18 +144,16 @@ public class MenuItemServiceImplementation implements MenuItemService {
         return response;
     }
 
-    public MenuItemDTO updateMenuItemByMenu(Long menuId, Integer menuItemID, MenuItemDTO menuItemDTO) {
+    public MenuItemDTO updateMenuItemByMenu(Long menuId, Integer menuItemID, MenuItem menuItem) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
 
-        MenuItem menuItem = menuItemRepository.findById(menuItemID)
+        MenuItem menuItemToFind = menuItemRepository.findById(menuItemID)
                 .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", Long.valueOf(menuItemID)));
 
-        MenuItem menuItemMapped = modelMapper.map(menuItemDTO, MenuItem.class);
-        menuItemMapped.setId(menuItem.getId());
-        menuItemMapped.setMenu(menu);
-        MenuItem saved = menuItemRepository.save(menuItemMapped);
-        System.out.println("Mapped Menu ID: " + menuItemMapped.getMenu().getId());
+        boolean exists = menu.getMenuItemsList().stream().anyMatch(menuItem1 -> menuItem1.getId().equals(menuItemID));
+        MenuItem saved = menuItemRepository.save(menuItem);
+        menuRepository.save(menu);
         return modelMapper.map(saved, MenuItemDTO.class);
     }
 
@@ -167,17 +161,6 @@ public class MenuItemServiceImplementation implements MenuItemService {
     {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
         MenuItem menuItem = menuItemRepository.findById(menuItemID).orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", menuItemID));
-
-        List<MenuItem> menuItemsList = menu.getMenuItemsList();
-        for(MenuItem m : menuItemsList)
-        {
-            if(m.getId().equals(menuItem.getId()))
-            {
-               menuItem.setMenu(null);
-               menuRepository.save(menu);
-               menuItemRepository.save(menuItem);
-            }
-        }
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
 }

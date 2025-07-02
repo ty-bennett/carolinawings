@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,8 @@ public class MenuItem {
     private BigDecimal price;
     private String category;
     private boolean enabled;
-    @ManyToOne
-    private Menu menu;
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL)
+    private List<MenuMenuItemJoin> menuMappings = new ArrayList<>();
 
     public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
         this.name = name;

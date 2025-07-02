@@ -6,6 +6,7 @@ package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.*;
+import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.service.MenuItemServiceImplementation;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import jakarta.validation.Valid;
@@ -82,9 +83,9 @@ public class MenuController {
     }
 
     @PutMapping("/menus/{id}/menuitems/{menuitemid}")
-    public ResponseEntity<MenuItemDTO> updateMenuItemByMenu(@PathVariable Long id, @PathVariable Integer menuitemid, @RequestBody MenuItemDTO dto)
+    public ResponseEntity<MenuItemDTO> updateMenuItemByMenu(@PathVariable Long id, @PathVariable Integer menuitemid, @RequestBody MenuItem menuItem)
     {
-       MenuItemDTO responseMenuItem = menuItemServiceImplementation.updateMenuItemByMenu(id, menuitemid, dto);
+       MenuItemDTO responseMenuItem = menuItemServiceImplementation.updateMenuItemByMenu(id, menuitemid, menuItem);
        return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
     }
 
