@@ -24,7 +24,7 @@ public class Menu {
     private String name;
     private String description;
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MenuMenuItemJoin> menuItemsList = new ArrayList<>();
+    private List<MenuMenuItem> menuItemsList = new ArrayList<>();
 
     public String toString() {
         return "Menu{" +

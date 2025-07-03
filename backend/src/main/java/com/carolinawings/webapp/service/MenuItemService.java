@@ -4,10 +4,15 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.MenuItemDTO;
+import com.carolinawings.webapp.dto.MenuItemRequestDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
-import com.carolinawings.webapp.model.MenuItem;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.Optional;
 
 @Service
@@ -20,5 +25,13 @@ public interface MenuItemService {
     MenuItemDTO deleteMenuItem(Integer id);
     MenuItemDTO updateMenuItem(MenuItemDTO menuItem, Integer id);
 
- //   MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem);
+    MenuItemDTO addMenuItemToMenu(Long menuId, MenuItemDTO menuItem);
+
+    MenuDTO getMenuItemsByMenu(Long menuId, Integer pageNumber, Integer pageSize);
+
+    MenuItemDTO deleteMenuItemFromMenu(Long menuId, Integer menuItemID);
+
+    MenuItemDTO updateMenuItemByMenu(@PathVariable Long menuId, @PathVariable Integer menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO);
+
+    //   MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem);
 }

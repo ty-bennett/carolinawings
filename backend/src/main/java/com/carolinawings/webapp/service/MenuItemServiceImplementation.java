@@ -5,8 +5,11 @@ import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.MenuItem;
+import com.carolinawings.webapp.model.MenuMenuItem;
 import com.carolinawings.webapp.repository.MenuItemRepository;
+import com.carolinawings.webapp.repository.MenuMenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,8 +36,12 @@ public class MenuItemServiceImplementation implements MenuItemService {
     @Autowired
     private MenuRepository menuRepository;
 
-    public MenuItemServiceImplementation(MenuItemRepository menuItemRepository) {
+    @Autowired
+    private final MenuMenuItemRepository menuMenuItemRepository;
+
+    public MenuItemServiceImplementation(MenuItemRepository menuItemRepository, MenuMenuItemRepository menuMenuItemRepository) {
         this.menuItemRepository = menuItemRepository;
+        this.menuMenuItemRepository = menuMenuItemRepository;
     }
 
     @Override
@@ -85,7 +94,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
         mR.setPageNumber(menuItems.getNumber());
         mR.setPageSize(menuItems.getSize());
         mR.setTotalPages(menuItems.getTotalPages());
-        mR.setTotalElements(mR.getTotalElements());
+        mR.setTotalElements(menuItems.getTotalElements());
         mR.setLastPage(mR.isLastPage());
         return mR;
     }
@@ -124,44 +133,84 @@ public class MenuItemServiceImplementation implements MenuItemService {
         return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }
 
-    public MenuItemDTO addMenuItemToMenu (Long menuId, MenuItemDTO menuItem) {
+    @Override
+    public MenuItemDTO addMenuItemToMenu(Long menuId, MenuItemDTO requestMenuItem) {
+        //get Menu
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-        List<MenuItemDTO> menuItemDTOS = menu.getMenuItemsList().stream().map((element) -> modelMapper.map(element, MenuItemDTO.class)).toList();
-        if(menuItemDTOS.contains(menuItem))
-        {
-            throw new APIException("Menu item already in list!");
+
+       //Find existing menu Item (if it exists) by name
+        MenuItem menuItem =  menuItemRepository.findByName(requestMenuItem.getName());
+        if(menuItem == null) {
+            menuItem = new MenuItem();
+            menuItem.setName(requestMenuItem.getName());
+            menuItem.setDescription(requestMenuItem.getDescription());
+            menuItem.setImageURL(requestMenuItem.getImageUrl());
+            menuItem.setPrice(new BigDecimal(requestMenuItem.getPrice()));
+            menuItem.setCategory(requestMenuItem.getCategory());
+
+            menuItemRepository.save(menuItem);
         }
-        return modelMapper.map(menuItem, MenuItemDTO.class);
+
+        Optional<MenuMenuItem> existing = menuMenuItemRepository.findByMenuIdAndMenuItemId(menuId, menuItem.getId());
+        if (existing.isPresent())
+            throw new APIException("Menu item with the id " + menuItem.getId() + " already exists");
+
+        MenuMenuItem join = new MenuMenuItem();
+        join.setMenu(menu);
+        join.setMenuItem(menuItem);
+        join.setStatus(requestMenuItem.getEnabled() != null ? requestMenuItem.getEnabled() : "enabled");
+
+        menuMenuItemRepository.save(join);
+
+        MenuItemDTO responseDTO = modelMapper.map(menuItem, MenuItemDTO.class);
+        responseDTO.setEnabled(join.getStatus());
+        return responseDTO;
     }
 
-    public MenuItemResponse getMenuItemsByMenu(Long menuId, Integer pageNumber, Integer pageSize) {
+
+    @Override
+    public MenuDTO getMenuItemsByMenu(Long menuId, Integer pageNumber, Integer pageSize) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-        List<MenuItemDTO> responseMenuItem = menu.getMenuItemsList().stream().map((element) -> modelMapper.map(element, MenuItemDTO.class)).toList();
-        MenuItemResponse response = new MenuItemResponse();
-        response.setContent(responseMenuItem);
-        response.setPageSize(pageSize);
-        response.setPageNumber(pageNumber);
-        return response;
+
+       List<MenuMenuItem> menuItems = menuMenuItemRepository.findAllByMenuId(menuId);
+        List<MenuItemDTO> response = menuItems.stream()
+                .map(menuItem -> new MenuItemDTO(
+                        menuItem.getMenuItem().getName(),
+                        menuItem.getMenuItem().getDescription(),
+                        menuItem.getMenuItem().getImageURL(),
+                        menuItem.getMenuItem().getPrice().toPlainString(),
+                        menuItem.getMenuItem().getCategory(),
+                        menuItem.getStatus()
+                        ))
+                .toList();
+        MenuDTO menuDTO = modelMapper.map(menu, MenuDTO.class);
+        menuDTO.setMenuItemsList(response);
+        menuDTO.setName(menu.getName());
+        menuDTO.setDescription(menu.getDescription());
+        return menuDTO;
     }
 
-    public MenuItemDTO updateMenuItemByMenu(Long menuId, Integer menuItemID, MenuItem menuItem) {
-        Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-
-        MenuItem menuItemToFind = menuItemRepository.findById(menuItemID)
-                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", Long.valueOf(menuItemID)));
-
-        boolean exists = menu.getMenuItemsList().stream().anyMatch(menuItem1 -> menuItem1.getId().equals(menuItemID));
-        MenuItem saved = menuItemRepository.save(menuItem);
-        menuRepository.save(menu);
-        return modelMapper.map(saved, MenuItemDTO.class);
-    }
-
+    @Override
     public MenuItemDTO deleteMenuItemFromMenu(Long menuId, Integer menuItemID)
     {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
         MenuItem menuItem = menuItemRepository.findById(menuItemID).orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", menuItemID));
         return modelMapper.map(menuItem, MenuItemDTO.class);
+    }
+
+    @Override
+    public MenuItemDTO updateMenuItemByMenu(@PathVariable Long menuId, @PathVariable Integer menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO)
+    {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
+        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", menuItemId));
+        MenuMenuItem menuMenuItem = menuMenuItemRepository.findByMenuIdAndMenuItemId(menuId, menuItemId).orElseThrow(() -> new ResourceNotFoundException("JoinTable", "MenuID and menuItemId "+ menuId, menuItemId));
+
+        MenuItem response = modelMapper.map(menuItemDTO, MenuItem.class);
+
+        menuMenuItem.setMenu(menu);
+        menuMenuItem.setMenuItem(response);
+        menuMenuItemRepository.save(menuMenuItem);
+        return modelMapper.map(response, MenuItemDTO.class) ;
     }
 }
 

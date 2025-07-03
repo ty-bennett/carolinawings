@@ -15,6 +15,7 @@ public class MenuItemRequestDTO
 {
     String name;
     String description;
+    String url;
     String price;
     String category;
     String enabled;

@@ -25,17 +25,15 @@ public class MenuItem {
     private String imageURL;
     private BigDecimal price;
     private String category;
-    private boolean enabled;
     @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL)
-    private List<MenuMenuItemJoin> menuMappings = new ArrayList<>();
+    private List<MenuMenuItem> menus = new ArrayList<>();
 
-    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
+    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category) {
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;
         this.price = price;
         this.category = category;
-        this.enabled = enabled;
     }
     public MenuItem() {}
 
@@ -47,7 +45,6 @@ public class MenuItem {
                 ", imageURL='" + imageURL + '\'' +
                 ", price=" + price +
                 ", category='" + category + '\'' +
-                ", enabled=" + enabled +
                 '}';
     }
 
@@ -59,7 +56,6 @@ public class MenuItem {
            this.description.equals(m.getDescription()) &&
            this.imageURL.equals(m.getImageURL()) &&
            this.price.equals(m.getPrice()) &&
-           this.category.equals(m.getCategory()) &&
-           this.enabled == (m.isEnabled());
+           this.category.equals(m.getCategory());
     }
 }

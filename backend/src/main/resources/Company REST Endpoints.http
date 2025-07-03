@@ -78,7 +78,7 @@ GET localhost:8080/admin/menuitems
 ### update menuItem by MenuiD
 
 
-PUT http://localhost:8080/admin/menuitems/1
+PUT http://localhost:8080/admin/menus/1/menuitems/1
 Content-Type: application/json
 
 {
@@ -92,5 +92,5 @@ Content-Type: application/json
 
 ### Delete menu item from menu
 
-DELETE localhost:8080/admin/menus/1/menuitems/1
+DELETE localhost:8080/admin/menus/1/menuitems/88
 

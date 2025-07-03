@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        name = "menu_menu_item_join",
+        name = "menu_menu_item",
         uniqueConstraints =
         {
         @UniqueConstraint(columnNames = {"menu_id", "menu_item_id"})
@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class MenuMenuItemJoin {
+public class MenuMenuItem{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
