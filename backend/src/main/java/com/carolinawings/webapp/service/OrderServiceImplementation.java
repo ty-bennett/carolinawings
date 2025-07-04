@@ -8,8 +8,12 @@ import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponse;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
+import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.model.Order;
+import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.repository.OrderRepository;
+import com.carolinawings.webapp.repository.RestaurantRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +21,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +34,8 @@ public class OrderServiceImplementation implements OrderService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     public OrderServiceImplementation(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -97,6 +105,20 @@ public class OrderServiceImplementation implements OrderService {
         order.setId(id);
         Order savedOrderToRepo = orderRepository.save(order);
         return modelMapper.map(savedOrderToRepo, OrderDTO.class);
+    }
+
+    public OrderDTO createOrderByRestaurant(Long id, @Valid OrderDTO orderDTO) {
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", id));
+        Order order = modelMapper.map(orderDTO, Order.class);
+        List<MenuItem> menuItemList = order.getListOfMenuItems();
+        BigDecimal totalAmount = menuItemList.stream()
+                .map(MenuItem::getPrice)
+                .filter(Objects::nonNull) //remove null elements, if they are there
+                .reduce(BigDecimal.ZERO, BigDecimal::add); // sum prices starting from zero
+        order.setRestaurantAssignedTo(restaurant.getId()); //set restaurant id it's assigned to
+        order.setOrderAmount(totalAmount); //set total amount to the calculated price
+        orderRepository.save(order); //save order to repository
+        return modelMapper.map(order, OrderDTO.class); //convert back to DTO to return to User
     }
 }
 

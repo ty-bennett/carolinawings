@@ -6,9 +6,12 @@ package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.MenuDTO;
+import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.RestaurantDTO;
 import com.carolinawings.webapp.dto.RestaurantResponse;
+import com.carolinawings.webapp.service.OrderServiceImplementation;
 import com.carolinawings.webapp.service.RestaurantServiceImplementation;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,11 @@ import java.util.UUID;
 public class RestaurantController {
 
     private final RestaurantServiceImplementation restaurantServiceImplementation;
+    private OrderServiceImplementation orderServiceImplementation;
 
-    public RestaurantController(RestaurantServiceImplementation restaurantServiceImplementation) {
+    public RestaurantController(RestaurantServiceImplementation restaurantServiceImplementation, OrderServiceImplementation orderServiceImplementation) {
         this.restaurantServiceImplementation = restaurantServiceImplementation;
+        this.orderServiceImplementation = orderServiceImplementation;
     }
 
     // Get all restaurants
@@ -76,4 +81,14 @@ public class RestaurantController {
         Set<MenuDTO> menuDTOS = restaurantServiceImplementation.getMenuByRestaurant(restaurantId);
         return new ResponseEntity<>(menuDTOS, HttpStatus.OK);
     }
+    //create order at restaurant
+
+    @PostMapping("/restaurants/{id}/orders/create")
+    @Transactional
+    public ResponseEntity<OrderDTO> createOrderByRestaurant(@Valid @RequestBody OrderDTO orderDTO, @PathVariable Long id)
+    {
+        OrderDTO savedOrderDTO = orderServiceImplementation.createOrderByRestaurant(id, orderDTO);
+        return new ResponseEntity<>(savedOrderDTO, HttpStatus.CREATED);
+    }
+
 }

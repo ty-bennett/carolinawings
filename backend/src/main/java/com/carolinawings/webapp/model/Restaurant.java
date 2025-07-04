@@ -23,7 +23,7 @@ public class Restaurant {
     private String name;
     private String address;
     @OneToMany
-    private Set<Manager> restaurantAdmin;
+    private Set<User> restaurantAdmin;
     @ManyToMany
     @JoinTable(
             name = "restaurant_menus",

@@ -4,6 +4,7 @@ import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponse;
 import com.carolinawings.webapp.service.OrderServiceImplementation;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,4 +64,5 @@ public class OrderController {
         OrderDTO savedOrderDTO = orderServiceImplementation.updateOrder(orderDTO, id);
         return new ResponseEntity<>(savedOrderDTO, HttpStatus.OK);
     }
+
 }

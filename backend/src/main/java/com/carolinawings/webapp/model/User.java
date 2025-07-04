@@ -43,7 +43,7 @@ public class User {
     private LocalDate dateJoined;
     //set status of User
     private Boolean enabled;
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Order> orderHistoryList;
     @Enumerated(EnumType.STRING)
     @ManyToOne

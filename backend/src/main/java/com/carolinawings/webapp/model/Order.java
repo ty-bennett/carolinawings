@@ -35,6 +35,11 @@ public class Order {
 	//User assigned order to
 	@ManyToOne
 	private User user;
-	@OneToMany
+	@ManyToMany
+	@JoinTable(
+			name = "order_menu_items",
+			joinColumns = @JoinColumn(name = "order_id"),
+			inverseJoinColumns = @JoinColumn(name = "menu_item_id")
+	)
 	private List<MenuItem> listOfMenuItems;
 }
