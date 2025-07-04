@@ -92,6 +92,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.github.terrytsai</groupId>
+			<artifactId>escpos</artifactId>
+			<version>2.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

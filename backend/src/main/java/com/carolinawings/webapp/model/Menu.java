@@ -8,7 +8,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +27,10 @@ public class Menu {
     private String description;
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MenuMenuItem> menuItemsList = new ArrayList<>();
+    @ManyToMany(mappedBy = "menus")
+    private Set<Restaurant> restaurants = new HashSet<>();
+
+
 
     public String toString() {
         return "Menu{" +

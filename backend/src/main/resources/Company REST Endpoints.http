@@ -61,7 +61,7 @@ Content-Type: application/json
 {
   "name": "Buffalo Wings",
   "description": "Crispy chicken wings tossed in spicy buffalo sauce. Served with ranch.",
-  "imageURL": "sample image",
+  "imageUrl": "sample image",
   "price": "10.99",
   "category": "Appetizer",
   "enabled": "true"
@@ -78,7 +78,7 @@ GET localhost:8080/admin/menuitems
 ### update menuItem by MenuiD
 
 
-PUT http://localhost:8080/admin/menus/1/menuitems/1
+PUT http://localhost:8080/admin/menus/1/menuitems/88
 Content-Type: application/json
 
 {
@@ -93,4 +93,15 @@ Content-Type: application/json
 ### Delete menu item from menu
 
 DELETE localhost:8080/admin/menus/1/menuitems/88
+
+### Get menus from restaurant
+
+GET localhost:8080/admin/restaurants/1/menus
+
+### create restaurant
+
+POST localhost:8080/admin/restaurants
+Content-Type: application/json
+
+
 

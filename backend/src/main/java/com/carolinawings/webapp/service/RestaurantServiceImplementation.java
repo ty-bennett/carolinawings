@@ -4,10 +4,12 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.RestaurantDTO;
 import com.carolinawings.webapp.dto.RestaurantResponse;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
+import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import org.modelmapper.ModelMapper;
@@ -19,7 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImplementation implements RestaurantService {
@@ -83,13 +86,13 @@ public class RestaurantServiceImplementation implements RestaurantService {
     }
 
     @Override
-    public Optional<RestaurantDTO> getRestaurantById(UUID id) {
+    public Optional<RestaurantDTO> getRestaurantById(Long id) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
         return restaurant.map(r -> modelMapper.map(r, RestaurantDTO.class));
     }
 
     @Override
-    public RestaurantDTO deleteRestaurant(UUID id) {
+    public RestaurantDTO deleteRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", id));
         restaurantRepository.delete(restaurant);
@@ -97,7 +100,7 @@ public class RestaurantServiceImplementation implements RestaurantService {
     }
 
     @Override
-    public RestaurantDTO updateRestaurant(RestaurantDTO restaurantDTO, UUID id) {
+    public RestaurantDTO updateRestaurant(RestaurantDTO restaurantDTO, Long id) {
         Restaurant existing = restaurantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", id));
 
@@ -106,4 +109,11 @@ public class RestaurantServiceImplementation implements RestaurantService {
         Restaurant saved = restaurantRepository.save(restaurant);
         return modelMapper.map(saved, RestaurantDTO.class);
     }
+
+    public Set<MenuDTO> getMenuByRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        Set<Menu> menus = restaurant.getMenus();
+        return menus.stream().map((element) -> modelMapper.map(element, MenuDTO.class)).collect(Collectors.toSet());
+    }
+
 }

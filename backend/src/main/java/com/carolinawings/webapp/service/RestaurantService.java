@@ -13,8 +13,8 @@ import java.util.UUID;
 public interface RestaurantService {
     RestaurantResponse getAllRestaurants();
     RestaurantResponse getAllRestaurantsPaged(Integer page, Integer pageSize);
-    Optional<RestaurantDTO> getRestaurantById(UUID id);
+    Optional<RestaurantDTO> getRestaurantById(Long id);
     RestaurantDTO createRestaurant(RestaurantDTO restaurant);
-    RestaurantDTO deleteRestaurant(UUID id);
-    RestaurantDTO updateRestaurant(RestaurantDTO restaurant, UUID id);
+    RestaurantDTO deleteRestaurant(Long id);
+    RestaurantDTO updateRestaurant(RestaurantDTO restaurantDTO, Long id);
 }

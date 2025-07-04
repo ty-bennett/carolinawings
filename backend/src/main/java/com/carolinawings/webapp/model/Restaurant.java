@@ -4,52 +4,33 @@ Ty Bennett
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "restaurants")
+@Getter
+@Setter
 public class Restaurant {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String address;
     @OneToMany
     private Set<Manager> restaurantAdmin;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Set<Manager> getRestaurantAdmin() {
-        return restaurantAdmin;
-    }
-
-    public void setRestaurantAdmin(Set<Manager> restaurantAdmin) {
-        this.restaurantAdmin = restaurantAdmin;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "restaurant_menus",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "menu_id")
+    )
+    private Set<Menu> menus = new HashSet<>();
 
     public boolean equals(Restaurant r)
     {
