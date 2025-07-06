@@ -11,6 +11,7 @@ import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.model.Order;
 import com.carolinawings.webapp.model.Restaurant;
+import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.OrderRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import jakarta.validation.Valid;
@@ -36,30 +37,21 @@ public class OrderServiceImplementation implements OrderService {
     private ModelMapper modelMapper;
     @Autowired
     private RestaurantRepository restaurantRepository;
+    @Autowired
+    private MenuItemRepository menuItemRepository;
 
     public OrderServiceImplementation(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
-    @Override
-    public OrderResponse getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
+    public OrderResponse getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", restaurantId));
+        Page<Order> orders = orderRepository.findOrdersByRestaurantAssignedTo(restaurantId, pageDetails);
+
         if (orders.isEmpty())
             throw new APIException("No orders present");
         List<OrderDTO> orderDTOS = orders.stream()
-                .map(order -> modelMapper.map(order, OrderDTO.class))
-                .toList();
-
-        return new OrderResponse(orderDTOS);
-    }
-
-    public OrderResponse getAllOrdersPaged(Integer pageNumber, Integer pageSize) {
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
-        Page<Order> orders = orderRepository.findAll(pageDetails);
-        List<Order> ordersPageable = orders.getContent();
-        if (ordersPageable.isEmpty())
-            throw new APIException("No orders present");
-        List<OrderDTO> orderDTOS = ordersPageable.stream()
                 .map(order -> modelMapper.map(order, OrderDTO.class))
                 .toList();
 
@@ -73,15 +65,6 @@ public class OrderServiceImplementation implements OrderService {
         return oR;
     }
 
-    @Override
-    public OrderDTO createOrder(OrderDTO orderDTO) {
-        Order order = modelMapper.map(orderDTO, Order.class);
-        Order savedOrder = orderRepository.getOrderById(order.getId());
-        if (savedOrder != null)
-            throw new APIException("Order with the order id" + order.getId() + " already exists");
-        Order returnOrder = orderRepository.save(order);
-        return modelMapper.map(returnOrder, OrderDTO.class);
-    }
 
     @Override
     public Optional<OrderDTO> getOrderById(UUID id) {
@@ -110,13 +93,16 @@ public class OrderServiceImplementation implements OrderService {
     public OrderDTO createOrderByRestaurant(Long id, @Valid OrderDTO orderDTO) {
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", id));
         Order order = modelMapper.map(orderDTO, Order.class);
-        List<MenuItem> menuItemList = order.getListOfMenuItems();
+        List<Integer> menuItemIdList = orderDTO.getListOfItems();
+        List<MenuItem> menuItemList = menuItemIdList.stream().map(menuItemRepository::findById)
+                        .filter(Optional::isPresent).map(Optional::get).toList();
         BigDecimal totalAmount = menuItemList.stream()
                 .map(MenuItem::getPrice)
                 .filter(Objects::nonNull) //remove null elements, if they are there
                 .reduce(BigDecimal.ZERO, BigDecimal::add); // sum prices starting from zero
         order.setRestaurantAssignedTo(restaurant.getId()); //set restaurant id it's assigned to
         order.setOrderAmount(totalAmount); //set total amount to the calculated price
+        order.setListOfMenuItems(menuItemList);
         orderRepository.save(order); //save order to repository
         return modelMapper.map(order, OrderDTO.class); //convert back to DTO to return to User
     }

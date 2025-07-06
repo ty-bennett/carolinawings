@@ -7,6 +7,7 @@ package com.carolinawings.webapp.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.*;
@@ -41,5 +42,5 @@ public class Order {
 			joinColumns = @JoinColumn(name = "order_id"),
 			inverseJoinColumns = @JoinColumn(name = "menu_item_id")
 	)
-	private List<MenuItem> listOfMenuItems;
+	private List<MenuItem> listOfMenuItems = new ArrayList<>();
 }

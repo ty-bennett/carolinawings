@@ -30,7 +30,7 @@ public class Restaurant {
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "menu_id")
     )
-    private Set<Menu> menus = new HashSet<>();
+    private Set<Menu> menus;
 
     public boolean equals(Restaurant r)
     {

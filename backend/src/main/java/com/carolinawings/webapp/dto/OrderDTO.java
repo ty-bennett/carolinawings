@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -13,6 +14,6 @@ public class OrderDTO {
     private String restaurant;
     private String pickupTime;
     private String orderAmount;
-    private String userAssignedTo;
+    private UUID userAssignedTo;
     private List<Integer> listOfItems;
 }

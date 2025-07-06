@@ -6,16 +6,14 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponse;
-import com.carolinawings.webapp.model.Order;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderService {
-    OrderResponse getAllOrders();
-    OrderResponse getAllOrdersPaged(Integer page, Integer pageSize);
+    OrderResponse getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId);
     Optional<OrderDTO> getOrderById(UUID id);
-    OrderDTO createOrder(OrderDTO order);
+    OrderDTO createOrderByRestaurant(Long id, OrderDTO order);
     OrderDTO deleteOrderById(UUID id);
     OrderDTO updateOrder(OrderDTO order, UUID id);
 }

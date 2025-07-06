@@ -41,7 +41,7 @@ public class RestaurantController {
 
     // Get all restaurants with pagination
     @GetMapping("/restaurants")
-    public ResponseEntity<RestaurantResponse> getRestaurants(
+    public ResponseEntity<RestaurantResponse> getAllRestaurants(
             @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize) {
         return new ResponseEntity<>(restaurantServiceImplementation.getAllRestaurantsPaged(pageNumber, pageSize), HttpStatus.OK);

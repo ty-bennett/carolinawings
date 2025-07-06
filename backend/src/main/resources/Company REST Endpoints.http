@@ -90,6 +90,10 @@ Content-Type: application/json
   "enabled": "true"
 }
 
+#### GET all restaurants
+
+GET localhost:8080/admin/restaurants
+
 ### Delete menu item from menu
 
 DELETE localhost:8080/admin/menus/1/menuitems/88
@@ -106,11 +110,8 @@ Content-Type: application/json
 {
   "name": "Carolina Wings",
   "address": "123 Wing Street, Charlotte, NC",
-  "restaurantAdmin": [
-    "a3f1e5b2-9c4d-4d8a-81f7-3e0f87c19f9b",
-    "b7e5a6d9-28ef-4aaf-9c12-3e5f8c2a7d6f"
-  ],
-  "menus": [10, 15, 20]
+  "restaurantAdmin": [],
+  "menus": []
 }
 
 #### create order
@@ -119,10 +120,11 @@ POST localhost:8080/admin/restaurants/1/orders/create
 Content-Type: application/json
 
 {
-  "userId": "20f0d23b-fb6e-4f1f-95b6-fad9e408905d",
-  "menuItemIds": [1, 2, 3],
-  "restaurantId": 1,
-  "pickupTime": "18:45"
+  "restaurant": 1,
+  "pickupTime": "18:45",
+  "orderAmount": "0",
+  "userAssignedTo": "20f0d23b-fb6e-4f1f-95b6-fad9e408905d",
+  "listOfItems": [1, 2, 3]
 }
 
 
