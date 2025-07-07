@@ -116,13 +116,13 @@ Content-Type: application/json
 
 #### create order
 
-POST localhost:8080/admin/restaurants/1/orders/create
+POST localhost:8080/admin/restaurants/orders
 Content-Type: application/json
 
 {
-  "restaurant": 1,
+  "restaurantId": 1,
   "pickupTime": "18:45",
-  "orderAmount": "0",
+  "orderAmount": "20.35",
   "userAssignedTo": "20f0d23b-fb6e-4f1f-95b6-fad9e408905d",
   "listOfItems": [1, 2, 3]
 }

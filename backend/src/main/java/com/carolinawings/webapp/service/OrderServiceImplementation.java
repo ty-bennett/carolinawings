@@ -11,9 +11,11 @@ import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.model.Order;
 import com.carolinawings.webapp.model.Restaurant;
+import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.OrderRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
+import com.carolinawings.webapp.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +42,8 @@ public class OrderServiceImplementation implements OrderService {
     private RestaurantRepository restaurantRepository;
     @Autowired
     private MenuItemRepository menuItemRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public OrderServiceImplementation(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -91,20 +96,25 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     public OrderDTO createOrderByRestaurant(Long id, @Valid OrderDTO orderDTO) {
-        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", id));
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", id));
+        User user = userRepository.findById(orderDTO.getUserAssignedTo())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", orderDTO.getUserAssignedTo()));
+
+        List<MenuItem> menuItemsList = menuItemRepository.findAllById(orderDTO.getListOfItems());
+
+        LocalTime pickupTime = LocalTime.parse(orderDTO.getPickupTime());
+        BigDecimal orderAmount = new BigDecimal(orderDTO.getOrderAmount());
+
         Order order = modelMapper.map(orderDTO, Order.class);
-        List<Integer> menuItemIdList = orderDTO.getListOfItems();
-        List<MenuItem> menuItemList = menuItemIdList.stream().map(menuItemRepository::findById)
-                        .filter(Optional::isPresent).map(Optional::get).toList();
-        BigDecimal totalAmount = menuItemList.stream()
-                .map(MenuItem::getPrice)
-                .filter(Objects::nonNull) //remove null elements, if they are there
-                .reduce(BigDecimal.ZERO, BigDecimal::add); // sum prices starting from zero
-        order.setRestaurantAssignedTo(restaurant.getId()); //set restaurant id it's assigned to
-        order.setOrderAmount(totalAmount); //set total amount to the calculated price
-        order.setListOfMenuItems(menuItemList);
-        orderRepository.save(order); //save order to repository
-        return modelMapper.map(order, OrderDTO.class); //convert back to DTO to return to User
+        order.setUser(user);
+        order.setPickupTime(pickupTime);
+        order.setOrderAmount(orderAmount);
+        order.setListOfMenuItems(menuItemsList);
+        order.setRestaurantAssignedTo(restaurant.getId());
+
+        Order savedOrderToRepo = orderRepository.save(order);
+        return modelMapper.map(savedOrderToRepo, OrderDTO.class);
     }
 }
 

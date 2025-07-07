@@ -5,10 +5,8 @@ Written by Ty Bennett
 package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.config.ApplicationConstants;
-import com.carolinawings.webapp.dto.MenuDTO;
-import com.carolinawings.webapp.dto.OrderDTO;
-import com.carolinawings.webapp.dto.RestaurantDTO;
-import com.carolinawings.webapp.dto.RestaurantResponse;
+import com.carolinawings.webapp.dto.*;
+import com.carolinawings.webapp.service.MenuServiceImplementation;
 import com.carolinawings.webapp.service.OrderServiceImplementation;
 import com.carolinawings.webapp.service.RestaurantServiceImplementation;
 import jakarta.transaction.Transactional;
@@ -27,10 +25,12 @@ public class RestaurantController {
 
     private final RestaurantServiceImplementation restaurantServiceImplementation;
     private OrderServiceImplementation orderServiceImplementation;
+    private MenuServiceImplementation menuServiceImplementation;
 
     public RestaurantController(RestaurantServiceImplementation restaurantServiceImplementation, OrderServiceImplementation orderServiceImplementation) {
         this.restaurantServiceImplementation = restaurantServiceImplementation;
         this.orderServiceImplementation = orderServiceImplementation;
+
     }
 
     // Get all restaurants
@@ -83,12 +83,31 @@ public class RestaurantController {
     }
     //create order at restaurant
 
-    @PostMapping("/restaurants/{id}/orders/create")
+    @PostMapping("/restaurants/{id}/orders/")
     @Transactional
     public ResponseEntity<OrderDTO> createOrderByRestaurant(@Valid @RequestBody OrderDTO orderDTO, @PathVariable Long id)
     {
         OrderDTO savedOrderDTO = orderServiceImplementation.createOrderByRestaurant(id, orderDTO);
         return new ResponseEntity<>(savedOrderDTO, HttpStatus.CREATED);
+    }
+
+    // Get all orders by restaurant id with pagination
+    @GetMapping("/restaurants/{id}/orders")
+    public ResponseEntity<OrderResponse> getOrders(
+            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @PathVariable Long id)
+    {
+        return new ResponseEntity<>(orderServiceImplementation.getAllOrdersByRestaurantPaged(pageNumber, pageSize, id), HttpStatus.OK);
+    }
+
+    // Get all menus and paginate results
+    @GetMapping("/restaurants/{restaurantId}/menus")
+    public ResponseEntity<MenuResponse> getMenusByRestaurant(
+            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @PathVariable Long restaurantId) {
+        return new ResponseEntity<>(menuServiceImplementation.getAllMenusByRestaurant(pageNumber, pageSize, restaurantId), HttpStatus.OK);
     }
 
 }

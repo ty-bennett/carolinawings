@@ -23,31 +23,12 @@ public class OrderController {
         this.orderServiceImplementation = orderServiceImplementation;
     }
 
-    // Get all orders
-    @GetMapping("/orders/all")
-    public ResponseEntity<OrderResponse> getOrders() {
-        return new ResponseEntity<>(orderServiceImplementation.getAllOrders(), HttpStatus.OK);
-    }
 
-    // Get all orders with pagination
-    @GetMapping("/orders")
-    public ResponseEntity<OrderResponse> getOrders(
-            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize) {
-        return new ResponseEntity<>(orderServiceImplementation.getAllOrdersPaged(pageNumber, pageSize), HttpStatus.OK);
-    }
 
     // Get an order by its UUID
     @GetMapping("/orders/{id}")
     public ResponseEntity<Optional<OrderDTO>> getOrderById(@PathVariable UUID id) {
         return new ResponseEntity<>(orderServiceImplementation.getOrderById(id), HttpStatus.OK);
-    }
-
-    // Create an order with a valid object in request
-    @PostMapping("/orders")
-    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
-        OrderDTO savedOrderDTO = orderServiceImplementation.createOrder(orderDTO);
-        return new ResponseEntity<>(savedOrderDTO, HttpStatus.CREATED);
     }
 
     // Delete an order using its UUID

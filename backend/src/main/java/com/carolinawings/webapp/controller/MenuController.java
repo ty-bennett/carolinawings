@@ -27,19 +27,8 @@ public class MenuController {
         this.menuItemServiceImplementation = menuItemServiceImplementation;
     }
 
-    // Get all menus
-    @GetMapping("/menus/all")
-    public ResponseEntity<MenuResponse> getMenus() {
-        return new ResponseEntity<>(menuServiceImplementation.getAllMenus(), HttpStatus.OK);
-    }
 
-    // Get all menus and paginate results
-    @GetMapping("/menus")
-    public ResponseEntity<MenuResponse> getMenus(
-            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize) {
-        return new ResponseEntity<>(menuServiceImplementation.getAllMenusPage(pageNumber, pageSize), HttpStatus.OK);
-    }
+
 
     // Get a menu by its id and return it
     @GetMapping("/menus/{id}")

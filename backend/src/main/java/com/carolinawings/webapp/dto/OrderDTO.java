@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
-    private String restaurant;
+    private Long restaurantId;
     private String pickupTime;
     private String orderAmount;
     private UUID userAssignedTo;

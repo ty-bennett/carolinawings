@@ -9,7 +9,9 @@ import com.carolinawings.webapp.dto.MenuResponse;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
+import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.repository.MenuRepository;
+import com.carolinawings.webapp.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +32,23 @@ public class MenuServiceImplementation implements MenuService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private MenuItemServiceImplementation menuItemServiceImplementation;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     public MenuServiceImplementation(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
     @Override
-    public MenuResponse getAllMenus() {
-        List<Menu> menus = menuRepository.findAll();
-        if (menus.isEmpty())
-            throw new APIException("No menus present");
-        List<MenuDTO> menuDTOS = menus.stream()
-                .map(menu -> modelMapper.map(menu, MenuDTO.class))
-                .toList();
-
-        return new MenuResponse(menuDTOS);
-    }
-
-    @Override
-    public MenuResponse getAllMenusPage(Integer pageNumber, Integer pageSize) {
+    public MenuResponse getAllMenusByRestaurant(Integer pageNumber, Integer pageSize, Long restaurantId) {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new APIException("Restaurant not found"));
+        List<Long> menuIds = restaurant.getMenus().stream().map(Menu::getId).toList();
         Page<Menu> menus = menuRepository.findAll(pageDetails);
+
         List<Menu> menusPageable = menus.getContent();
         if (menusPageable.isEmpty())
             throw new APIException("No menus present");
