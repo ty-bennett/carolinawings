@@ -1,6 +1,7 @@
 package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.config.ApplicationConstants;
+import com.carolinawings.webapp.dto.UserRequestDTO;
 import com.carolinawings.webapp.dto.UserResponse;
 import com.carolinawings.webapp.dto.UserResponseDTO;
 import com.carolinawings.webapp.service.UserServiceImplementation;
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     // Create a user
-    @PostMapping("/users")
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserResponseDTO userDTO) {
+    @PostMapping("/users/register")
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userDTO) {
         UserResponseDTO savedUserDTO = userServiceImplementation.createUser(userDTO);
         return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
@@ -58,7 +59,7 @@ public class UserController {
 
     // Update a user
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserResponseDTO userDTO,
+    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRequestDTO userDTO,
                                                       @PathVariable UUID id) {
         UserResponseDTO savedUserDTO = userServiceImplementation.updateUser(userDTO, id);
         return new ResponseEntity<>(savedUserDTO, HttpStatus.OK);

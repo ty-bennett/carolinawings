@@ -5,6 +5,7 @@ Written by Ty Bennett
 package com.carolinawings.webapp.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -33,8 +34,9 @@ public class User {
     private String name;
     //email of users
     @Email(message = "Email should be valid")
+    @Size(max=50)
     private String email;
-    @Size(min=8, max=50, message = "Password must be at least 8 characters long")
+    @Size(min=8, max=100, message = "Password must be at least 8 characters long")
     private String password;
     private String phoneNumber;
     //Are they a member of mailing list
@@ -46,8 +48,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> orderHistoryList;
     @Enumerated(EnumType.STRING)
-    @ManyToOne
-    private Role role;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     @Override
     public String toString() {

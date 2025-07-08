@@ -96,10 +96,11 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     public OrderDTO createOrderByRestaurant(Long id, @Valid OrderDTO orderDTO) {
+        Order orderReq = modelMapper.map(orderDTO, Order.class);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", id));
-        User user = userRepository.findById(orderDTO.getUserAssignedTo())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", orderDTO.getUserAssignedTo()));
+        User user = userRepository.findById(orderReq.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", orderReq.getUser().getId()));
 
         List<MenuItem> menuItemsList = menuItemRepository.findAllById(orderDTO.getListOfItems());
 

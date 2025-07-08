@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ### get the menu items and sort by their price ascending
-GET localhost:8080/admin/menuitems/sort?sortBy=price
+GET localhost:8080/admin/menus/1/menuitems/sort?sortBy=price
 
 ### add new menu item to a menu
 
@@ -50,9 +50,18 @@ Content-Type: application/json
   "menuItemsList": []
 }
 
+### Create restaurant
+POST localhost:8080/admin/restaurants
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings Test",
+  "address": ""
+}
+
 ### Get menus
 
-GET localhost:8080/admin/menus
+GET localhost:8080/admin/restaurants/1/menus
 
 ### POst new menu item to menu
 POST localhost:8080/admin/menus/1/menuitems
@@ -114,16 +123,37 @@ Content-Type: application/json
   "menus": []
 }
 
+### create a userr
+POST localhost:8080/admin/users/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "password": "securePassword123",
+  "phoneNumber": "123-456-7890",
+  "newsletterMember": true,
+  "dateJoined": "2025-07-07",
+  "enabled": true,
+  "role": {
+    "name": "CUSTOMER"
+  }
+}
+
+###Get users
+
+GET localhost:8080/admin/users
+
 #### create order
 
-POST localhost:8080/admin/restaurants/orders
+POST localhost:8080/admin/restaurants/1/orders
 Content-Type: application/json
 
 {
   "restaurantId": 1,
   "pickupTime": "18:45",
   "orderAmount": "20.35",
-  "userAssignedTo": "20f0d23b-fb6e-4f1f-95b6-fad9e408905d",
+  "userAssignedTo": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
   "listOfItems": [1, 2, 3]
 }
 

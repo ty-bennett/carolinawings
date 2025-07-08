@@ -28,8 +28,6 @@ public class MenuController {
     }
 
 
-
-
     // Get a menu by its id and return it
     @GetMapping("/menus/{id}")
     public ResponseEntity<Optional<MenuDTO>> getMenuById(@PathVariable Long id) {
@@ -56,12 +54,6 @@ public class MenuController {
                                               @PathVariable Long id) {
         MenuDTO savedMenuDTO = menuServiceImplementation.updateMenu(menuDTO, id);
         return new ResponseEntity<>(savedMenuDTO, HttpStatus.OK);
-    }
-
-    @PostMapping("/menus/{id}/menuitems")
-    public ResponseEntity<MenuItemDTO> addMenuItemToMenu(@PathVariable Long id, @Valid @RequestBody MenuItemDTO menuItem) {
-        MenuItemDTO responseMenuItem = menuItemServiceImplementation.addMenuItemToMenu(id, menuItem);
-        return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
     }
 
     @GetMapping("/menus/{id}/menuitems")

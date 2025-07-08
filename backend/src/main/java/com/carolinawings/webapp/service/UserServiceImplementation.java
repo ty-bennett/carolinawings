@@ -4,6 +4,7 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.UserRequestDTO;
 import com.carolinawings.webapp.dto.UserResponse;
 import com.carolinawings.webapp.dto.UserResponseDTO;
 import com.carolinawings.webapp.exceptions.APIException;
@@ -66,7 +67,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public UserResponseDTO createUser(UserResponseDTO userDTO) {
+    public UserResponseDTO createUser(UserRequestDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
         // Example check: unique username or email (adjust based on your User entity)
         User savedUser = userRepository.findByEmail(user.getEmail());
@@ -90,7 +91,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateUser(UserResponseDTO userDTO, UUID id) {
+    public UserResponseDTO updateUser(UserRequestDTO userDTO, UUID id) {
         User savedUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId: ", id));
         User user = modelMapper.map(userDTO, User.class);

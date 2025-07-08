@@ -1,5 +1,7 @@
 package com.carolinawings.webapp.dto;
 
+import com.carolinawings.webapp.model.MenuItem;
+import com.carolinawings.webapp.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,6 @@ public class OrderDTO {
     private Long restaurantId;
     private String pickupTime;
     private String orderAmount;
-    private UUID userAssignedTo;
+    private UserResponseDTO userAssignedTo;
     private List<Integer> listOfItems;
 }

@@ -18,8 +18,8 @@ import java.util.Optional;
 @Service
 public interface MenuItemService {
     MenuItemResponse getAllMenuItems();
-    MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize);
-    MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection);
+    MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize, Long menuId);
+    MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection, Long menuId);
     Optional<MenuItemDTO> getMenuItemById(Integer id);
     MenuItemDTO createMenuItem(MenuItemDTO menuItem);
     MenuItemDTO deleteMenuItem(Integer id);

@@ -18,20 +18,12 @@ import java.util.Set;
 @Entity
 @Table(name = "roles")
 public class Role {
-
-    public enum Roles {
-       CUSTOMER,
-       ADMIN,
-       STAFF,
-       OWNER,
-       GUEST
-    }
-
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, name = "role_name")
+    private RoleName name;
     @ManyToMany
     @JoinTable(
             name = "role_permissions",
@@ -45,7 +37,6 @@ public class Role {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 ", permissionsList=" + permissionsList +
                 '}';
     }
@@ -55,7 +46,6 @@ public class Role {
         return r != null &&
             this.getId().equals(r.getId()) &&
             this.getName().equals(r.getName()) &&
-            this.getDescription().equals(r.getDescription()) &&
             this.getPermissionsList().equals(r.getPermissionsList());
     }
 }

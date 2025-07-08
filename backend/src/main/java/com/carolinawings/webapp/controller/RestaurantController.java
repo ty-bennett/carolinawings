@@ -27,9 +27,10 @@ public class RestaurantController {
     private OrderServiceImplementation orderServiceImplementation;
     private MenuServiceImplementation menuServiceImplementation;
 
-    public RestaurantController(RestaurantServiceImplementation restaurantServiceImplementation, OrderServiceImplementation orderServiceImplementation) {
+    public RestaurantController(RestaurantServiceImplementation restaurantServiceImplementation, OrderServiceImplementation orderServiceImplementation, MenuServiceImplementation menuServiceImplementation) {
         this.restaurantServiceImplementation = restaurantServiceImplementation;
         this.orderServiceImplementation = orderServiceImplementation;
+        this.menuServiceImplementation = menuServiceImplementation;
 
     }
 
@@ -75,15 +76,9 @@ public class RestaurantController {
         return new ResponseEntity<>(updatedRestaurantDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/restaurants/{restaurantId}/menus")
-    public ResponseEntity<Set<MenuDTO>> getMenusByRestaurant(@PathVariable Long restaurantId)
-    {
-        Set<MenuDTO> menuDTOS = restaurantServiceImplementation.getMenuByRestaurant(restaurantId);
-        return new ResponseEntity<>(menuDTOS, HttpStatus.OK);
-    }
     //create order at restaurant
 
-    @PostMapping("/restaurants/{id}/orders/")
+    @PostMapping("/restaurants/{id}/orders")
     @Transactional
     public ResponseEntity<OrderDTO> createOrderByRestaurant(@Valid @RequestBody OrderDTO orderDTO, @PathVariable Long id)
     {

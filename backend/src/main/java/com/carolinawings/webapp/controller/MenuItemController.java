@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin")
 public class MenuItemController {
 
     private final MenuItemServiceImplementation menuItemServiceImplementation;
@@ -31,18 +30,20 @@ public class MenuItemController {
     public ResponseEntity<MenuItemResponse> getALlMenuItems() {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItems(), HttpStatus.OK);
     }
-    @GetMapping("/menuitems")
+    @GetMapping("/menus/{menuId}/menuitems")
     public ResponseEntity<MenuItemResponse> getAllMenuItemsPaged(@RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
-                                                            @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize) {
-        return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItemsPaged(pageNumber, pageSize), HttpStatus.OK);
+                                                            @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize,
+                                                            @PathVariable Long menuId){
+        return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItemsPaged(pageNumber, pageSize, menuId), HttpStatus.OK);
     }
 
-    @GetMapping("/menuitems/sort")
+    @GetMapping("/menus/{menuId}/menuitems/sort")
     public ResponseEntity<MenuItemResponse> getAllMenuItemsSorted(@RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
                                                             @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize,
                                                             @RequestParam(name="sortBy", defaultValue = ApplicationConstants.SORT_MENU_ITEMS_BY, required = false) String sortBy,
-                                                            @RequestParam(name="sortOrder", defaultValue = ApplicationConstants.SORT_MENU_ITEMS_ORDER, required = false) String sortOrder) {
-        return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItemsSorted(pageNumber, pageSize, sortBy, sortOrder), HttpStatus.OK);
+                                                            @RequestParam(name="sortOrder", defaultValue = ApplicationConstants.SORT_MENU_ITEMS_ORDER, required = false) String sortOrder,
+                                                            @PathVariable Long menuId){
+        return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItemsSorted(pageNumber, pageSize, sortBy, sortOrder, menuId), HttpStatus.OK);
     }
 
     @GetMapping("/menuitems/{id}")
@@ -66,5 +67,11 @@ public class MenuItemController {
                                                  @PathVariable Integer id) {
         MenuItemDTO savedMenuItemDTO = menuItemServiceImplementation.updateMenuItem(menuItemDTO, id);
         return new ResponseEntity<>(savedMenuItemDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/menus/{id}/menuitems")
+    public ResponseEntity<MenuItemDTO> addMenuItemToMenu(@PathVariable Long id, @Valid @RequestBody MenuItemDTO menuItem) {
+        MenuItemDTO responseMenuItem = menuItemServiceImplementation.addMenuItemToMenu(id, menuItem);
+        return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
     }
 }

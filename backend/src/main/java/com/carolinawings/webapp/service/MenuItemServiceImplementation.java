@@ -19,10 +19,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.carolinawings.webapp.model.MenuMenuItem;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuItemServiceImplementation implements MenuItemService {
@@ -57,14 +59,19 @@ public class MenuItemServiceImplementation implements MenuItemService {
     }
 
     @Override
-    public MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize) {
+    public MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize, Long menuId) {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
         Page<MenuItem> menuItems = menuItemRepository.findAll(pageDetails);
         List<MenuItem> menuItemsPageable = menuItems.getContent();
         if (menuItemsPageable.isEmpty())
             throw new APIException("No menu items present");
         List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
-                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
+                .map(menuItem -> {
+                    MenuItemDTO menuItemDTO = modelMapper.map(menuItem, MenuItemDTO.class);
+                    Optional<MenuMenuItem> menuMenuItem = menuMenuItemRepository.findByMenuIdAndMenuItemId(menuId, menuItem.getId());
+                    menuItemDTO.setStatus(menuMenuItem.isPresent() ? menuItemDTO.getStatus() : null);
+                    return menuItemDTO;
+                })
                 .toList();
         MenuItemResponse mR = new MenuItemResponse();
         mR.setContent(menuItemDTOS);
@@ -77,7 +84,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
     }
 
     @Override
-    public MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection) {
+    public MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection, Long menuId) {
         Sort sortByAndOrder = sortDirection.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -87,8 +94,14 @@ public class MenuItemServiceImplementation implements MenuItemService {
         if (menuItemsPageable.isEmpty())
             throw new APIException("No menu items present");
         List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
-                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
+                .map(menuItem -> {
+                    MenuItemDTO menuItemDTO = modelMapper.map(menuItem, MenuItemDTO.class);
+                    Optional<MenuMenuItem> menuMenuItem = menuMenuItemRepository.findByMenuIdAndMenuItemId(menuId, menuItem.getId());
+                    menuItemDTO.setStatus(menuMenuItem.isPresent() ? menuItemDTO.getStatus() : null);
+                    return menuItemDTO;
+                })
                 .toList();
+
         MenuItemResponse mR = new MenuItemResponse();
         mR.setContent(menuItemDTOS);
         mR.setPageNumber(menuItems.getNumber());
@@ -154,16 +167,15 @@ public class MenuItemServiceImplementation implements MenuItemService {
         Optional<MenuMenuItem> existing = menuMenuItemRepository.findByMenuIdAndMenuItemId(menuId, menuItem.getId());
         if (existing.isPresent())
             throw new APIException("Menu item with the id " + menuItem.getId() + " already exists");
-
         MenuMenuItem join = new MenuMenuItem();
         join.setMenu(menu);
         join.setMenuItem(menuItem);
-        join.setStatus(requestMenuItem.getEnabled() != null ? requestMenuItem.getEnabled() : "enabled");
+        join.setStatus(existing.get().getStatus()!= null ? existing.get().getStatus() : "enabled");
 
         menuMenuItemRepository.save(join);
 
         MenuItemDTO responseDTO = modelMapper.map(menuItem, MenuItemDTO.class);
-        responseDTO.setEnabled(join.getStatus());
+        responseDTO.setStatus(join.getStatus());
         return responseDTO;
     }
 
@@ -180,7 +192,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
                         menuItem.getMenuItem().getImageURL(),
                         menuItem.getMenuItem().getPrice().toPlainString(),
                         menuItem.getMenuItem().getCategory(),
-                        menuItem.getStatus()
+                        menuItems.getFirst().getStatus()
                         ))
                 .toList();
         MenuDTO menuDTO = modelMapper.map(menu, MenuDTO.class);
