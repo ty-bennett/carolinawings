@@ -2,8 +2,9 @@
 
 
 .menuheader {
-  margin-top: 70px;
   font-size: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   letter-spacing: 0.4em;
   color: white;
 }

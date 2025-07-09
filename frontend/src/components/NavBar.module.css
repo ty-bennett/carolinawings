@@ -11,7 +11,6 @@
   text-align: center;
   padding: 15px;
   margin: 0;
-  top: 0;
 }
 
 .navbaritem {
@@ -86,7 +85,7 @@
 .backgroundimg {
   width: 100%;
   height: auto;
-  object-fit: scale-down;
+  object-fit: cover;
   z-index: -1;
   margin-bottom: 22%;
   
@@ -123,10 +122,9 @@
 }
 
 .navbarposition {
-  position: absolute;
+  position: relative;
   width: 100%;
   top: 0;
-  margin-top: 22vh;
 }
 /* nav bar styling */ 
 

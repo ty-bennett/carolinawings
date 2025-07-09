@@ -4,10 +4,7 @@ Ty Bennett
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -21,6 +18,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ToString.Exclude
     @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "role_name")
     private RoleName name;
@@ -32,6 +30,9 @@ public class Role {
     )
     private Set<Permission> permissionsList;
 
+    public Role(RoleName name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {

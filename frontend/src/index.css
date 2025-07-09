@@ -5,3 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+  --color-darkred: rgb(75,0,0);
+  --color-yellow: rgb(212, 189, 118);
+}

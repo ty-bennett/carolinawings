@@ -123,23 +123,6 @@ Content-Type: application/json
   "menus": []
 }
 
-### create a userr
-POST localhost:8080/admin/users/register
-Content-Type: application/json
-
-{
-  "name": "John Doe",
-  "email": "johndoe@example.com",
-  "password": "securePassword123",
-  "phoneNumber": "123-456-7890",
-  "newsletterMember": true,
-  "dateJoined": "2025-07-07",
-  "enabled": true,
-  "role": {
-    "name": "CUSTOMER"
-  }
-}
-
 ###Get users
 
 GET localhost:8080/admin/users

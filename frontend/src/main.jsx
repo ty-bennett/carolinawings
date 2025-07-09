@@ -10,6 +10,8 @@ import Catering from './pages/Catering.jsx';
 import Locations from './pages/Locations.jsx';
 import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import Companies from './pages/Companies.jsx';
 
 
 export default function App() {
@@ -23,7 +25,9 @@ export default function App() {
             <Route path="/catering" element={<Catering />} />
             <Route path="/locations" element={<Locations />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/regsiter" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/companies" element={<Companies />} />
           </Route>
         </Routes>
       </BrowserRouter>
