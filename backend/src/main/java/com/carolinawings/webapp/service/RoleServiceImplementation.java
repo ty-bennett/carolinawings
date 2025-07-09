@@ -66,9 +66,8 @@ public class RoleServiceImplementation implements RoleService {
     @Override
     public RoleDTO createRole(RoleDTO roleDTO) {
         Role role = modelMapper.map(roleDTO, Role.class);
-        Role savedRole = roleRepository.findByName(role.getName());
-        if (savedRole != null)
-            throw new APIException("Role with the name " + role.getName() + " already exists");
+        Role savedRole = roleRepository.findByName(role.getName().name())
+                .orElseThrow(() -> new APIException("Role with the name " + role.getName() + " already exists"));
         Role returnRole = roleRepository.save(role);
         return modelMapper.map(returnRole, RoleDTO.class);
     }

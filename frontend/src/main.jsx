@@ -9,6 +9,7 @@ import Specials from './pages/Specials.jsx';
 import Catering from './pages/Catering.jsx';
 import Locations from './pages/Locations.jsx';
 import Contact from './pages/Contact.jsx';
+import Login from './pages/Login.jsx';
 
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/catering" element={<Catering />} />
             <Route path="/locations" element={<Locations />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/regsiter" element={<Login />} />
           </Route>
         </Routes>
       </BrowserRouter>

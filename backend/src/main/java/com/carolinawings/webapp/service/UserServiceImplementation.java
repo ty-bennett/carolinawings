@@ -70,9 +70,7 @@ public class UserServiceImplementation implements UserService {
     public UserResponseDTO createUser(UserRequestDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
         // Example check: unique username or email (adjust based on your User entity)
-        User savedUser = userRepository.findByEmail(user.getEmail());
-        if(savedUser != null)
-            throw new APIException("User with the email"+ user.getEmail() + " already exists");
+        User savedUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new APIException("User with the email"+ user.getEmail() + " already exists"));
         User returnUser = userRepository.save(user);
         return modelMapper.map(returnUser, UserResponseDTO.class);
     }

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,21 +30,29 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     //UUID of user
+    @Column(name = "id")
     private UUID id;
     //name of user
+    @Column(name = "name")
+    @Size(min = 2, max = 40, message = "Name must be at least 2 characters long")
     private String name;
     //email of users
     @Email(message = "Email should be valid")
-    @Size(max=50)
+    @Size(max=50, min = 7, message = "Email must be a valid email")
     private String email;
-    @Size(min=8, max=100, message = "Password must be at least 8 characters long")
+    @Size(min=8, max=120, message = "Password must be at least 8 characters long")
+    @Column(name = "password")
     private String password;
+    @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "newsletter_member")
     //Are they a member of mailing list
     private Boolean newsletterMember;
+    @Column(name = "date_joined")
     //keep track of how old account is
     private LocalDate dateJoined;
     //set status of User
+    @Column(name = "enabled")
     private Boolean enabled;
     @OneToMany(mappedBy = "user")
     private List<Order> orderHistoryList;
@@ -53,6 +62,9 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    public User(@NotBlank @Size(min = 3, max = 40) @Email String email, @NotBlank @Size(min = 8, max=50) String password, String encode) {
+    }
 
     @Override
     public String toString() {
