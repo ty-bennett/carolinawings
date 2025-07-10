@@ -11,7 +11,8 @@ module.exports = {
       },
       colors: {
         darkred: 'rgb(75,0,0)', 
-        yellow: 'rgb(212, 189, 118)'
+        yellow: 'rgb(212, 189, 118)',
+        gold: 'rgb(190, 149, 20)'
       },
     },
   },

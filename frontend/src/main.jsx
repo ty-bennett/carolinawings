@@ -12,6 +12,7 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Companies from './pages/Companies.jsx';
+import Restaurants from './pages/Restaurants.jsx';
 
 
 export default function App() {
@@ -27,7 +28,9 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/companies" element={<Companies />} />
+            <Route path="/admin/companies" element={<Companies />} />
+            <Route path="/admin/restaurants" element={<Restaurants />} />
+            <Route path="/admin/restaurants/menus/menuitems" element={<MenuItemsByMenu />} />
           </Route>
         </Routes>
       </BrowserRouter>

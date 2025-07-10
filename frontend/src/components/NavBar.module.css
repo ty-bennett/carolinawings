@@ -67,11 +67,12 @@
 
 .gridchildimg {
   width: auto;
-  height: 22vh;
-  z-index: -1;
+  height: 210px;
+  background-size: contain;
   overflow: hidden;
   grid-area: img;
   margin: 0;
+  padding: 0;
 }
 
 .gridchildbutton {

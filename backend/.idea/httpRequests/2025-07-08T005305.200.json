@@ -1,0 +1,16 @@
+{
+  "content": [
+    {
+      "id": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
+      "name": "John Doe",
+      "email": "johndoe@example.com",
+      "phoneNumber": null,
+      "newsletterMember": "true"
+    }
+  ],
+  "pageNumber": 0,
+  "pageSize": 50,
+  "totalElements": 1,
+  "totalPages": 1,
+  "lastPage": true
+}
