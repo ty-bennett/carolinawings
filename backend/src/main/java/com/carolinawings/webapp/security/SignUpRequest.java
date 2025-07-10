@@ -1,0 +1,28 @@
+package com.carolinawings.webapp.security;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class SignUpRequest {
+    @NotBlank
+    @Size(min = 3, max = 40)
+    @Email
+    private String username;
+
+    private Set<String> roles;
+
+    @NotBlank
+    @Size(min = 8, max=50)
+    private String password;
+}

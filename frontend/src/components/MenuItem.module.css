@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inconsolata:wght@200..900&family=Lexend&family=Pacifico&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.cardcontainer {
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  height: 230px;
+  background-color: black;
+  border-radius: 10px;
+}
+
+.headercontainer {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+
+  width: 100%;
+}
+
+.header {
+  font-family: "Open Sans";
+  font-weight: 400;
+  color: white;
+  font-size: 20px;
+  width: 100%;
+  margin: 0;
+}
+
+.header svg {
+  display: inline-block;
+}
+
+.price {
+  display: flex;
+  font-weight: 200;
+  color: white;
+  padding-top: 2px;
+  margin: 0;
+}
+
+.description {
+  font-family: "Open Sans";
+  color: white;
+  font-size: 16px;
+}
+
+.description p {
+  font-family: "Open Sans";
+  color: white;
+  font-size: 16px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 2em;
+}
+
+ul li {
+  display: flex;
+  padding-left: 5px;
+}

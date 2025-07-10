@@ -1,0 +1,146 @@
+### Get company to get All companies
+GET localhost:8080/platform-admin/companies
+
+### Get to get a company by ID
+
+GET localhost:8080/platform-admin/companies/1
+
+### POST request to create a company
+POST localhost:8080/platform-admin/companies
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings - Redbank",
+  "address": "Red Bank, SC",
+  "logoURL": "https://example.com/logo.png",
+  "phoneNumber": "8038080488",
+  "industry": "Food Service"
+}
+
+### DELETE request to delete a company by id
+
+DELETE localhost:8080/platform-admin/companies/1
+
+### PUT new company property
+
+PUT http://localhost:8080/platform-admin/companies/2
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings - Ballentine",
+  "address": "Ballentine, SC",
+  "logoURL": "https://example.com/logo.png",
+  "phoneNumber": "123456789",
+  "industry": "Food Service"
+}
+
+### get the menu items and sort by their price ascending
+GET localhost:8080/admin/menus/1/menuitems/sort?sortBy=price
+
+### add new menu item to a menu
+
+    ###First create menu
+
+POST localhost:8080/admin/menus
+Content-Type: application/json
+
+{
+  "name": "Lunch Specials",
+  "description": "lunch specials",
+  "menuItemsList": []
+}
+
+### Create restaurant
+POST localhost:8080/admin/restaurants
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings Test",
+  "address": ""
+}
+
+### Get menus
+
+GET localhost:8080/admin/restaurants/1/menus
+
+### POst new menu item to menu
+POST localhost:8080/admin/menus/1/menuitems
+Content-Type: application/json
+
+{
+  "name": "Buffalo Wings",
+  "description": "Crispy chicken wings tossed in spicy buffalo sauce. Served with ranch.",
+  "imageUrl": "sample image",
+  "price": "10.99",
+  "category": "Appetizer",
+  "enabled": "true"
+}
+
+### Get menu by Menu Items by Menu
+
+GET localhost:8080/admin/menus/1/menuitems
+
+### GET ALL MENU ITEMS
+
+GET localhost:8080/admin/menuitems
+
+### update menuItem by MenuiD
+
+
+PUT http://localhost:8080/admin/menus/1/menuitems/88
+Content-Type: application/json
+
+{
+  "name": "Buffalo Wings - Extra Spicy",
+  "description": "Crispy chicken wings tossed in spicy buffalo sauce with extra heat. Served with blue cheese.",
+  "imageUrl": "sample image url",
+  "price": "11.99",
+  "category": "Appetizer",
+  "enabled": "true"
+}
+
+#### GET all restaurants
+
+GET localhost:8080/admin/restaurants
+
+### Delete menu item from menu
+
+DELETE localhost:8080/admin/menus/1/menuitems/88
+
+### Get menus from restaurant
+
+GET localhost:8080/admin/restaurants/1/menus
+
+### create restaurant
+
+POST localhost:8080/admin/restaurants
+Content-Type: application/json
+
+{
+  "name": "Carolina Wings",
+  "address": "123 Wing Street, Charlotte, NC",
+  "restaurantAdmin": [],
+  "menus": []
+}
+
+###Get users
+
+GET localhost:8080/admin/users
+
+#### create order
+
+POST localhost:8080/admin/restaurants/1/orders
+Content-Type: application/json
+
+{
+  "restaurantId": 1,
+  "pickupTime": "18:45",
+  "orderAmount": "20.35",
+  "userAssignedTo": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
+  "listOfItems": [1, 2, 3]
+}
+
+
+
+
+
