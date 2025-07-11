@@ -15,16 +15,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("{spring.app.jwtSecret}")
+    @Value(value = "${spring.app.jwtSecretKey}")
     private String jwtSecret;
 
-    @Value("${spring.app.jwtExpirationMs}")
+    @Value(value = "${spring.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String getJwtFromHeader(HttpServletRequest request)
@@ -48,7 +49,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String geUserNameFromJwtToken(String token)
+    public String getUserNameFromJwtToken(String token)
     {
         return Jwts.parser()
                 .verifyWith((SecretKey) key())
@@ -58,6 +59,7 @@ public class JwtUtils {
 
     private Key key()
     {
+        logger.debug("Secret: {}", jwtSecret); // DEBUG LINE
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 

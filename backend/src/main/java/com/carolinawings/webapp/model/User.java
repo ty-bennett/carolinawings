@@ -5,8 +5,8 @@ Written by Ty Bennett
 package com.carolinawings.webapp.model;
 
 import java.time.LocalDate;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,13 +16,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Table(name="users")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 
 public class User {
@@ -39,7 +36,7 @@ public class User {
     //email of users
     @Email(message = "Email should be valid")
     @Size(max=50, min = 7, message = "Email must be a valid email")
-    private String email;
+    private String username;
     @Size(min=8, max=120, message = "Password must be at least 8 characters long")
     @Column(name = "password")
     private String password;
@@ -52,8 +49,6 @@ public class User {
     //keep track of how old account is
     private LocalDate dateJoined;
     //set status of User
-    @Column(name = "enabled")
-    private Boolean enabled;
     @OneToMany(mappedBy = "user")
     private List<Order> orderHistoryList;
     @Enumerated(EnumType.STRING)
@@ -63,7 +58,15 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public User(@NotBlank @Size(min = 3, max = 40) @Email String email, @NotBlank @Size(min = 8, max=50) String password, String encode) {
+    public User(@NotBlank @Size(min = 3, max = 40) @Email String username, @NotBlank @Size(min = 8, max=50) String password, String encode, String phoneNumber, boolean newsletterMember, String name) {
+        this.name = name;
+        this.username = username;
+        this.password = encode;
+        this.newsletterMember = newsletterMember;
+        this.dateJoined = LocalDate.now();
+        this.roles = new HashSet<>();
+        this.phoneNumber = phoneNumber;
+        this.orderHistoryList = new ArrayList<>();
     }
 
     @Override
@@ -71,12 +74,11 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", newsletterMember=" + newsletterMember +
                 ", dateJoined=" + dateJoined +
-                ", enabled=" + enabled +
                 ", ordersList= " + orderHistoryList +
                 '}';
     }
@@ -85,12 +87,11 @@ public class User {
         return u != null &&
                 this.id.equals(u.id) &&
                 this.name.equals(u.name) &&
-                this.email.equals(u.email) &&
+                this.username.equals(u.username) &&
                 this.password.equals(u.password) &&
                 this.phoneNumber.equals(u.phoneNumber) &&
                 this.newsletterMember.equals(u.newsletterMember) &&
                 this.dateJoined.equals(u.dateJoined) &&
-                this.enabled.equals(u.enabled) &&
                 this.orderHistoryList.equals(u.orderHistoryList);
         }
     }

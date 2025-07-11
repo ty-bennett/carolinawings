@@ -4,7 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="" />
+    <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T220405.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T220416.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T220438.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T221612.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T222358.400.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T222402.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T222423.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/SignUpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/SignUpRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/jwt/AuthTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/jwt/AuthTokenFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/jwt/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/jwt/JwtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/service/UserDetailsImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/service/UserDetailsImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/service/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/service/UserDetailsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/UserServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/UserServiceImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,6 +83,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "HTTP Request.Company REST Endpoints | #6.executor": "Run",
+    "HTTP Request.Company REST Endpoints | Create restaurant.executor": "Run",
     "HTTP Request.Company REST Endpoints | DELETE request to delete a company by id.executor": "Run",
     "HTTP Request.Company REST Endpoints | Delete menu item from menu.executor": "Run",
     "HTTP Request.Company REST Endpoints | GET ALL MENU ITEMS.executor": "Run",
@@ -95,7 +117,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.OrderSystemApplication.executor": "Run",
-    "git-widget-placeholder": "temp",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/benne/Desktop/code/GitHub/carolinawings/backend/pom.xml",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -125,19 +147,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.OrderSystemApplication">
-    <configuration name="Company REST Endpoints | Get users" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="Get users" index="19" runType="Run single request">
+    <configuration name="Company REST Endpoints | Create restaurant" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="Create restaurant" index="8" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="Company REST Endpoints | create a userr" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="create a userr" index="18" runType="Run single request">
+    <configuration name="Company REST Endpoints | GET all restaurants" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="GET all restaurants" index="14" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="Company REST Endpoints | create order" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="create order" index="18" runType="Run single request">
+    <configuration name="Company REST Endpoints | POst new menu item to menu" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="POst new menu item to menu" index="10" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="Company REST Endpoints | add new menu item to a menu" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="add new menu item to a menu" index="7" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="Company REST Endpoints | create restaurant" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="create restaurant" index="17" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="Company REST Endpoints | get the menu items and sort by their price ascending" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="get the menu items and sort by their price ascending" index="6" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="OrderSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -149,20 +171,20 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="HTTP Request.Company REST Endpoints | Get users" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | create a userr" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | Create restaurant" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | GET all restaurants" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | POst new menu item to menu" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | add new menu item to a menu" />
       <item itemvalue="HTTP Request.Company REST Endpoints | create restaurant" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | get the menu items and sort by their price ascending" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | create order" />
       <item itemvalue="Spring Boot.OrderSystemApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.Company REST Endpoints | create order" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | Get users" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | create a userr" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | POst new menu item to menu" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | add new menu item to a menu" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | GET all restaurants" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | Create restaurant" />
         <item itemvalue="HTTP Request.Company REST Endpoints | create restaurant" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | get the menu items and sort by their price ascending" />
       </list>
     </recent_temporary>
   </component>
@@ -190,6 +212,7 @@
       <workItem from="1752022597140" duration="9177000" />
       <workItem from="1752039503858" duration="890000" />
       <workItem from="1752107005056" duration="1414000" />
+      <workItem from="1752194392081" duration="7988000" />
     </task>
     <servers />
   </component>

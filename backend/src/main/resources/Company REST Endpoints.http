@@ -56,7 +56,7 @@ Content-Type: application/json
 
 {
   "name": "Carolina Wings Test",
-  "address": ""
+  "address": "123 Test street"
 }
 
 ### Get menus

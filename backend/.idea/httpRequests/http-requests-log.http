@@ -1,3 +1,101 @@
+POST http://localhost:8080/admin/menus/1/menuitems
+Content-Type: application/json
+Content-Length: 218
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "name": "Buffalo Wings",
+  "description": "Crispy chicken wings tossed in spicy buffalo sauce. Served with ranch.",
+  "imageUrl": "sample image",
+  "price": "10.99",
+  "category": "Appetizer",
+  "enabled": "true"
+}
+
+<> 2025-07-10T210610.405.json
+
+###
+
+POST http://localhost:8080/admin/menus
+Content-Type: application/json
+Content-Length: 88
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "name": "Lunch Specials",
+  "description": "lunch specials",
+  "menuItemsList": []
+}
+
+<> 2025-07-10T210607.201.json
+
+###
+
+GET http://localhost:8080/admin/restaurants
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-07-10T210550.200.json
+
+###
+
+POST http://localhost:8080/admin/restaurants
+Content-Type: application/json
+Content-Length: 52
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "name": "Carolina Wings Test",
+  "address": ""
+}
+
+<> 2025-07-10T210535.201.json
+
+###
+
+GET http://localhost:8080/admin/restaurants
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-07-10T210527.200.json
+
+###
+
+GET http://localhost:8080/admin/restaurants
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-07-10T210511.200.json
+
+###
+
+POST http://localhost:8080/admin/restaurants
+Content-Type: application/json
+Content-Length: 117
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "name": "Carolina Wings",
+  "address": "123 Wing Street, Charlotte, NC",
+  "restaurantAdmin": [],
+  "menus": []
+}
+
+<> 2025-07-10T210454.201.json
+
+###
+
 POST http://localhost:8080/admin/restaurants/1/orders
 Content-Type: application/json
 Content-Length: 162
@@ -664,80 +762,6 @@ Accept-Encoding: br, deflate, gzip, x-gzip
 Accept: */*
 
 <> 2025-07-07T222426.200.json
-
-###
-
-DELETE http://localhost:8080/platform-admin/companies/1
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-content-length: 0
-
-<> 2025-07-07T222423.200.json
-
-###
-
-POST http://localhost:8080/platform-admin/companies
-Content-Type: application/json
-Content-Length: 175
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-{
-  "name": "Carolina Wings - Redbank",
-  "address": "Red Bank, SC",
-  "logoURL": "https://example.com/logo.png",
-  "phoneNumber": "8038080488",
-  "industry": "Food Service"
-}
-
-<> 2025-07-07T222402.201.json
-
-###
-
-GET http://localhost:8080/platform-admin/companies
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-07T222358.400.json
-
-###
-
-GET http://localhost:8080/admin/menus
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-07T221612.405.json
-
-###
-
-GET http://localhost:8080/admin/menuitems
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-07T220438.200.json
-
-###
-
-GET http://localhost:8080/admin/menus
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-07T220416.405.json
-
-###
-
-GET http://localhost:8080/admin/menus
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-07T220405.405.json
 
 ###
 

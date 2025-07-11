@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-    Optional<User> findByEmail(String username);
-
-    boolean existsByEmail(@Email(message = "Email should be valid") @Size(max=50, min = 7, message = "Email must be a valid email") String email);
+    boolean existsByUsername(String email);
+    Optional<User> findByUsername(String username);
 }

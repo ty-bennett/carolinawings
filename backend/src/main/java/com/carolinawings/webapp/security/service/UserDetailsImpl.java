@@ -24,17 +24,15 @@ public class UserDetailsImpl implements UserDetails {
 
     private UUID id;
     private String username;
-    private String email;
 
     @JsonIgnore
     private String password;
     private Collection<? extends  GrantedAuthority> authorities;
 
-    public UserDetailsImpl(UUID id, String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(UUID id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.email = email;
         this.authorities = authorities;
     }
 
@@ -46,8 +44,7 @@ public class UserDetailsImpl implements UserDetails {
 
         return new UserDetailsImpl(
                 user.getId(),
-                user.getEmail(),
-                user.getEmail(),
+                user.getUsername(),
                 user.getPassword(),
                 grantedAuthorities
         );

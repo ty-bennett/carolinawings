@@ -30,7 +30,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/admin/companies" element={<Companies />} />
             <Route path="/admin/restaurants" element={<Restaurants />} />
-            <Route path="/admin/restaurants/menus/menuitems" element={<MenuItemsByMenu />} />
+            {/* <Route path="/admin/restaurants/menus/menuitems" element={<MenuItemsByMenu />} /> */}
           </Route>
         </Routes>
       </BrowserRouter>

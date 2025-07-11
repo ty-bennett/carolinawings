@@ -37,7 +37,7 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("username", data.username);
-
+      setTimeout(2000);       
       navigate("/"); // Redirect on success
     } catch (err) {
       setError(err.message);
