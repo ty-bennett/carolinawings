@@ -9,8 +9,11 @@ import { useNavigate } from "react-router-dom";
 function Register() 
 {
     const [formData, setFormData] = useState({
+      name: '',
       email: '',
       password: '',
+      phoneNumber: '',
+      newsletterMember: false
     });
 
     const [success, setSuccess] = useState(false);
@@ -28,6 +31,7 @@ function Register()
     const handleSubmit = async (e) => {
       e.preventDefault();
       setLoading(true);
+      setFormData(formData);
       setError(null);
       setSuccess(false);
 
@@ -38,7 +42,6 @@ function Register()
           }
         });
         setSuccess(true);
-        setFormData({ name: '', phoneNumber: '', email: '', password: '', newsletterMember: ''});
         navigate("/login");
       } catch (err) {
         console.error(err);
@@ -99,7 +102,7 @@ function Register()
                 <label className="block text-white mb-1 w-full">Phone Number</label> 
                 <input
                   className="w-full border p-2 rounded py-2 bg-white mx-auto"
-                  type="number"
+                  type="tel"
                   name="phoneNumber"
                   placeholder="Ex: +18084084000"
                   value={formData.phoneNumber}
@@ -116,7 +119,6 @@ function Register()
                   name="newsletterMember"
                   value={formData.newsletterMember}
                   onChange={handleChange}
-                  required
                 />
               </div>
               </div>
@@ -124,6 +126,7 @@ function Register()
                   type="submit"
                   className="bg-green-600 text-white px-4 py-2 my-4 mt-6 rounded hover:bg-green-700 flex items-center justify-center"
                   disabled={loading}
+                  onChange={handleSubmit}
                 >
                   {loading ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin cursor-pointer"></span>
@@ -135,7 +138,7 @@ function Register()
             </div>
           </div>
             {success && <p className="text-white-600 mt-2 text-center bg-green-500">User registered successfully!</p>}
-            {error && <p className="text-red-600 mt-2">{error}</p>}
+            {error && <p className="text-red-600 bg-white mt-2">{error}</p>}
         <Footer />
       </main>
     </>
