@@ -10,13 +10,15 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError(null);
+    setSuccess(false);
 
     try {
       const res = await fetch("http://localhost:8080/api/auth/login", {
@@ -34,12 +36,23 @@ function Login() {
       const data = await res.json();
 
       // Store in localStorage (adjust keys based on your response format)
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
+      localStorage.setItem("token", data.jwtToken);
+      localStorage.setItem("roles", JSON.stringify(data.roles));
       localStorage.setItem("username", data.username);
-      setTimeout(2000);       
-      navigate("/"); // Redirect on success
+      localStorage.setItem("id", data.id);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("restaurants", data.restaurants[0].id);
+
+      setSuccess(true);
+      if(data.roles.includes("ROLE_MANAGER, ROLE_RESTAURANTADMIN")) {
+        navigate("/admin/restaurants/dashboard")
+      } else if(data.roles.includes("ROLE_COMPANYADMIN")) {
+        navigate("/admin/companies/dashboard")
+      } else {
+        navigate("/")
+      }
     } catch (err) {
+      console.error(err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -48,15 +61,16 @@ function Login() {
 
     return (
     <>
-      <main className=""> 
-          <div className="bg-[url(/backgroundImages/backgroundimage.jpg)] bg-no-repeat bg-center bg-cover min-h-screen ">
-          <NavBar />
-          <div className="max-w-sm mx-auto mt-20 p-4 bg-darkred shadow-md rounded-lg">
-          <img className="pl-4" src="/carolinawingslogo.png"></img>
+      <NavBar />
+      <main> 
+          <div className="bg-[url(/backgroundImages/backgroundimage.jpg)] bg-no-repeat bg-center bg-cover h-screen flex items-center ">
+          
+          <div className="max-w-sm mx-auto p-5 bg-darkred shadow-md rounded-lg">
+          <img className="" src="/carolinawingslogo.png"></img>
           <h2 className="text-2xl font-bold mt-6 text-center text-white ">Login</h2>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <form onSubmit={handleLogin}>
-              <div className="mb-4 py-5">
+              <div className="py-5">
               <label className="block text-white mb-1 w-full">Email</label>
               <input
                   type="username"
@@ -116,14 +130,12 @@ function Login() {
                   Sign up here
                 </Link>
               </p>
-            </div> 
+            </div>
           </form>
         </div>
       </div>
+      <Footer />
       </main>
-      <div className="flex flex-col flex-end mt-5">
-        <Footer />
-      </div>
     </>
   )
 }

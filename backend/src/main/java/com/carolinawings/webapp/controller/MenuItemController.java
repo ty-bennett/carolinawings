@@ -47,7 +47,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems/{id}")
-    public ResponseEntity<Optional<MenuItemDTO>> getMenuItemById(@PathVariable Integer id) {
+    public ResponseEntity<Optional<MenuItemDTO>> getMenuItemById(@PathVariable Long id) {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemById(id), HttpStatus.OK);
     }
 
@@ -58,13 +58,13 @@ public class MenuItemController {
     }
 
     @DeleteMapping("/menuitems/{id}")
-    public ResponseEntity<MenuItemDTO> deleteMenuItemById(@PathVariable Integer id) {
+    public ResponseEntity<MenuItemDTO> deleteMenuItemById(@PathVariable Long id) {
         return new ResponseEntity<>(menuItemServiceImplementation.deleteMenuItem(id), HttpStatus.OK);
     }
 
     @PutMapping("/menuitems/{id}")
     public ResponseEntity<MenuItemDTO> updateMenuItem(@Valid @RequestBody MenuItemDTO menuItemDTO,
-                                                 @PathVariable Integer id) {
+                                                 @PathVariable Long id) {
         MenuItemDTO savedMenuItemDTO = menuItemServiceImplementation.updateMenuItem(menuItemDTO, id);
         return new ResponseEntity<>(savedMenuItemDTO, HttpStatus.OK);
     }

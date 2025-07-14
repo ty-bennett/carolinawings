@@ -11,6 +11,7 @@ import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.Restaurant;
+import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,10 +75,7 @@ public class RestaurantServiceImplementation implements RestaurantService {
     @Override
     public RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO) {
         Restaurant restaurant = modelMapper.map(restaurantDTO, Restaurant.class);
-        Restaurant existing = restaurantRepository.findByName(restaurant.getName());
-
-        if (existing != null)
-            throw new APIException("Restaurant with the name " + restaurant.getName() + " already exists");
+        Restaurant existing = restaurantRepository.findByName(restaurant.getName()).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "name", restaurant.getName()));
 
         Restaurant saved = restaurantRepository.save(restaurant);
         return modelMapper.map(saved, RestaurantDTO.class);
@@ -87,8 +83,13 @@ public class RestaurantServiceImplementation implements RestaurantService {
 
     @Override
     public Optional<RestaurantDTO> getRestaurantById(Long id) {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
-        return restaurant.map(r -> modelMapper.map(r, RestaurantDTO.class));
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantID", id));
+        RestaurantDTO restaurantDTO = modelMapper.map(restaurant, RestaurantDTO.class);
+        Set<UUID> restaurantAdminIds = restaurant.getRestaurantAdmin()
+                .stream().map(User::getId).collect(Collectors.toSet());
+        restaurantDTO.setRestaurantAdmin(restaurantAdminIds);
+        return Optional.of(restaurantDTO);
+
     }
 
     @Override

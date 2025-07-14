@@ -4,6 +4,7 @@ Ty Bennett
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,7 @@ public class Restaurant {
     private Long id;
     private String name;
     private String address;
-    @OneToMany
+    @ManyToMany(mappedBy = "restaurants")
     private Set<User> restaurantAdmin;
     @ManyToMany
     @JoinTable(
@@ -31,6 +32,15 @@ public class Restaurant {
             inverseJoinColumns = @JoinColumn(name = "menu_id")
     )
     private Set<Menu> menus;
+
+    public Restaurant(String name, String address, Set<User> restaurantAdmin, Set<Menu> menus) {
+        this.name = name;
+        this.address = address;
+        this.restaurantAdmin = restaurantAdmin;
+        this.menus = menus;
+    }
+
+    public Restaurant() {}
 
     public boolean equals(Restaurant r)
     {

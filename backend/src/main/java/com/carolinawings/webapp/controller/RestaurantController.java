@@ -24,8 +24,8 @@ import java.util.UUID;
 public class RestaurantController {
 
     private final RestaurantServiceImplementation restaurantServiceImplementation;
-    private OrderServiceImplementation orderServiceImplementation;
-    private MenuServiceImplementation menuServiceImplementation;
+    private final OrderServiceImplementation orderServiceImplementation;
+    private final MenuServiceImplementation menuServiceImplementation;
 
     public RestaurantController(RestaurantServiceImplementation restaurantServiceImplementation, OrderServiceImplementation orderServiceImplementation, MenuServiceImplementation menuServiceImplementation) {
         this.restaurantServiceImplementation = restaurantServiceImplementation;

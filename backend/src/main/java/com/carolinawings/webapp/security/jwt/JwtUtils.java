@@ -6,6 +6,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.io.Decoders;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +58,16 @@ public class JwtUtils {
                 .getPayload().getSubject();
     }
 
+    public String getRolesFromJwtToken(String token)
+    {
+        return (String) Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build().parseSignedClaims(token)
+                .getPayload().get("roles");
+    }
+
     private Key key()
     {
-        logger.debug("Secret: {}", jwtSecret); // DEBUG LINE
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 

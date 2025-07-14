@@ -12,8 +12,8 @@ public class MenuItemFactory {
                                           String description,
                                           String url,
                                           BigDecimal price,
-                                          String category
-                                          ) {
-        return new MenuItem(name, description, url, price, category);
+                                          String category,
+                                          boolean status) {
+        return new MenuItem(name, description, url, price, category, status);
     }
 }

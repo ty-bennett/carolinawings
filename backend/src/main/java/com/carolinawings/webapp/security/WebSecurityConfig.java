@@ -1,9 +1,8 @@
 package com.carolinawings.webapp.security;
 
-import com.carolinawings.webapp.model.Role;
-import com.carolinawings.webapp.model.RoleName;
-import com.carolinawings.webapp.repository.RoleRepository;
-import com.carolinawings.webapp.repository.UserRepository;
+import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.model.*;
+import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.security.jwt.AuthEntryPointJwt;
 import com.carolinawings.webapp.security.jwt.AuthTokenFilter;
 import com.carolinawings.webapp.security.service.UserDetailsServiceImpl;
@@ -14,19 +13,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Configuration
@@ -62,7 +65,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
                 .authorizeHttpRequests(authorizeRequests ->
@@ -78,7 +81,7 @@ public class WebSecurityConfig {
 
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http.headers(headers -> headers.frameOptions(
-                frameOptionsConfig -> frameOptionsConfig.sameOrigin()
+                HeadersConfigurer.FrameOptionsConfig::sameOrigin
         ));
 
         return http.build();
@@ -87,11 +90,11 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer()
     {
-        return(web -> web.ignoring());
+        return(WebSecurity::ignoring);
     }
 
     @Bean
-    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
         return args -> {
             // Retrieve or create roles
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -102,15 +105,61 @@ public class WebSecurityConfig {
 
             Role restaurantAdminRole = roleRepository.findByName(RoleName.ROLE_RESTAURANTADMIN)
                     .orElseGet(() -> {
-                        Role newSellerRole = new Role(RoleName.ROLE_RESTAURANTADMIN);
-                        return roleRepository.save(newSellerRole);
+                        Role newRestaurantAdminRole= new Role(RoleName.ROLE_RESTAURANTADMIN);
+                        return roleRepository.save(newRestaurantAdminRole);
                     });
 
             Role managerRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
                     .orElseGet(() -> {
-                        Role newAdminRole = new Role(RoleName.ROLE_ADMIN);
-                        return roleRepository.save(newAdminRole);
+                        Role newManagerRole = new Role(RoleName.ROLE_MANAGER);
+                        return roleRepository.save(newManagerRole);
                     });
+            User tytest = userRepository.findByUsername("test")
+                    .orElseGet(() -> {
+                        PasswordEncoder encoder = new BCryptPasswordEncoder();
+                        User user = new User("test@gmail.com", "password", encoder.encode("password"), "8035215139", true, "ty bennett");
+                        Set<Role> roles = Set.of(userRole, restaurantAdminRole, managerRole);
+                        user.setRoles(roles);
+                        return userRepository.save(user);
+                    });
+            Restaurant testRestaurant = restaurantRepository.findByName("Carolina Wings Redbank")
+                    .orElseGet(() -> {
+                        Set<User> restaurantAdmins = new HashSet<>();
+                        Set<Menu> menus = new HashSet<>();
+                        restaurantAdmins.add(tytest);
+
+                        Restaurant newRestaurant = new Restaurant(
+                                "Carolina Wings Redbank",
+                                "1767E S Lake Dr",
+                                restaurantAdmins,
+                                menus);
+                        return restaurantRepository.save(newRestaurant);
+                    });
+            Menu testMenu = new Menu(
+                    "RedBank Menu",
+                    "Menu for CWS Redbank",
+                    new ArrayList<>(),
+                    new HashSet<>(Set.of(testRestaurant))
+            );
+            menuRepository.save(testMenu);
+
+            List<MenuItem> menuItems = menuItemRepository.findAll();
+
+            for(MenuItem item : menuItems) {
+                item.setMenu(testMenu);
+            }
+
+            testMenu.setMenuItemsList(menuItems);
+            menuRepository.save(testMenu);
+            menuItemRepository.saveAll(menuItems);
+
+            Set<Restaurant> restaurants = Set.of(testRestaurant);
+
+            tytest.setRestaurants(restaurants);
+            userRepository.save(tytest);
+
+            testRestaurant.getMenus().add(testMenu);
+            restaurantRepository.save(testRestaurant);
 
             Set<Role> userRoles = Set.of(userRole);
             Set<Role> sellerRoles = Set.of(restaurantAdminRole);

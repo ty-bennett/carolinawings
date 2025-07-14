@@ -19,21 +19,26 @@ import java.util.List;
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
     private String name;
     private String description;
     private String imageURL;
     private BigDecimal price;
     private String category;
-    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL)
-    private List<MenuMenuItem> menus = new ArrayList<>();
+    private boolean enabled;
 
-    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category) {
+    @ManyToOne
+    @JoinColumn(name = "menu_id", nullable = true)
+    private Menu menu;
+
+    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;
         this.price = price;
         this.category = category;
+        this.enabled = enabled;
     }
     public MenuItem() {}
 
@@ -45,6 +50,7 @@ public class MenuItem {
                 ", imageURL='" + imageURL + '\'' +
                 ", price=" + price +
                 ", category='" + category + '\'' +
+                ", enabled=" + enabled +
                 '}';
     }
 

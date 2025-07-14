@@ -52,11 +52,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> orderHistoryList;
     @Enumerated(EnumType.STRING)
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_restaurant",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
+    private Set<Restaurant> restaurants;
 
     public User(@NotBlank @Size(min = 3, max = 40) @Email String username, @NotBlank @Size(min = 8, max=50) String password, String encode, String phoneNumber, boolean newsletterMember, String name) {
         this.name = name;

@@ -1,18 +1,24 @@
 import CompanyForm from "../components/CompanyForm";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Companies() {
   const navigate = useNavigate();
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
-    const role = "ADMIN";
+    const roles = JSON.parse(localStorage.getItem("roles"));
+    setRoles(roles || []);
+
     
 
-    if (!role) {
+    if (!roles) {
       // User is not logged in
       navigate("/login");
-    } else if (role !== "ADMIN") {
+    } else if (
+      roles.includes("ROLE_RESTAURANT_ADMIN") ||
+      roles.includes("ROLE_MANAGER") ||
+      roles.includes("ROLE_USER")) {
       // Logged in but wrong role
       navigate("/unauthorized");
     }

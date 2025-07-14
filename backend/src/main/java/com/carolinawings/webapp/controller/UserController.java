@@ -23,31 +23,10 @@ public class UserController {
         this.userServiceImplementation = userServiceImplementation;
     }
 
-    // Get all users
-    @GetMapping("/users/all")
-    public ResponseEntity<UserResponse> getUsers() {
-        return new ResponseEntity<>(userServiceImplementation.getAllUsers(), HttpStatus.OK);
-    }
-
-    // Get all users paginated
-    @GetMapping("/users")
-    public ResponseEntity<UserResponse> getUsers(
-            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize) {
-        return new ResponseEntity<>(userServiceImplementation.getAllUsersPaged(pageNumber, pageSize), HttpStatus.OK);
-    }
-
     // Get a user by ID
     @GetMapping("/users/{id}")
     public ResponseEntity<Optional<UserResponseDTO>> getUserById(@PathVariable UUID id) {
         return new ResponseEntity<>(userServiceImplementation.getUserById(id), HttpStatus.OK);
-    }
-
-    // Create a user
-    @PostMapping("/users/register")
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userDTO) {
-        UserResponseDTO savedUserDTO = userServiceImplementation.createUser(userDTO);
-        return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
 
     // Delete a user by ID

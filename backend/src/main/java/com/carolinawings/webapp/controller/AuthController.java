@@ -69,7 +69,7 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).toList();
         UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
-                userDetails.getUsername(), jwtToken, roles);
+                toDisplayCase(userDetails.getName()), userDetails.getUsername(), jwtToken, roles, userDetails.getRestaurants());
 
         return ResponseEntity.ok(response);
     }
@@ -79,10 +79,10 @@ public class AuthController {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Error: Account already registered!" + HttpStatus.BAD_REQUEST));
         }
 
-        User user = new User(signUpRequest.getUsername(),
+        User user = new User(toDisplayCase(signUpRequest.getUsername()),
                 signUpRequest.getPassword(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getPhoneNumber(),
@@ -119,5 +119,22 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    private static String toDisplayCase(String s) {
+        final String ACTIONABLE_DELIMITERS = " '-/"; // these cause the character following
+        // to be capitalized
+
+        StringBuilder sb = new StringBuilder();
+        boolean capNext = true;
+
+        for (char c : s.toCharArray()) {
+            c = (capNext)
+                    ? Character.toUpperCase(c)
+                    : Character.toLowerCase(c);
+            sb.append(c);
+            capNext = (ACTIONABLE_DELIMITERS.indexOf(c) >= 0); // explicit cast not needed
+        }
+        return sb.toString();
     }
 }

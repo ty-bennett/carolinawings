@@ -17,5 +17,5 @@ public class OrderDTO {
     private String pickupTime;
     private String orderAmount;
     private UserResponseDTO userAssignedTo;
-    private List<Integer> listOfItems;
+    private List<Long> listOfItems;
 }

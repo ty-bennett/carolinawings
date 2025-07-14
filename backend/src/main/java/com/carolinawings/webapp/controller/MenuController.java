@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -57,21 +58,21 @@ public class MenuController {
     }
 
     @GetMapping("/menus/{id}/menuitems")
-    public ResponseEntity<MenuDTO> getMenuItemsByMenu(@PathVariable Long id,
-                                                               @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
-                                                               @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize) {
+    public ResponseEntity<MenuDTO> getMenuItemsByMenu(@PathVariable String id,
+                                                                @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
+                                                                @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize) {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemsByMenu(id, pageNumber, pageSize), HttpStatus.OK);
     }
 
     @PutMapping("/menus/{id}/menuitems/{menuitemid}")
-    public ResponseEntity<MenuItemDTO> updateMenuItemByMenu(@PathVariable Long id, @PathVariable Integer menuitemid, @RequestBody MenuItemDTO menuItem)
+    public ResponseEntity<MenuItemDTO> updateMenuItemByMenu(@PathVariable Long id, @PathVariable Long menuitemid, @RequestBody MenuItemDTO menuItem)
     {
        MenuItemDTO responseMenuItem = menuItemServiceImplementation.updateMenuItemByMenu(id, menuitemid, menuItem);
        return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
     }
 
     @DeleteMapping("/menus/{id}/menuitems/{menuitemid}")
-    public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Integer menuitemid)
+    public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Long menuitemid)
     {
         MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
         return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);

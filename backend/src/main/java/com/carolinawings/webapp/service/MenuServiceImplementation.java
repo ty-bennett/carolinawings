@@ -5,11 +5,14 @@ Written by Ty Bennett
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.MenuDTO;
+import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuResponse;
+import com.carolinawings.webapp.dto.RestaurantDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.Restaurant;
+import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import jakarta.validation.Valid;
@@ -22,8 +25,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuServiceImplementation implements MenuService {
@@ -36,6 +42,8 @@ public class MenuServiceImplementation implements MenuService {
     private MenuItemServiceImplementation menuItemServiceImplementation;
     @Autowired
     private RestaurantRepository restaurantRepository;
+    @Autowired
+    private MenuItemRepository menuItemRepository;
 
     public MenuServiceImplementation(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
@@ -46,14 +54,26 @@ public class MenuServiceImplementation implements MenuService {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new APIException("Restaurant not found"));
-        List<Long> menuIds = restaurant.getMenus().stream().map(Menu::getId).toList();
-        Page<Menu> menus = menuRepository.findAll(pageDetails);
+        Page<Menu> menus = menuRepository.findByRestaurantsId(restaurantId, pageDetails);
 
         List<Menu> menusPageable = menus.getContent();
         if (menusPageable.isEmpty())
             throw new APIException("No menus present");
+        List<MenuItemDTO> menuItemDTOS = menuItemRepository.findAll().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).collect(Collectors.toList());
         List<MenuDTO> menuDTOS = menusPageable.stream()
-                .map(menu -> modelMapper.map(menu, MenuDTO.class))
+                .map(menu -> {
+                    MenuDTO dto = new MenuDTO();
+                    dto.setId(menu.getId());
+                    dto.setName(menu.getName());
+                    dto.setDescription(menu.getDescription());
+                    dto.setMenuItemsList(menuItemDTOS);
+
+                    if (!menu.getRestaurants().isEmpty()) {
+                        dto.setRestaurantId(menu.getRestaurants().iterator().next().getId());
+                    }
+
+                    return dto;
+                })
                 .toList();
         MenuResponse mR = new MenuResponse();
         mR.setContent(menuDTOS);
@@ -68,9 +88,7 @@ public class MenuServiceImplementation implements MenuService {
     @Override
     public MenuDTO createMenu(MenuDTO menuDTO) {
         Menu menu = modelMapper.map(menuDTO, Menu.class);
-        Menu savedMenu = menuRepository.findByName(menu.getName());
-        if (savedMenu != null)
-            throw new APIException("Menu with the name " + menu.getName() + " already exists");
+        Menu savedMenu = menuRepository.findByName(menu.getName()).orElseThrow(() -> new APIException("Menu with name "+ menu.getName() + " already exists!"));
         Menu returnMenu = menuRepository.save(menu);
         return modelMapper.map(returnMenu, MenuDTO.class);
     }
@@ -98,7 +116,4 @@ public class MenuServiceImplementation implements MenuService {
         Menu savedMenuToRepo = menuRepository.save(menu);
         return modelMapper.map(savedMenuToRepo, MenuDTO.class);
     }
-
-
-
 }

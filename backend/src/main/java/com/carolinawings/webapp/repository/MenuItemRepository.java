@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
+public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
     MenuItem findByName(String name);
 //    Optional<MenuItem> findMenuItemById(Integer id);
 //    List<MenuItem> findAll();

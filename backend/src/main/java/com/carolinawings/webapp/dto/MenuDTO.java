@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +15,5 @@ public class MenuDTO {
     private String name;
     private String description;
     private List<MenuItemDTO> menuItemsList;
+    private Long restaurantId;
 }

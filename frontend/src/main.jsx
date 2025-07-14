@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import './index.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, RouterProvider } from "react-router-dom";
 import Home from './pages/Home.jsx';
 import Menu from './pages/Menu.jsx';
 import Specials from './pages/Specials.jsx';
@@ -12,10 +12,13 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Companies from './pages/Companies.jsx';
-import Restaurants from './pages/Restaurants.jsx';
-
+import RestaurantDashboard from './pages/RestaurantDashboard.jsx';
+import Unauthorized from './pages/Unauthorized.jsx';
+import MenuDetails from './pages/MenuDetails.jsx';
+import { useState, useEffect } from 'react';
 
 export default function App() {
+
   return (
       <BrowserRouter>
         <Routes>
@@ -29,8 +32,11 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin/companies" element={<Companies />} />
-            <Route path="/admin/restaurants" element={<Restaurants />} />
+            if()
+            <Route path="/admin/restaurants/dashboard" element={<RestaurantDashboard />} />
             {/* <Route path="/admin/restaurants/menus/menuitems" element={<MenuItemsByMenu />} /> */}
+            <Route path="/admin/restaurants/menus" element={<MenuDetails />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Route>
         </Routes>
       </BrowserRouter>
