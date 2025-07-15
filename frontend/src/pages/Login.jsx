@@ -41,7 +41,7 @@ function Login() {
       localStorage.setItem("username", data.username);
       localStorage.setItem("id", data.id);
       localStorage.setItem("name", data.name);
-      localStorage.setItem("restaurants", data.restaurants[0].id);
+      localStorage.setItem("restaurants", data.restaurants);
 
       setSuccess(true);
       if(data.roles.includes("ROLE_MANAGER, ROLE_RESTAURANTADMIN")) {

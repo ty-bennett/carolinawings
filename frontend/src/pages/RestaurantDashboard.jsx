@@ -18,11 +18,14 @@ function RestaurantDashboard() {
     setError(null);
     try {
       const token = localStorage.getItem("token");
-      const restaurant = localStorage.getItem("restaurants");
+      const restaurant = Number(localStorage.getItem("restaurants"));
+      console.log(restaurant);
+      console.log(`Restaurant is ${restaurant}`);
       const res = await axios.get(`http://localhost:8080/admin/restaurants/${restaurant}/menus`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setMenus(res.data.content || []);
+      const data = res.data;
+      setMenus(data.content || []);
     } catch (err) {
       console.error(err);
       setError("Failed to load menus.");
