@@ -58,7 +58,7 @@ public class MenuController {
     }
 
     @GetMapping("/menus/{id}/menuitems")
-    public ResponseEntity<MenuDTO> getMenuItemsByMenu(@PathVariable String id,
+    public ResponseEntity<List<MenuItemDTO>> getMenuItemsByMenu(@PathVariable String id,
                                                                 @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
                                                                 @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize) {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemsByMenu(id, pageNumber, pageSize), HttpStatus.OK);

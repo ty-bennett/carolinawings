@@ -163,15 +163,13 @@ public class MenuItemServiceImplementation implements MenuItemService {
 
 
     @Override
-    public MenuDTO getMenuItemsByMenu(String menuId, Integer pageNumber, Integer pageSize) {
+    public List<MenuItemDTO> getMenuItemsByMenu(String menuId, Integer pageNumber, Integer pageSize) {
         Long newMenuID = Long.valueOf(menuId);
         Menu menu = menuRepository.findById(newMenuID).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
         if(menu == null) {
             throw new ResourceNotFoundException("Menu", "menuId", menuId);
         }
-
-        menuRepository.save(menu);
-        return modelMapper.map(menu, MenuDTO.class);
+        return menu.getMenuItemsList().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).toList();
     }
 
     @Override

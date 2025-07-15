@@ -7,7 +7,6 @@ package com.carolinawings.webapp.service;
 import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuResponse;
-import com.carolinawings.webapp.dto.RestaurantDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
@@ -15,15 +14,12 @@ import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashSet;
 import java.util.List;
@@ -115,5 +111,13 @@ public class MenuServiceImplementation implements MenuService {
         menu.setId(id);
         Menu savedMenuToRepo = menuRepository.save(menu);
         return modelMapper.map(savedMenuToRepo, MenuDTO.class);
+    }
+
+    @Override
+    public MenuDTO getMenuByIdAndRestaurantId(Long restaurantId, Long menuId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        Set<Menu> menusToSearch = restaurant.getMenus() == null ? new HashSet<>() : restaurant.getMenus();
+        Menu menu = menusToSearch.stream().filter(menuItem -> menuItem.getId().equals(menuId)).findFirst().get();
+        return modelMapper.map(menu, MenuDTO.class);
     }
 }

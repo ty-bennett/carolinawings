@@ -105,4 +105,9 @@ public class RestaurantController {
         return new ResponseEntity<>(menuServiceImplementation.getAllMenusByRestaurant(pageNumber, pageSize, restaurantId), HttpStatus.OK);
     }
 
+    @GetMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    public ResponseEntity<MenuDTO> getMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId) {
+        return new ResponseEntity<>(menuServiceImplementation.getMenuByIdAndRestaurantId(restaurantId, menuId), HttpStatus.OK);
+    }
+
 }

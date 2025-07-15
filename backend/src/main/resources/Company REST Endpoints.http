@@ -105,7 +105,7 @@ GET localhost:8080/admin/restaurants
 
 ### Delete menu item from menu
 
-DELETE localhost:8080/admin/menus/1/menuitems/88
+DELETE localhost:8080/admin/menus/1/menuitems/
 
 ### Get menus from restaurant
 

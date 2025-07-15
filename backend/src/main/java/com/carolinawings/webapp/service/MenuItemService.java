@@ -4,7 +4,6 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
 import jakarta.validation.Valid;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,7 +26,7 @@ public interface MenuItemService {
 
     MenuItemDTO addMenuItemToMenu(Long menuId, MenuItemDTO menuItem);
 
-    MenuDTO getMenuItemsByMenu(String menuId, Integer pageNumber, Integer pageSize);
+    List<MenuItemDTO> getMenuItemsByMenu(String menuId, Integer pageNumber, Integer pageSize);
 
     MenuItemDTO deleteMenuItemFromMenu(Long menuId, Long menuItemID);
 

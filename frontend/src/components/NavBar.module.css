@@ -199,3 +199,8 @@
   background-color: #f2f2f2;
   cursor: pointer;
 }
+
+.userDropdownContainer {
+  position: relative;
+  display: inline-block;
+}

@@ -18,14 +18,12 @@ function RestaurantDashboard() {
     setError(null);
     try {
       const token = localStorage.getItem("token");
-      const restaurant = Number(localStorage.getItem("restaurants"));
-      console.log(restaurant);
-      console.log(`Restaurant is ${restaurant}`);
+      const restaurant = localStorage.getItem("restaurants");
+
       const res = await axios.get(`http://localhost:8080/admin/restaurants/${restaurant}/menus`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = res.data;
-      setMenus(data.content || []);
+      setMenus(res.data.content || []);
     } catch (err) {
       console.error(err);
       setError("Failed to load menus.");
@@ -57,9 +55,9 @@ function RestaurantDashboard() {
     if (activeTab === "hours") setHours(getHours());
   }, [activeTab]);
 
-  const handleMenuClick = (restaurantId) => {
-    navigate("/admin/restaurants/menus");
-    fetchMenus();
+  const handleMenuClick = (menuId) => {
+    localStorage.setItem("menuId", menuId);
+    navigate("/admin/restaurants/menus/menuitems");
   };
 
   return (
@@ -114,7 +112,7 @@ function RestaurantDashboard() {
                 <div
                   key={menu.id}
                   className="bg-white p-4 rounded-lg shadow-md border hover:scale-101 transition-transform cursor-pointer"
-                  onClick={handleMenuClick(menu.id)}
+                  onClick={() => handleMenuClick(menu.id)}
                 >
                   <h2 className="text-xl font-semibold">{menu.name}</h2>
                   <p className="text-gray-600">{menu.description}</p>
