@@ -30,7 +30,7 @@ public interface MenuItemService {
 
     MenuItemDTO deleteMenuItemFromMenu(Long menuId, Long menuItemID);
 
-    MenuItemDTO updateMenuItemByMenu(@PathVariable Long menuId, @PathVariable Long menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO);
+    MenuItemDTO editMenuItemByMenu(@PathVariable Long menuId, @PathVariable Long menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO);
 
     //   MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem);
 }

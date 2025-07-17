@@ -14,6 +14,5 @@ public class MenuItemDTO {
     private String imageUrl;
     private String price;
     private String category;
-    private String enabled;
-
+    private Boolean enabled;
 }

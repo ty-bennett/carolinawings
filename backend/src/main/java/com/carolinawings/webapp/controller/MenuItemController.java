@@ -7,6 +7,9 @@ package com.carolinawings.webapp.controller;
 import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
+import com.carolinawings.webapp.model.Menu;
+import com.carolinawings.webapp.repository.MenuItemRepository;
+import com.carolinawings.webapp.repository.MenuRepository;
 import com.carolinawings.webapp.service.MenuItemServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,19 +21,25 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/admin")
 public class MenuItemController {
 
     private final MenuItemServiceImplementation menuItemServiceImplementation;
+    private final MenuRepository menuRepository;
+    private final MenuItemRepository menuItemRepository;
 
-    public MenuItemController(MenuItemServiceImplementation menuItemServiceImplementation) {
+    public MenuItemController(MenuItemServiceImplementation menuItemServiceImplementation, MenuRepository menuRepository, MenuItemRepository menuItemRepository) {
         this.menuItemServiceImplementation = menuItemServiceImplementation;
+        this.menuRepository = menuRepository;
+        this.menuItemRepository = menuItemRepository;
     }
 
     @GetMapping("/menuitems/all")
     public ResponseEntity<MenuItemResponse> getALlMenuItems() {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItems(), HttpStatus.OK);
     }
-    @GetMapping("/menus/{menuId}/menuitems")
+
+    @GetMapping("/menus/{menuId}/menuitems/paged")
     public ResponseEntity<MenuItemResponse> getAllMenuItemsPaged(@RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
                                                             @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize,
                                                             @PathVariable Long menuId){
@@ -51,11 +60,6 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/menuitems")
-    public ResponseEntity<MenuItemDTO> createMenuItem(@Valid @RequestBody MenuItemDTO menuItemDTO) {
-        MenuItemDTO savedMenuItemDTO = menuItemServiceImplementation.createMenuItem(menuItemDTO);
-        return new ResponseEntity<>(savedMenuItemDTO, HttpStatus.CREATED);
-    }
 
     @DeleteMapping("/menuitems/{id}")
     public ResponseEntity<MenuItemDTO> deleteMenuItemById(@PathVariable Long id) {
@@ -74,4 +78,12 @@ public class MenuItemController {
         MenuItemDTO responseMenuItem = menuItemServiceImplementation.addMenuItemToMenu(id, menuItem);
         return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
     }
+
+    @PutMapping("/menus/{id}/menuitems/{menuItemId}")
+    public ResponseEntity<MenuItemDTO> editMenuItemByMenu(@PathVariable Long id,@PathVariable Long menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO) {
+        MenuItemDTO menuItem = menuItemServiceImplementation.editMenuItemByMenu(id, menuItemId, menuItemDTO);
+        return new ResponseEntity<>(menuItem, HttpStatus.OK);
+    }
+
+//    @DeleteMapping("/menus/")
 }

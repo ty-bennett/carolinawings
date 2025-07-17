@@ -55,7 +55,8 @@ public class MenuItemServiceImplementation implements MenuItemService {
     @Override
     public MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize, Long menuId) {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
-        Page<MenuItem> menuItems = menuItemRepository.findAll(pageDetails);
+        Menu menu = menuRepository.findById(menuId).orElseThrow(ResourceNotFoundException::new);
+        Page<MenuItem> menuItems = menuItemRepository.findAllByMenu_Id(pageDetails, menuId);
         List<MenuItem> menuItemsPageable = menuItems.getContent();
         if (menuItemsPageable.isEmpty())
             throw new APIException("No menu items present");
@@ -176,22 +177,41 @@ public class MenuItemServiceImplementation implements MenuItemService {
     public MenuItemDTO deleteMenuItemFromMenu(Long menuId, Long menuItemID)
     {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-        MenuItem menuItem = menuItemRepository.findById(menuItemID).orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemID", menuItemID));
-        return modelMapper.map(menuItem, MenuItemDTO.class);
-    }
-
-    @Override
-    public MenuItemDTO updateMenuItemByMenu(@PathVariable Long menuId, @PathVariable Long menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO)
-    {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
-        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", menuItemId));
-
-        MenuItem response = modelMapper.map(menuItemDTO, MenuItem.class);
-        response.setMenu(menu);
-        menuItemRepository.save(menuItem);
+        List<MenuItem> menuItemList = menu.getMenuItemsList();
+        MenuItem deletedMenuItem = menuItemList.stream().filter(item -> item.getId().equals(menuItemID)).findFirst().get();
+        menuItemList.removeIf(item -> item.getId().equals(menuItemID));
+        menu.setMenuItemsList(menuItemList);
         menuRepository.save(menu);
-
-        return modelMapper.map(response, MenuItemDTO.class) ;
+        return modelMapper.map(deletedMenuItem, MenuItemDTO.class);
     }
+
+    public MenuItemDTO editMenuItemByMenu(Long id, Long menuItemId, @Valid MenuItemDTO menuItemDTO)
+    {
+        Menu menu = menuRepository.findById(id).orElseThrow(()-> new RuntimeException("Menu not found"));
+        MenuItem menuItem = menu.getMenuItemsList().stream()
+                .filter(item -> item.getId()
+                .equals(menuItemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+
+        menuItem.setName(menuItemDTO.getName());
+        menuItem.setDescription(menuItemDTO.getDescription());
+        menuItem.setImageURL(menuItemDTO.getImageUrl());
+        menuItem.setPrice(new BigDecimal(menuItemDTO.getPrice()));
+        menuItem.setCategory(menuItemDTO.getCategory());
+        menuItem.setEnabled(menuItemDTO.getEnabled());
+        menuItem.setMenu(menu);
+        MenuItem res = menuItemRepository.save(menuItem);
+        menuRepository.save(menu);
+        return modelMapper.map(res, MenuItemDTO.class);
+    }
+
+    public MenuItemDTO deleteMenuItemByMenu(Long menuId, Long menuItemID) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(()-> new RuntimeException("Menu not found"));
+        List<MenuItem> menuItemList = menu.getMenuItemsList();
+        menuItemList.stream().filter(item ->  item.getId().equals(menuItemID));
+        return modelMapper.map(menuItemList.getFirst(), MenuItemDTO.class);
+    }
+
 }
 

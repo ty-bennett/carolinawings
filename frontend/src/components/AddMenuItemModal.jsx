@@ -3,15 +3,14 @@ import axios from "axios";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-function EditMenuItemModal({ item, menuId, onClose, onSave }) {
+function AddMenuItemModal({ onClose, onSave }) {
   const [formData, setFormData] = useState({
-    id: item.id || "",
-    name: item.name || "",
-    description: item.description || "",
-    imageUrl: item.imageUrl || "",
-    price: item.price || "",
-    category: item.category || "",
-    enabled: item.enabled || false,
+    name: "",
+    description: "",
+    imageUrl: "",
+    price: "",
+    category: "",
+    enabled: false,
   });
 
   const handleChange = (e) => {
@@ -25,19 +24,20 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    const id = formData.id
+    const menuId = localStorage.getItem("menuId");
+
     try {
-      await axios.put(
-        `http://localhost:8080/admin/menuitems/${id}`,
+      const response = await axios.post(
+        `http://localhost:8080/admin/menus/${menuId}/menuitems`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      onSave({ ...item, ...formData });
+      onSave(response.data); // Add the new item to list in parent
       onClose();
     } catch (err) {
-      console.error("Update failed:", err);
+      console.error("Failed to add menu item:", err);
     }
   };
 
@@ -47,7 +47,7 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
         onSubmit={handleSubmit}
         className="bg-white rounded p-6 shadow-md w-full max-w-md"
       >
-        <h2 className="text-xl font-bold mb-4">Edit Menu Item</h2>
+        <h2 className="text-xl font-bold mb-4">Add New Menu Item</h2>
 
         <input
           type="text"
@@ -56,6 +56,7 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
           onChange={handleChange}
           placeholder="Name"
           className="w-full mb-2 p-2 border rounded"
+          required
         />
 
         <input
@@ -83,6 +84,7 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
           onChange={handleChange}
           placeholder="Price"
           className="w-full mb-2 p-2 border rounded"
+          required
         />
 
         <input
@@ -94,11 +96,10 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
           className="w-full mb-2 p-2 border rounded"
         />
 
-        {/* ✅ Material UI Toggle */}
         <FormControlLabel
           control={
             <Switch
-              checked={formData.enabled? true : false}
+              checked={formData.enabled}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -110,10 +111,10 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
             />
           }
           label={formData.enabled ? "Enabled" : "Disabled"}
-          className="my-2" 
+          className="my-2"
         />
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2 mt-4">
           <button
             type="button"
             onClick={onClose}
@@ -133,4 +134,4 @@ function EditMenuItemModal({ item, menuId, onClose, onSave }) {
   );
 }
 
-export default EditMenuItemModal;
+export default AddMenuItemModal;

@@ -26,13 +26,13 @@ public class MenuItem {
     private String imageURL;
     private BigDecimal price;
     private String category;
-    private boolean enabled;
+    private Boolean enabled;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = true)
     private Menu menu;
 
-    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, boolean enabled) {
+    public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, Boolean enabled) {
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;

@@ -7,15 +7,16 @@
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/MenuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/RestaurantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/RestaurantController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/MenuItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/MenuItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuItemService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuItemServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuItemServiceImplementation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuServiceImplementation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/NavBar.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/NavBar.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/RestaurantDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/RestaurantDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/EditMenuItemModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/EditMenuItemModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/MenuDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/MenuDetails.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,6 +210,8 @@
       <workItem from="1752362675391" duration="15869000" />
       <workItem from="1752439636539" duration="18092000" />
       <workItem from="1752550774418" duration="2410000" />
+      <workItem from="1752631198406" duration="7645000" />
+      <workItem from="1752719990419" duration="3453000" />
     </task>
     <servers />
   </component>

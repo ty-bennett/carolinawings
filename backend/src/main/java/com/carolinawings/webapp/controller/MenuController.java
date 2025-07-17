@@ -64,17 +64,10 @@ public class MenuController {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemsByMenu(id, pageNumber, pageSize), HttpStatus.OK);
     }
 
-    @PutMapping("/menus/{id}/menuitems/{menuitemid}")
-    public ResponseEntity<MenuItemDTO> updateMenuItemByMenu(@PathVariable Long id, @PathVariable Long menuitemid, @RequestBody MenuItemDTO menuItem)
-    {
-       MenuItemDTO responseMenuItem = menuItemServiceImplementation.updateMenuItemByMenu(id, menuitemid, menuItem);
-       return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
-    }
-
     @DeleteMapping("/menus/{id}/menuitems/{menuitemid}")
     public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Long menuitemid)
     {
-        MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
+        MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemByMenu(id, menuitemid);
         return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
     }
 }
