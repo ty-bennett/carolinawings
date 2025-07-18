@@ -30,17 +30,12 @@ public class Order {
 	//a time that is set by user to choose when to pickup order
 	private LocalTime pickupTime;
 	//a time to be taken whenever order is set to order
-	private LocalDateTime orderDateTime;
+	private LocalDateTime orderDateTime = LocalDateTime.now();
 	//price of order
 	private BigDecimal orderAmount;
 	//User assigned order to
 	@ManyToOne
 	private User user;
-	@ManyToMany
-	@JoinTable(
-			name = "order_menu_items",
-			joinColumns = @JoinColumn(name = "order_id"),
-			inverseJoinColumns = @JoinColumn(name = "menu_item_id")
-	)
+	@OneToMany
 	private List<MenuItem> listOfMenuItems = new ArrayList<>();
 }

@@ -32,12 +32,14 @@ public class Menu {
 
     @ManyToMany(mappedBy = "menus")
     private Set<Restaurant> restaurants = new HashSet<>();
+    private Boolean isPrimary;
 
-    public Menu(String name, String description, List<MenuItem> menuItemsList, Set<Restaurant> restaurants) {
+    public Menu(String name, String description, List<MenuItem> menuItemsList, Set<Restaurant> restaurants, Boolean isPrimary) {
         this.name = name;
         this.description = description;
         this.menuItemsList = menuItemsList;
         this.restaurants = restaurants;
+        this.isPrimary = isPrimary;
     }
 
     public String toString() {
@@ -45,7 +47,8 @@ public class Menu {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description=" + description + '\'' +
-                ", menuItemsList=" + menuItemsList +
+                ", menuItemsList=" + menuItemsList + '\'' +
+                ", isPrimary=" + isPrimary +
                 '}';
     }
 

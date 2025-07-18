@@ -16,4 +16,5 @@ public class MenuDTO {
     private String description;
     private List<MenuItemDTO> menuItemsList;
     private Long restaurantId;
+    private Boolean isPrimary;
 }

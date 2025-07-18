@@ -139,10 +139,18 @@ public class WebSecurityConfig {
                     "RedBank Menu",
                     "Menu for CWS Redbank",
                     new ArrayList<>(),
-                    new HashSet<>(Set.of(testRestaurant))
+                    new HashSet<>(Set.of(testRestaurant)),
+                    true
             );
             menuRepository.save(testMenu);
-
+            Menu secondTestMenu = new Menu(
+                    "Test disabled",
+                    "test",
+                    new ArrayList<>(),
+                    new HashSet<>(Set.of(testRestaurant)),
+                    false
+            );
+            menuRepository.save(secondTestMenu);
             List<MenuItem> menuItems = menuItemRepository.findAll();
 
             for(MenuItem item : menuItems) {
