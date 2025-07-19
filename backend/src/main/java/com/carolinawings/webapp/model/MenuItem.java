@@ -6,6 +6,7 @@ package com.carolinawings.webapp.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -16,6 +17,8 @@ import java.util.List;
 @Table(name = "menu_items")
 @Getter
 @Setter
+@NoArgsConstructor
+
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +31,9 @@ public class MenuItem {
     private String category;
     private Boolean enabled;
 
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CartItem> menuItems = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = true)
     private Menu menu;
@@ -39,19 +45,6 @@ public class MenuItem {
         this.price = price;
         this.category = category;
         this.enabled = enabled;
-    }
-    public MenuItem() {}
-
-    public String toString() {
-        return "MenuItem{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", imageURL='" + imageURL + '\'' +
-                ", price=" + price +
-                ", category='" + category + '\'' +
-                ", enabled=" + enabled +
-                '}';
     }
 
     public boolean equals(MenuItem m)

@@ -9,19 +9,18 @@
   list-style-type: none;
   background-color: black;
   text-align: center;
-  padding: 15px;
-  margin: 0;
 }
 
 .navbaritem {
   text-decoration: none;
   font-size: large;
   font-family: "Public Sans", sans-serif;
-  display: inline;
-  margin: 5px;
   color: #be9514;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 2em;
+  padding-right: 2em;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .navbaritem:hover {
@@ -35,12 +34,13 @@
   font-size: large;
   font-family: "Public Sans", sans-serif;
   display: inline;
-  margin: 5px;
   background-color: #be9514;
-  padding: 15px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 2em;
+  padding-right: 2em;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .navbaritemactive:hover {
@@ -81,6 +81,8 @@
 
 .gridchildnav {
   grid-area: nav;
+  background-color: black;
+  height: 60px;
 }
 
 .backgroundimg {
@@ -125,9 +127,10 @@
 .navbarposition {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  align-items: stretch;
   background-color: black;
-  padding: 1rem 2rem;
+  justify-content: center;
+  height: 100%;
 }
 /* nav bar styling */ 
 
@@ -156,21 +159,19 @@
 
 .right {
   display: flex;
-  justify-content: flex-end;
   position: relative;
+  justify-self: flex-end;
 }
 
 .welcomeMessage {
   list-style-type: none;
-  justify-self: end;
+  align-items: center;
   color: white; 
   background-color: rgb(75,0,0);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  margin-left: 1rem;
   font-weight: bold;
   cursor: pointer;
+  height: 100%;
+  width: 100%;
 }
 
 .dropdownMenu {

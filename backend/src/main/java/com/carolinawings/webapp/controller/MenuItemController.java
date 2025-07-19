@@ -85,5 +85,10 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItem, HttpStatus.OK);
     }
 
-//    @DeleteMapping("/menus/")
+    @DeleteMapping("/menus/{id}/menuitems/{menuitemid}")
+    public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Long menuitemid)
+    {
+        MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
+        return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
+    }
 }

@@ -11,10 +11,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name="users")
@@ -62,6 +59,13 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
     private Set<Restaurant> restaurants;
+
+    @ToString.Exclude
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Cart cart;
+
+
+
 
     public User(@NotBlank @Size(min = 3, max = 40) @Email String username, @NotBlank @Size(min = 8, max=50) String password, String encode, String phoneNumber, boolean newsletterMember, String name) {
         this.name = name;

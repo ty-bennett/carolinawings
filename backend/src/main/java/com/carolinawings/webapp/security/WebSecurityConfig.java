@@ -151,6 +151,7 @@ public class WebSecurityConfig {
                     false
             );
             menuRepository.save(secondTestMenu);
+
             List<MenuItem> menuItems = menuItemRepository.findAll();
 
             for(MenuItem item : menuItems) {

@@ -145,19 +145,19 @@ public class MenuItemServiceImplementation implements MenuItemService {
             menuItem.setImageURL(requestMenuItem.getImageUrl());
             menuItem.setPrice(new BigDecimal(requestMenuItem.getPrice()));
             menuItem.setCategory(requestMenuItem.getCategory());
+            menuItem.setMenu(menu);
 
             menuItemRepository.save(menuItem);
         }
-        Optional<Menu> menuToAdd = menuRepository.findById(menuId);
-        List<MenuItem> menuItemList = menuToAdd.get().getMenuItemsList();
+        List<MenuItem> menuItemList = menu.getMenuItemsList();
         boolean existing = menuItemList.stream().anyMatch(item -> item.getId().equals(requestMenuItem.getId()));
         if (existing)
             throw new APIException("Menu item with the id " + menuItem.getId() + " already exists");
         else {
             menuItemList.add(menuItem);
             menuItemRepository.save(menuItem);
-            menuToAdd.get().setMenuItemsList(menuItemList);
-            menuRepository.save(menuToAdd.get());
+            menu.setMenuItemsList(menuItemList);
+            menuRepository.save(menu);
         }
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
@@ -205,13 +205,5 @@ public class MenuItemServiceImplementation implements MenuItemService {
         menuRepository.save(menu);
         return modelMapper.map(res, MenuItemDTO.class);
     }
-
-    public MenuItemDTO deleteMenuItemByMenu(Long menuId, Long menuItemID) {
-        Menu menu = menuRepository.findById(menuId).orElseThrow(()-> new RuntimeException("Menu not found"));
-        List<MenuItem> menuItemList = menu.getMenuItemsList();
-        menuItemList.stream().filter(item ->  item.getId().equals(menuItemID));
-        return modelMapper.map(menuItemList.getFirst(), MenuItemDTO.class);
-    }
-
 }
 
