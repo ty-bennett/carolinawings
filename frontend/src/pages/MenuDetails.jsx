@@ -151,35 +151,44 @@ const filteredMenuItems = menuItems.filter(item =>
           </div>
         ) : filteredMenuItems.length > 0 ? (
           <div className="bg-darkred p-4 flex flex-wrap justify-center rounded-md mt-6 gap-4">
-            {filteredMenuItems.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white p-4 rounded-lg w-110 h-80 shadow hover:scale-102 transform duration-100"
-              >
-                <div className="flex justify-between mb-2 px-2">
-                  <h2 className="text-xl font-semibold">{item.name}</h2>
-                  <p className="text-green-500 text-xl font-bold">${item.price}</p>
-                </div>
-                <p className="text-gray-700 flex-grow">{item.description}</p>
-
-                <div className="flex justify-between">
-                  <button
-                    onClick={() => {
-                    setEditingItem(item);
-                    setIsModalOpen(true);
-                  }}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer w-full mx-2">
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteClick(item)} 
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer w-full mx-2"
-                  > 
-                    Delete
-                  </button>
-                </div>
+                    {filteredMenuItems.map((item) => (
+          <div
+            key={item.id}
+            className="relative bg-white p-4 rounded-lg w-110 h-80 shadow flex flex-col justify-between text-xl text-gray-400 overflow-hidden"
+          >
+            {!item.enabled && (
+              <div className="absolute inset-0 bg-white/70 flex items-center justify-center pointer-events-none ">
+                <span className="text-red-600 font-bold text-2xl">Out of Stock</span>
               </div>
-            ))}
+            )}
+
+            <div className="flex justify-between mb-2 px-2">
+              <h2 className="text-xl font-semibold text-black">{item.name}</h2>
+              <p className="text-green-500 text-xl font-bold">${item.price}</p>
+            </div>
+
+            <p className="text-gray-700 flex-grow">{item.description}</p>
+
+            <div className="flex justify-between">
+              <button
+                onClick={() => {
+                  setEditingItem(item);
+                  setIsModalOpen(true);
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer w-full mx-2"
+                disabled={!item.enabled}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteClick(item)}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer w-full mx-2"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
           </div>
         ) : (
           <p className="text-center text-gray-500 py-10">No items match your search.</p>
