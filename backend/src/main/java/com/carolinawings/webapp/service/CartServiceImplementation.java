@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class CartServiceImplementation implements CartService {
@@ -58,31 +59,34 @@ public class CartServiceImplementation implements CartService {
         newCartItem.setCart(cart);
         newCartItem.setQuantity(cartItemDTO.getQuantity());
         newCartItem.setMemos(cartItemDTO.getMemos());
-        newCartItem.setMenuItemPrice(menuItem.getPrice().doubleValue());
+        newCartItem.setDressing(cartItemDTO.getDressing());
+        newCartItem.setSauces(cartItemDTO.getSauces());
+        newCartItem.setMenuItemPrice(menuItem.getPrice().doubleValue() * cartItemDTO.getQuantity());
         //save cart item
         cartItemRepository.save(newCartItem);
+        cart.getCartItems().add(newCartItem);
         // return update cart
         cart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * newCartItem.getMenuItemPrice()));
         cartRepository.save(cart);
 
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
-        List<CartItem> cartItems = cart.getCartItems();
 
-        List<CartItemDTO> cartItemDTOS = cartItems.stream().map(
+        List<CartItem> cartItems = cart.getCartItems();
+        Stream<CartItemDTO> cartItemDTOS = cartItems.stream().map(
                 item -> {
                     CartItemDTO newCartItemDTO = new CartItemDTO();
                     newCartItemDTO.setCartItemId(item.getId());
                     newCartItemDTO.setQuantity(item.getQuantity());
                     newCartItemDTO.setMemos(item.getMemos());
-                    newCartItemDTO.setSauces(item.getSauce());
+                    newCartItemDTO.setSauces(item.getSauces());
                     newCartItemDTO.setDressing(item.getDressing());
+
                     MenuItemDTO menuItemDTO = modelMapper.map(item.getMenuItem(), MenuItemDTO.class);
                     newCartItemDTO.setMenuItem(menuItemDTO);
 
                     return newCartItemDTO;
-                }).toList();
-        cartDTO.setMenuItems(cartItemDTOS);
-
+                });
+        cartDTO.setMenuItems(cartItemDTOS.toList());
         return cartDTO;
     }
 

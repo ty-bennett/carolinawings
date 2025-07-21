@@ -14,7 +14,6 @@ public class CartItemDTO {
     private Integer quantity;
     private Double price;
     private String memos;
-
     private String sauces;
     private String dressing;
 }

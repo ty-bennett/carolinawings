@@ -12,5 +12,5 @@ public class AddCartItemDTO {
     private Integer quantity;
     private String memos;
     private String dressing;
-    private String sauce;
+    private String sauces;
 }

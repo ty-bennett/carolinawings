@@ -28,6 +28,6 @@ public class CartItem {
     private Double menuItemPrice;
     private Integer quantity;
     private String memos;
-    private String sauce;
+    private String sauces;
     private String dressing;
 }
