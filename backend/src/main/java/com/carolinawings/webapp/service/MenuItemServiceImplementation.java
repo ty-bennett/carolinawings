@@ -56,7 +56,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
     public MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize, Long menuId) {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
         Menu menu = menuRepository.findById(menuId).orElseThrow(ResourceNotFoundException::new);
-        Page<MenuItem> menuItems = menuItemRepository.findAllByMenu_Id(pageDetails, menuId);
+        Page<MenuItem> menuItems = menuItemRepository.findAllByMenu_Id(menuId, pageDetails);
         List<MenuItem> menuItemsPageable = menuItems.getContent();
         if (menuItemsPageable.isEmpty())
             throw new APIException("No menu items present");

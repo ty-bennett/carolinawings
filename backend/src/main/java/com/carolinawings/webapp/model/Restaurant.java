@@ -25,12 +25,7 @@ public class Restaurant {
     private String address;
     @ManyToMany(mappedBy = "restaurants")
     private Set<User> restaurantAdmin;
-    @ManyToMany
-    @JoinTable(
-            name = "restaurant_menus",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id")
-    )
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Menu> menus;
 
     public Restaurant(String name, String address, Set<User> restaurantAdmin, Set<Menu> menus) {

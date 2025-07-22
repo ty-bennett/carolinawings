@@ -30,15 +30,16 @@ public class Menu {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MenuItem> menuItemsList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "menus")
-    private Set<Restaurant> restaurants = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
     private Boolean isPrimary;
 
-    public Menu(String name, String description, List<MenuItem> menuItemsList, Set<Restaurant> restaurants, Boolean isPrimary) {
+    public Menu(String name, String description, List<MenuItem> menuItemsList, Restaurant restaurant, Boolean isPrimary) {
         this.name = name;
         this.description = description;
         this.menuItemsList = menuItemsList;
-        this.restaurants = restaurants;
+        this.restaurant = restaurant;
         this.isPrimary = isPrimary;
     }
 

@@ -135,11 +135,12 @@ public class WebSecurityConfig {
                                 menus);
                         return restaurantRepository.save(newRestaurant);
                     });
+            testRestaurant = restaurantRepository.findById(testRestaurant.getId()).orElseThrow(() -> new RuntimeException("testRestaurant not found"));
             Menu testMenu = new Menu(
                     "RedBank Menu",
                     "Menu for CWS Redbank",
                     new ArrayList<>(),
-                    new HashSet<>(Set.of(testRestaurant)),
+                    testRestaurant,
                     true
             );
             menuRepository.save(testMenu);
@@ -147,7 +148,7 @@ public class WebSecurityConfig {
                     "Test disabled",
                     "test",
                     new ArrayList<>(),
-                    new HashSet<>(Set.of(testRestaurant)),
+                    testRestaurant,
                     false
             );
             menuRepository.save(secondTestMenu);
@@ -159,6 +160,7 @@ public class WebSecurityConfig {
             }
 
             testMenu.setMenuItemsList(menuItems);
+            testMenu.setIsPrimary(true);
             menuRepository.save(testMenu);
             menuItemRepository.saveAll(menuItems);
 
@@ -167,7 +169,15 @@ public class WebSecurityConfig {
             tytest.setRestaurants(restaurants);
             userRepository.save(tytest);
 
-            testRestaurant.getMenus().add(testMenu);
+            Set<Menu> menuSet = testRestaurant.getMenus();
+            if(menuSet == null) {
+                menuSet = new HashSet<>();
+            }
+            for(Menu menu : menuSet) {
+                menu.setRestaurant(testRestaurant);
+            }
+            menuSet.add(testMenu);
+            testRestaurant.setMenus(menuSet);
             restaurantRepository.save(testRestaurant);
 
             Set<Role> userRoles = Set.of(userRole);

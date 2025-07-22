@@ -21,10 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,27 +47,26 @@ public class MenuServiceImplementation implements MenuService {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new APIException("Restaurant not found"));
-        Page<Menu> menus = menuRepository.findByRestaurantsId(restaurantId, pageDetails);
+        Page<Menu> menus = menuRepository.findByRestaurant_Id(restaurant.getId(), pageDetails);
 
         List<Menu> menusPageable = menus.getContent();
+        List<MenuDTO> menuDTOS = new ArrayList<>();
+        for (Menu menuPage : menusPageable) {
+            List<MenuItemDTO> menuItemDTOS = menuItemRepository.findAllByMenu_Id(menuPage.getId()).stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).toList();
+            MenuDTO dto = new MenuDTO();
+            dto.setId(menuPage.getId());
+            dto.setName(menuPage.getName());
+            dto.setDescription(menuPage.getDescription());
+            dto.setMenuItemsList(menuItemDTOS);
+
+            if (menuPage.getRestaurant() != null) {
+                dto.setRestaurantId(menuPage.getRestaurant().getId());
+            }
+            menuDTOS.add(dto);
+        }
         if (menusPageable.isEmpty())
             throw new APIException("No menus present");
-        List<MenuItemDTO> menuItemDTOS = menuItemRepository.findAll().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).collect(Collectors.toList());
-        List<MenuDTO> menuDTOS = menusPageable.stream()
-                .map(menu -> {
-                    MenuDTO dto = new MenuDTO();
-                    dto.setId(menu.getId());
-                    dto.setName(menu.getName());
-                    dto.setDescription(menu.getDescription());
-                    dto.setMenuItemsList(menuItemDTOS);
 
-                    if (!menu.getRestaurants().isEmpty()) {
-                        dto.setRestaurantId(menu.getRestaurants().iterator().next().getId());
-                    }
-
-                    return dto;
-                })
-                .toList();
         MenuResponse mR = new MenuResponse();
         mR.setContent(menuDTOS);
         mR.setPageNumber(menus.getNumber());
@@ -116,8 +112,25 @@ public class MenuServiceImplementation implements MenuService {
     @Override
     public MenuDTO getMenuByIdAndRestaurantId(Long restaurantId, Long menuId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
-        Set<Menu> menusToSearch = restaurant.getMenus() == null ? new HashSet<>() : restaurant.getMenus();
-        Menu menu = menusToSearch.stream().filter(menuItem -> menuItem.getId().equals(menuId)).findFirst().get();
-        return modelMapper.map(menu, MenuDTO.class);
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
+        menu.setRestaurant(restaurant);
+        Menu saved = menuRepository.save(menu);
+        return modelMapper.map(saved, MenuDTO.class);
+    }
+
+    @Override
+    public MenuDTO createMenuByRestaurant(Long restaurantId, MenuDTO menuDTO) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        boolean exists = restaurant.getMenus().stream().anyMatch(menu -> menu.getName().equals(menuDTO.getName()));
+        if(exists) {
+            throw new APIException("Menu with name "+ menuDTO.getName() + " already exists!");
+        }
+        Menu menu = modelMapper.map(menuDTO, Menu.class);
+        menu.setRestaurant(restaurant);
+        menu.setMenuItemsList(new ArrayList<>());
+
+        Menu savedMenu = menuRepository.save(menu);
+        return modelMapper.map(savedMenu, MenuDTO.class);
     }
 }

@@ -110,4 +110,9 @@ public class RestaurantController {
         return new ResponseEntity<>(menuServiceImplementation.getMenuByIdAndRestaurantId(restaurantId, menuId), HttpStatus.OK);
     }
 
+    @PostMapping("/restaurants/{restaurantId}/menus")
+    public ResponseEntity<MenuDTO> createMenuByRestaurant(@PathVariable Long restaurantId, @RequestBody MenuDTO menuDTO) {
+        MenuDTO newMenu = menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
+        return new ResponseEntity<>(newMenu, HttpStatus.CREATED);
+    }
 }
