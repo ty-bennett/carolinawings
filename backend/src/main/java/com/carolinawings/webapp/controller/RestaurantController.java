@@ -11,6 +11,7 @@ import com.carolinawings.webapp.service.OrderServiceImplementation;
 import com.carolinawings.webapp.service.RestaurantServiceImplementation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -114,5 +115,17 @@ public class RestaurantController {
     public ResponseEntity<MenuDTO> createMenuByRestaurant(@PathVariable Long restaurantId, @RequestBody MenuDTO menuDTO) {
         MenuDTO newMenu = menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
         return new ResponseEntity<>(newMenu, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    public ResponseEntity<MenuDTO> updateMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId, @RequestBody MenuDTO menuDTO) {
+        MenuDTO menu = menuServiceImplementation.updateMenuByRestaurant(restaurantId, menuId, menuDTO);
+        return new ResponseEntity<>(menu, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    public ResponseEntity<MenuDTO> deleteMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId) {
+        MenuDTO menu = menuServiceImplementation.deleteMenuByRestaurant(restaurantId, menuId);
+        return new ResponseEntity<>(menu, HttpStatus.OK);
     }
 }

@@ -58,6 +58,7 @@ public class MenuServiceImplementation implements MenuService {
             dto.setName(menuPage.getName());
             dto.setDescription(menuPage.getDescription());
             dto.setMenuItemsList(menuItemDTOS);
+            dto.setIsPrimary(menuPage.getIsPrimary());
 
             if (menuPage.getRestaurant() != null) {
                 dto.setRestaurantId(menuPage.getRestaurant().getId());
@@ -132,5 +133,35 @@ public class MenuServiceImplementation implements MenuService {
 
         Menu savedMenu = menuRepository.save(menu);
         return modelMapper.map(savedMenu, MenuDTO.class);
+    }
+
+    public MenuDTO updateMenuByRestaurant(Long restaurantId, Long menuId, MenuDTO menuDTO) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
+
+        Menu newMenu = modelMapper.map(menuDTO, Menu.class);
+        newMenu.setRestaurant(restaurant);
+        newMenu.setId(menu.getId());
+        List<MenuItemDTO> menuItemDTOS = menu.getMenuItemsList().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).toList();
+        newMenu.setMenuItemsList(menu.getMenuItemsList());
+        menuRepository.save(newMenu);
+        MenuDTO newMenuDTO = modelMapper.map(newMenu, MenuDTO.class);
+        newMenuDTO.setMenuItemsList(menuItemDTOS);
+        return newMenuDTO;
+    }
+
+    public MenuDTO deleteMenuByRestaurant(Long restaurantId, Long menuId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
+
+        restaurant.getMenus().remove(menu);
+        menuRepository.deleteById(menuId);
+        menuRepository.flush();
+        restaurantRepository.save(restaurant);
+        return modelMapper.map(menu, MenuDTO.class);
     }
 }
