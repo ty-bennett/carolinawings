@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuServiceImplementation implements MenuService {
@@ -127,6 +126,13 @@ public class MenuServiceImplementation implements MenuService {
         if(exists) {
             throw new APIException("Menu with name "+ menuDTO.getName() + " already exists!");
         }
+        List<Menu> menuList = restaurant.getMenus().stream().toList();
+        menuList.stream().forEach(element -> {
+            if(element.getIsPrimary().equals(true)){
+                menuDTO.setIsPrimary(false);
+                menuRepository.save(element);
+            }
+        });
         Menu menu = modelMapper.map(menuDTO, Menu.class);
         menu.setRestaurant(restaurant);
         menu.setMenuItemsList(new ArrayList<>());
@@ -135,6 +141,7 @@ public class MenuServiceImplementation implements MenuService {
         return modelMapper.map(savedMenu, MenuDTO.class);
     }
 
+    @Override
     public MenuDTO updateMenuByRestaurant(Long restaurantId, Long menuId, MenuDTO menuDTO) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
@@ -152,6 +159,7 @@ public class MenuServiceImplementation implements MenuService {
         return newMenuDTO;
     }
 
+    @Override
     public MenuDTO deleteMenuByRestaurant(Long restaurantId, Long menuId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
@@ -162,6 +170,27 @@ public class MenuServiceImplementation implements MenuService {
         menuRepository.deleteById(menuId);
         menuRepository.flush();
         restaurantRepository.save(restaurant);
+        return modelMapper.map(menu, MenuDTO.class);
+    }
+
+    @Override
+    public MenuDTO setPrimaryMenu(Long restaurantId, Long menuId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
+        menu.setRestaurant(restaurant);
+        menu.setIsPrimary(true);
+        menuRepository.save(menu);
+        List<Menu> menuList = restaurant.getMenus().stream().toList();
+        //stream each menu except the one that was passed into the DTO to be disabled
+        menuList.stream().forEach(item -> {
+            if(!item.getId().equals(menu.getId()))
+            {
+                item.setIsPrimary(false);
+                menuRepository.save(item);
+            }
+        });
         return modelMapper.map(menu, MenuDTO.class);
     }
 }

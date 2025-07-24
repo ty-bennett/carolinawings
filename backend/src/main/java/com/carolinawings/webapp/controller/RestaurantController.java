@@ -128,4 +128,10 @@ public class RestaurantController {
         MenuDTO menu = menuServiceImplementation.deleteMenuByRestaurant(restaurantId, menuId);
         return new ResponseEntity<>(menu, HttpStatus.OK);
     }
+
+    @PutMapping("/restaurants/{restaurantId}/menus/{menuId}/primary")
+    public ResponseEntity<MenuDTO> setPrimaryMenu(@PathVariable Long restaurantId, @PathVariable Long menuId) {
+        MenuDTO menu = menuServiceImplementation.setPrimaryMenu(restaurantId, menuId);
+        return new ResponseEntity<>(menu, HttpStatus.OK);
+    }
 }

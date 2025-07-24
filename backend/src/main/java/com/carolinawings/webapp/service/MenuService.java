@@ -15,8 +15,9 @@ public interface MenuService {
     MenuDTO createMenu(MenuDTO menu);
     MenuDTO deleteMenu(Long id);
     MenuDTO updateMenu(MenuDTO menu, Long id);
-
     MenuDTO getMenuByIdAndRestaurantId(Long restaurantId, Long menuId);
-
+    MenuDTO updateMenuByRestaurant(Long restaurantId, Long menuId, MenuDTO menuDTO);
+    MenuDTO deleteMenuByRestaurant(Long restaurantId, Long menuId);
+    MenuDTO setPrimaryMenu(Long restaurantId, Long menuId);
     MenuDTO createMenuByRestaurant(Long restaurantId, MenuDTO menuDTO);
 }
