@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/RestaurantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/RestaurantController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuServiceImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/RestaurantDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/RestaurantDashboard.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,6 +209,7 @@
       <workItem from="1752938698151" duration="14088000" />
       <workItem from="1753155100887" duration="8081000" />
       <workItem from="1753242322222" duration="2447000" />
+      <workItem from="1753329533748" duration="2208000" />
     </task>
     <servers />
   </component>
