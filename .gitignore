@@ -5,6 +5,6 @@ backend/src/main/resources/application.properties
 /.metadata/
 .idea/*
 .idea
-
+.env
 
 

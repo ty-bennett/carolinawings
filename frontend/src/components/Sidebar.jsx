@@ -9,7 +9,6 @@ function Sidebar({ onSelect }) {
         className={`text-xl w-full text-left p-3 cursor-pointer transition duration-200 ${
           onSelect === "menus" ? "bg-yellow text-black font-semibold" : "bg-darkred text-white hover:bg-yellow"
         }`}
-        onClick={() => onSelect("menus")}
       >
         Menus
       </button>
@@ -20,7 +19,6 @@ function Sidebar({ onSelect }) {
         className={`text-xl w-full text-left p-3 cursor-pointer transition duration-200 ${
           onSelect === "orders" ? "bg-yellow text-black font-semibold" : "bg-darkred text-white hover:bg-yellow"
         }`}
-        onClick={() => onSelect("orders")}
       >
         Orders
       </button>
@@ -31,7 +29,6 @@ function Sidebar({ onSelect }) {
         className={`text-xl w-full text-left p-3 cursor-pointer transition duration-200 ${
           onSelect === "hours" ? "bg-yellow text-black font-semibold" : "bg-darkred text-white hover:bg-yellow"
         }`}
-        onClick={() => onSelect("hours")}
       >
         Hours
       </button>

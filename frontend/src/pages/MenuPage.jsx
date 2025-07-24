@@ -20,7 +20,7 @@ function MenuPage() {
       const token = localStorage.getItem("token");
       const restaurant = localStorage.getItem("restaurants");
 
-      const res = await axios.get(`http://localhost:8080/admin/restaurants/${restaurant}/menus`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/admin/restaurants/${restaurant}/menus`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMenus(res.data.content || []);
@@ -39,19 +39,92 @@ function MenuPage() {
     navigate(`/admin/restaurants/menus/${menuId}`);
   };
 
+  const handlePrimaryMenuToggle = async (menuId) => {
+    const token = localStorage.getItem("token"); 
+    const restaurantId = localStorage.getItem("restaurants");
+
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/admin/restaurants/${restaurantId}/menus/${menuId}/primary`,
+        {}, // empty body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      fetchMenus(); // refresh to reflect updated primary state
+    } catch (err) {
+      console.error(err);
+      setError("Failed to set primary menu.");
+    }
+  }
+
+  const handleAddMenu = async() =>
+  {
+    const token = localStorage.getItem('token');
+    
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/admin/restaurants/${restaurantId}/menus`,
+        {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+    } catch(err) {
+      console.error(err);
+      setError("failed to create menu");
+    }
+  }
+
+    
+
+  const handleDeleteMenu = async (menuId) => {
+    const token = localStorage.getItem("token");
+    const restaurantId = localStorage.getItem("restaurants");
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/admin/restaurants/${restaurantId}/menus/${menuId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Menu deleted:", res.status);
+      fetchMenus(); // Refresh menus list
+    } catch (err) {
+      console.error(err);
+      setError("Failed to delete menu.");
+    }
+  };
+
   return (
     <>
       <NavBar />
       <div className="flex min-h-screen">
       <Sidebar onSelect={"menus"}/>
       <div className="p-6 bg-gray-500 min-h-screen space-y-4 w-5/6">
+          <button
+            className="bg-darkred text-white px-4 py-2 rounded cursor-pointer"
+            onClick={() => navigate("/admin/restaurants/dashboard")}
+          >
+            Back to Dashboard
+          </button>
         <h1 className="text-black text-3xl py-2 font-bold">Menus</h1>
-        <button
-          className="bg-darkred text-white px-4 py-2 rounded cursor-pointer"
-          onClick={() => navigate("/admin/restaurants/dashboard")}
-        >
-          Back to Dashboard
-        </button>
+        <div className="flex flex-row justify-between">
+
+          <button
+            className="bg-darkred text-white px-4 py-2 rounded-md cursor-pointer"
+            onClick={() => handleAddMenu()}
+          >
+            Create Menu
+          </button>
+        </div>
+        <hr></hr>
         {error && <p className="text-red-500">{error}</p>}
         {menus.map((menu) => (
           <div
@@ -72,9 +145,19 @@ function MenuPage() {
                       >View Menu
                       </button>
                     <FormGroup>
-                    <FormControlLabel label="Primary menu" control={<Switch checked={menu.isPrimary}/>}></FormControlLabel>
+                    <FormControlLabel label="Primary menu" 
+                    control={
+                      <Switch 
+                        checked={menu.isPrimary}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handlePrimaryMenuToggle(menu.id);
+                        }} 
+                      />
+                    }
+                    />
                     </FormGroup>
-                    </div>
+                    </div> 
                 </div>
                   <p className="text-gray-600">{menu.description}</p>
               </div>
