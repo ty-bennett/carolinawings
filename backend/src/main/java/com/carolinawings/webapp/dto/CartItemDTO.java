@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +16,5 @@ public class CartItemDTO {
     private Integer quantity;
     private Double price;
     private String memos;
-    private String sauces;
-    private String dressing;
+    private List<String> sauces;
 }

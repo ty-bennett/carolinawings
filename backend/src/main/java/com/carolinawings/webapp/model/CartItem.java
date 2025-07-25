@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cart_items")
@@ -25,9 +27,9 @@ public class CartItem {
     @JoinColumn(name = "menuitem_id")
     private MenuItem menuItem;
 
-    private Double menuItemPrice;
     private Integer quantity;
     private String memos;
-    private String sauces;
-    private String dressing;
+
+    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItemChoice> choices = new ArrayList<>();
 }
