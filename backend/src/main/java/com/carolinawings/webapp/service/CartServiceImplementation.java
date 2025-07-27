@@ -9,15 +9,15 @@ import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Cart;
 import com.carolinawings.webapp.model.CartItem;
 import com.carolinawings.webapp.model.MenuItem;
-import com.carolinawings.webapp.repository.CartItemRepository;
-import com.carolinawings.webapp.repository.CartRepository;
-import com.carolinawings.webapp.repository.MenuItemRepository;
+import com.carolinawings.webapp.model.MenuItemOptionRule;
+import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -34,6 +34,11 @@ public class CartServiceImplementation implements CartService {
     private CartItemRepository cartItemRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private MenuItemOptionRepository optionRepository;
+    @Autowired
+    MenuItemOptionRuleRepository ruleRepository;
+
 
     @Override
     public CartDTO addMenuItemToCart(@RequestBody AddCartItemDTO cartItemDTO) {
@@ -46,11 +51,22 @@ public class CartServiceImplementation implements CartService {
         if(cartItem != null) {
             throw new APIException("Menu item" + menuItem.getName() + " already exists inside cart");
         }
-        if(menuItem.getEnabled() == false){
+        if(!menuItem.getEnabled()){
             throw new APIException("Menu item " + menuItem.getName() + " is unavailable");
         }
         if(cartItemDTO.getQuantity() <= 0) {
             throw new APIException("Quantity must be greater than 0");
+        }
+
+        int quantity = cartItemDTO.getQuantity();
+
+        List<MenuItemOptionRule> rules = ruleRepository.findByMenuItemIdAndOptionType(menuItem.getId(), "sauce");
+        MenuItemOptionRule ruleMatched = rules.stream()
+                .filter(r -> quantity >= r.getMinQuantity() && quantity <= r.getMaxQuantity())
+                .findFirst()
+                .orElseThrow(() -> new APIException("no rule matches this quantity"));
+        if(cartItemDTO.getSelectedSauceOptionIds().size() > ruleMatched.getMaxChoices()) {
+            throw new APIException("Too many sauces selected. Max allowed: "+ ruleMatched.getMaxChoices());
         }
         //create cart item
         CartItem newCartItem = new CartItem();
@@ -59,14 +75,13 @@ public class CartServiceImplementation implements CartService {
         newCartItem.setCart(cart);
         newCartItem.setQuantity(cartItemDTO.getQuantity());
         newCartItem.setMemos(cartItemDTO.getMemos());
-        newCartItem.setDressing(cartItemDTO.getDressing());
-        newCartItem.setSauces(cartItemDTO.getSauces());
-        newCartItem.setMenuItemPrice(menuItem.getPrice().doubleValue() * cartItemDTO.getQuantity());
+        //newCartItem.setDressing(cartItemDTO.getDressing());
+        //newCartItem.setSauces(cartItemDTO.getSauces());
         //save cart item
         cartItemRepository.save(newCartItem);
         cart.getCartItems().add(newCartItem);
         // return update cart
-        cart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * newCartItem.getMenuItemPrice()));
+        cart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * newCartItem.getMenuItem().getPrice().doubleValue()));
         cartRepository.save(cart);
 
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
@@ -78,8 +93,8 @@ public class CartServiceImplementation implements CartService {
                     newCartItemDTO.setCartItemId(item.getId());
                     newCartItemDTO.setQuantity(item.getQuantity());
                     newCartItemDTO.setMemos(item.getMemos());
-                    newCartItemDTO.setSauces(item.getSauces());
-                    newCartItemDTO.setDressing(item.getDressing());
+                    //newCartItemDTO.setSauces(item.getSauces());
+                    //newCartItemDTO.setDressing(item.getDressing());
 
                     MenuItemDTO menuItemDTO = modelMapper.map(item.getMenuItem(), MenuItemDTO.class);
                     newCartItemDTO.setMenuItem(menuItemDTO);
