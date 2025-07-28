@@ -39,7 +39,7 @@ function MenuPage() {
 
   const handleMenuClick = (menuId) => {
     localStorage.setItem("menuId", menuId);
-    navigate(`/admin/restaurants/menus/${menuId}`);
+    navigate(`/admin/restaurants/dashboard/menus/${menuId}`);
   };
 
   const handlePrimaryMenuToggle = async (menuId) => {

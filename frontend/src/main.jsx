@@ -35,7 +35,7 @@ export default function App() {
             <Route path="/admin/companies" element={<Companies />} />
             if()
             <Route path="/admin/restaurants/dashboard" element={<RestaurantDashboard />} />
-            <Route path="/admin/restaurants/dashboard/menus/menuitems" element={<MenuDetails />} />
+            <Route path="/admin/restaurants/dashboard/menus/:menuId" element={<MenuDetails />} />
             <Route path="/admin/restaurants/dashboard/menus" element={<MenuPage />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Route>
