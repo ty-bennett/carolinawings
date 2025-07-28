@@ -8,10 +8,13 @@ import Sidebar from "../components/Sidebar";
 import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import AddMenuModal from "../components/AddMenuModal";
+
 
 function MenuPage() {
   const [menus, setMenus] = useState([]);
   const [error, setError] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
   const navigate = useNavigate();
 
   const fetchMenus = async () => {
@@ -60,25 +63,32 @@ function MenuPage() {
     }
   }
 
-  const handleAddMenu = async() =>
+  const handleAddMenu = () =>
   {
-    const token = localStorage.getItem('token');
-    
+    setShowAddModal(true); 
+  };
+
+  const handleSaveMenu = async (newMenuData) => {
+    const token = localStorage.getItem("token");
+    const restaurantId = localStorage.getItem("restaurants");
+
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/admin/restaurants/${restaurantId}/menus`,
+        `${import.meta.env.VITE_API_URL}/admin/menus`,
+        newMenuData,
         {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(res);
-    } catch(err) {
+      console.log(res.data);
+      console.log(res.status);
+      setShowAddModal(false);
+      fetchMenus(); // Refresh menus after adding
+    } catch (err) {
       console.error(err);
-      setError("failed to create menu");
+      setError("Failed to create menu.");
     }
-  }
+  };
 
     
 
@@ -126,10 +136,16 @@ function MenuPage() {
         </div>
         <hr></hr>
         {error && <p className="text-red-500">{error}</p>}
+        {showAddModal && (
+          <AddMenuModal
+            onClose={() => setShowAddModal(false)}
+            onSave={handleSaveMenu}
+          />
+        )}
         {menus.map((menu) => (
           <div
               key={menu.id}
-                className="bg-gray-200 p-4 rounded-lg shadow-md border hover:scale-101 transition-transform cursor-pointer"
+                className="bg-white p-4 rounded-lg shadow-md border hover:scale-101 transition-transform cursor-pointer"
               >
                 <div className="flex justify-between"> 
                   <h2 className="text-xl font-semibold py-2">{menu.name}</h2>
