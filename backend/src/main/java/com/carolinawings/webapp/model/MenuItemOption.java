@@ -1,16 +1,20 @@
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenuItemOption {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     private String name; // sauce/dressing name
-    @Enumerated(EnumType.STRING)
     private String type; // type (sauce or dressing)\
 
     @ManyToOne

@@ -60,7 +60,7 @@ public class CartServiceImplementation implements CartService {
 
         int quantity = cartItemDTO.getQuantity();
 
-        List<MenuItemOptionRule> rules = ruleRepository.findByMenuItemIdAndOptionType(menuItem.getId(), "sauce");
+        List<MenuItemOptionRule> rules = ruleRepository.findByMenuItem_IdAndOptionType(menuItem.getId(), "sauce");
         MenuItemOptionRule ruleMatched = rules.stream()
                 .filter(r -> quantity >= r.getMinQuantity() && quantity <= r.getMaxQuantity())
                 .findFirst()
