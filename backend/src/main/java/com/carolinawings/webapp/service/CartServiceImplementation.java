@@ -6,10 +6,7 @@ import com.carolinawings.webapp.dto.CartItemDTO;
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
-import com.carolinawings.webapp.model.Cart;
-import com.carolinawings.webapp.model.CartItem;
-import com.carolinawings.webapp.model.MenuItem;
-import com.carolinawings.webapp.model.MenuItemOptionRule;
+import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.util.AuthUtil;
 import org.modelmapper.ModelMapper;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -71,12 +69,21 @@ public class CartServiceImplementation implements CartService {
         //create cart item
         CartItem newCartItem = new CartItem();
 
-        newCartItem.setMenuItem(menuItem);
         newCartItem.setCart(cart);
+        newCartItem.setMenuItem(menuItem);
         newCartItem.setQuantity(cartItemDTO.getQuantity());
         newCartItem.setMemos(cartItemDTO.getMemos());
-        //newCartItem.setDressing(cartItemDTO.getDressing());
-        //newCartItem.setSauces(cartItemDTO.getSauces());
+
+        List<CartItemChoice> choices = new ArrayList<>();
+        for(Long optionId : cartItemDTO.getSelectedSauceOptionIds()) {
+            MenuItemOption option = optionRepository.findById(optionId)
+                    .orElseThrow(() -> new APIException("Option not found"));
+        }
+
+
+
+
+
         //save cart item
         cartItemRepository.save(newCartItem);
         cart.getCartItems().add(newCartItem);

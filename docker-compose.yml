@@ -14,7 +14,11 @@ services:
       - db
     restart:
       unless-stopped
-
+  app:
+    container_name: spring
+    image: openjdk-21:latest
+    environment:
+      
 networks:
   db:
     driver: bridge
