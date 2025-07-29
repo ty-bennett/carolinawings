@@ -12,10 +12,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
-    MenuItem findByName(String name);
+    Optional<MenuItem> findByName(String name);
 
     Page<MenuItem> findAllByMenu_Id(Long menuId, Pageable pageable);
     List<MenuItem> findAllByMenu_Id(Long menuId);

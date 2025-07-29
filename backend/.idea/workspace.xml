@@ -6,7 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/CartItemChoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/CartItemChoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Dressings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Dressings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItemOptionRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItemOptionRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Sauces.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Sauces.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemOptionRuleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemOptionRuleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/CartServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/CartServiceImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuItemServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/MenuItemServiceImplementation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

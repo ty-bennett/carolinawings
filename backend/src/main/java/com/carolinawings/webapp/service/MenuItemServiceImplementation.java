@@ -100,7 +100,8 @@ public class MenuItemServiceImplementation implements MenuItemService {
     @Override
     public MenuItemDTO createMenuItem(MenuItemDTO menuItemDTO) {
         MenuItem menuItem = modelMapper.map(menuItemDTO, MenuItem.class);
-        MenuItem existingMenuItem = menuItemRepository.findByName(menuItem.getName());
+        MenuItem existingMenuItem = menuItemRepository.findByName(menuItem.getName())
+                .orElseThrow(ResourceNotFoundException::new);
         if (existingMenuItem != null)
             throw new APIException("Menu item with the name " + menuItem.getName() + " already exists");
         MenuItem savedMenuItem = menuItemRepository.save(menuItem);
@@ -137,7 +138,8 @@ public class MenuItemServiceImplementation implements MenuItemService {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
 
        //Find existing menu Item (if it exists) by name
-        MenuItem menuItem =  menuItemRepository.findByName(requestMenuItem.getName());
+        MenuItem menuItem =  menuItemRepository.findByName(requestMenuItem.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemName", requestMenuItem.getName()));
         if(menuItem == null) {
             menuItem = new MenuItem();
             menuItem.setName(requestMenuItem.getName());

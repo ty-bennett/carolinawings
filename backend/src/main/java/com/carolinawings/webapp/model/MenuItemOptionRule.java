@@ -18,8 +18,7 @@ public class MenuItemOptionRule {
 
     @ManyToOne
     private MenuItem menuItem;
-
-    private Integer minQuantity;
-    private Integer maxQuantity;
+    private int quantity;
+    private Integer minChoices;
     private Integer maxChoices;
 }

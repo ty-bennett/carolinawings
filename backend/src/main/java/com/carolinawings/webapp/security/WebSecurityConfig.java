@@ -27,10 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +36,20 @@ public class WebSecurityConfig {
     UserDetailsServiceImpl userDetailsService;
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private MenuRepository menuRepository;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+    @Autowired
+    private MenuItemOptionRepository optionRepository;
+    @Autowired
+    private MenuItemOptionRuleRepository ruleRepository;
 
     @Bean
     public AuthTokenFilter authTokenFilter() {
@@ -105,7 +116,7 @@ public class WebSecurityConfig {
 
             Role restaurantAdminRole = roleRepository.findByName(RoleName.ROLE_RESTAURANTADMIN)
                     .orElseGet(() -> {
-                        Role newRestaurantAdminRole= new Role(RoleName.ROLE_RESTAURANTADMIN);
+                        Role newRestaurantAdminRole = new Role(RoleName.ROLE_RESTAURANTADMIN);
                         return roleRepository.save(newRestaurantAdminRole);
                     });
 
@@ -155,7 +166,7 @@ public class WebSecurityConfig {
 
             List<MenuItem> menuItems = menuItemRepository.findAll();
 
-            for(MenuItem item : menuItems) {
+            for (MenuItem item : menuItems) {
                 item.setMenu(testMenu);
             }
 
@@ -170,10 +181,10 @@ public class WebSecurityConfig {
             userRepository.save(tytest);
 
             Set<Menu> menuSet = testRestaurant.getMenus();
-            if(menuSet == null) {
+            if (menuSet == null) {
                 menuSet = new HashSet<>();
             }
-            for(Menu menu : menuSet) {
+            for (Menu menu : menuSet) {
                 menu.setRestaurant(testRestaurant);
             }
             menuSet.add(testMenu);
@@ -183,8 +194,40 @@ public class WebSecurityConfig {
             Set<Role> userRoles = Set.of(userRole);
             Set<Role> sellerRoles = Set.of(restaurantAdminRole);
             Set<Role> adminRoles = Set.of(userRole, restaurantAdminRole, managerRole);
-        };
 
+            Map<Integer, Integer> wingSauceQuantities = Map.of(
+                    8, 1,
+                    12, 1,
+                    18, 2,
+                    24, 3,
+                    50, 4,
+                    100, 5
+            );
+
+            String[] wingItemNames = {"8 Wings", "12 Wings", "Certified Jumbo Wings - 18 Wings (up to 2 flavors)", "24 Wings (up to 3 flavors)", "50 Wings", "100 Wings"};
+            final int[] i = {0};
+            for (String itemName : wingItemNames) {
+                menuItemRepository.findByName(itemName).ifPresent(item -> {
+                    Set<Integer> set = wingSauceQuantities.keySet();
+                    int qty = set.toArray(new Integer[set.size()])[i[0]];
+                    int max = wingSauceQuantities.get(qty);
+
+                    MenuItemOptionRule rule = new MenuItemOptionRule();
+                    rule.setMenuItem(item);
+                    rule.setOptionType("sauce");
+                    rule.setQuantity(qty); // quantity now matters
+                    rule.setMinChoices(1);
+                    rule.setMaxChoices(max);
+                    ruleRepository.save(rule);
+                    i[0]++;
+                });
+            }
+            String[] sauces = {"MILD", "MILD_HONEY", "BBQ", "TERIYAKI", "TERI_BBQ", "DOCS_BBQ", "HONEY_BBQ", "HOT_GARLIC", "HONEY_MUSTARD", "GARLIC_PARMESAN", "MANGO_HABANERO", "DOCS_SPECIAL", "MEDIUM", "HOT_HONEY", "CAJUN_HONEY", "TERI_HOT", "BUFFALO_CAJUN_RANCH", "HOT_HONEY_MUSTARD", "HOT", "TERI_CAJUN", "CAJUN", "FIRE_ISLAND", "BLISTERING", "BEYOND_BLISTERING", "CLASSIC", "GOLD", "PIG_SAUCE", "CAROLINA_RED", "CAROLINA_RUB", "LEMON_PEPPER"};
+            List<String> sauceList = Arrays.stream(sauces).toList();
+            MenuItemOption option = new MenuItemOption();
+            option.
+
+        };
     }
 
     @Bean
