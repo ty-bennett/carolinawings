@@ -15,4 +15,5 @@ public class AddCartItemDTO {
     private Integer quantity;
     private String memos;
     private List<Long> selectedSauceOptionIds;
+    private List<Long> selectedDressingIds;
 }

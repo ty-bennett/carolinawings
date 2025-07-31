@@ -2,8 +2,6 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.AddCartItemDTO;
 import com.carolinawings.webapp.dto.CartDTO;
-import com.carolinawings.webapp.dto.CartItemDTO;
-import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.*;
@@ -14,11 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class CartServiceImplementation implements CartService {
@@ -36,67 +31,54 @@ public class CartServiceImplementation implements CartService {
     @Autowired
     private MenuItemOptionRepository optionRepository;
     @Autowired
-    MenuItemOptionRuleRepository ruleRepository;
+    MenuItemOptionGroupRepository ruleRepository;
 
 
     @Override
     public CartDTO addMenuItemToCart(@RequestBody AddCartItemDTO cartItemDTO) {
         Cart cart = createCart();
-        //Retrieve menu item  dets
+
         MenuItem menuItem = menuItemRepository.findById(cartItemDTO.getMenuItemId())
                 .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuitemID", cartItemDTO.getMenuItemId()));
-        //perform validations (menu item in stock)?
-        CartItem cartItem = cartItemRepository.findCartItemByMenuItemIdAndCartId(cart.getId(), cartItemDTO.getMenuItemId());
-        if(cartItem != null) {
-            throw new APIException("Menu item" + menuItem.getName() + " already exists inside cart");
+
+        CartItem existingItem = cartItemRepository.findCartItemByMenuItemIdAndCartId(cart.getId(), cartItemDTO.getMenuItemId());
+        if (existingItem != null) {
+            throw new APIException("Menu item " + menuItem.getName() + " already exists inside cart");
         }
-        if(!menuItem.getEnabled()){
+
+        if (!menuItem.getEnabled()) {
             throw new APIException("Menu item " + menuItem.getName() + " is unavailable");
         }
-        if(cartItemDTO.getQuantity() <= 0) {
+
+        if (cartItemDTO.getQuantity() <= 0) {
             throw new APIException("Quantity must be greater than 0");
         }
 
-        int quantity = cartItemDTO.getQuantity();
-
-        MenuItemOptionRule rule = ruleRepository.findByMenuItem_IdAndOptionTypeAndQuantity(menuItem.getId(), "sauce", cartItemDTO.getQuantity())
-                .orElseThrow(() -> new APIException("No rules match this menu item and quantity"));
-
-        int selectedCount = cartItemDTO.getSelectedSauceOptionIds() != null ? cartItemDTO.getSelectedSauceOptionIds().size() : 0;
-
-        if(selectedCount < rule.getMinChoices() || selectedCount > rule.getMaxChoices()) {
-            throw new APIException("Invalid number of sauces: expected " + rule.getMinChoices() + " or " + rule.getMaxChoices());
-        }
-        //create cart item
+        // ✅ Create a new CartItem object
         CartItem newCartItem = new CartItem();
-
         newCartItem.setCart(cart);
         newCartItem.setMenuItem(menuItem);
         newCartItem.setQuantity(cartItemDTO.getQuantity());
         newCartItem.setMemos(cartItemDTO.getMemos());
 
+        // ✅ Collect selected options
         List<CartItemChoice> choices = new ArrayList<>();
-        for(Long optionId : cartItemDTO.getSelectedSauceOptionIds()) {
-            MenuItemOption option = optionRepository.findById(optionId)
-                    .orElseThrow(() -> new APIException("Option not found"));
 
-            if(!"sauce".equals(option.getType())) {
-                throw new APIException("Option type is not sauce");
-            }
+        // ✅ Validate and add sauces
+        validateAndAddChoices("sauce", cartItemDTO.getSelectedSauceOptionIds(), menuItem, newCartItem, choices);
 
-            CartItemChoice cartItemChoice = new CartItemChoice();
-            cartItemChoice.setCartItem(newCartItem);
-            cartItemChoice.setMenuItemOption(option);
-            cartItemChoice.setChoiceType(option.getType());
-            choices.add(cartItemChoice);
-        }
+        // ✅ Validate and add dressings
+        validateAndAddChoices("dressing", cartItemDTO.getSelectedDressingIds(), menuItem, newCartItem, choices);
 
-        cartItem.setChoices(choices);
-        cart.getCartItems().add(cartItem);
+        // ✅ Attach choices and save
+        newCartItem.setChoices(choices);
+        cart.getCartItems().add(newCartItem);
+
         cartRepository.save(cart);
 
         return modelMapper.map(cart, CartDTO.class);
     }
+
 
     private Cart createCart() {
         Cart userCart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
@@ -106,7 +88,52 @@ public class CartServiceImplementation implements CartService {
         Cart cart = new Cart();
         cart.setTotalPrice(0.0);
         cart.setUser(authUtil.loggedInUser());
-        Cart newCart = cartRepository.save(cart);
-        return newCart;
+        return cartRepository.save(cart);
     }
+
+    private void validateAndAddChoices(String type, List<Long> selectedOptionIds, MenuItem menuItem, CartItem cartItem, List<CartItemChoice> choices) {
+        if (selectedOptionIds == null) selectedOptionIds = new ArrayList<>();
+
+        MenuItemOptionGroup optionGroup = menuItem.getOptionGroups().stream()
+                .filter(group -> type.equalsIgnoreCase(group.getOptionType()))
+                .findFirst()
+                .orElse(null);
+
+        if (optionGroup == null) {
+            if (!selectedOptionIds.isEmpty()) {
+                throw new APIException("No option group for " + type + " expected, but options were provided");
+            }
+            return; // skip, nothing to validate or add
+        }
+
+        int selectedCount = selectedOptionIds.size();
+
+        if (optionGroup.isRequired() && selectedCount == 0) {
+            throw new APIException("At least one " + type + " must be selected");
+        }
+
+        if (selectedCount < optionGroup.getMinChoices() || selectedCount > optionGroup.getMaxChoices()) {
+            throw new APIException("You must select between " + optionGroup.getMinChoices() + " and " + optionGroup.getMaxChoices() + " " + type + "(s)");
+        }
+
+        for (Long optionId : selectedOptionIds) {
+            MenuItemOption option = optionRepository.findById(optionId)
+                    .orElseThrow(() -> new APIException("Option not found: " + optionId));
+
+            if (!type.equals(option.getName())) {
+                throw new APIException("Option " + optionId + " is not of type " + type);
+            }
+
+            if (!optionGroup.getOptionGroup().getOptions().contains(option)) {
+                throw new APIException("Option " + optionId + " is not valid for this menu item");
+            }
+
+            CartItemChoice choice = new CartItemChoice();
+            choice.setCartItem(cartItem);
+            choice.setMenuItemOption(option);
+            choice.setChoiceType(type);
+            choices.add(choice);
+        }
+    }
+
 }

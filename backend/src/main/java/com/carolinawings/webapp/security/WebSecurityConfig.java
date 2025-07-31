@@ -1,6 +1,5 @@
 package com.carolinawings.webapp.security;
 
-import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.security.jwt.AuthEntryPointJwt;
@@ -29,6 +28,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.*;
 
+import static java.util.Arrays.stream;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -49,7 +50,9 @@ public class WebSecurityConfig {
     @Autowired
     private MenuItemOptionRepository optionRepository;
     @Autowired
-    private MenuItemOptionRuleRepository ruleRepository;
+    private OptionGroupRepository groupRepository;
+    @Autowired
+    private MenuItemOptionGroupRepository ruleRepository;
 
     @Bean
     public AuthTokenFilter authTokenFilter() {
@@ -105,7 +108,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
+    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, MenuItemOptionRepository menuItemOptionRepository, OptionGroupRepository optionGroupRepository) {
         return args -> {
             // Retrieve or create roles
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -201,32 +204,74 @@ public class WebSecurityConfig {
                     18, 2,
                     24, 3,
                     50, 4,
-                    100, 5
-            );
+                    100, 5);
 
-            String[] wingItemNames = {"8 Wings", "12 Wings", "Certified Jumbo Wings - 18 Wings (up to 2 flavors)", "24 Wings (up to 3 flavors)", "50 Wings", "100 Wings"};
-            final int[] i = {0};
-            for (String itemName : wingItemNames) {
-                menuItemRepository.findByName(itemName).ifPresent(item -> {
-                    Set<Integer> set = wingSauceQuantities.keySet();
-                    int qty = set.toArray(new Integer[set.size()])[i[0]];
-                    int max = wingSauceQuantities.get(qty);
+            MenuItemOption mild = new MenuItemOption("MILD", "sauce");
+            MenuItemOption MILD_HONEY = new MenuItemOption("MILD_HONEY", "sauce");
+            MenuItemOption BBQ = new MenuItemOption("BBQ", "sauce");
+            MenuItemOption TERIYAKI = new MenuItemOption("TERIYAKI","sauce");
+            MenuItemOption TERI_BBQ = new MenuItemOption("TERI_BBQ", "sauce");
+            MenuItemOption DOCS_BBQ = new MenuItemOption("DOCS_BBQ", "sauce");
+            MenuItemOption HONEY_BBQ = new MenuItemOption("HONEY_BBQ", "sauce");
+            MenuItemOption HOT_GARLIC = new MenuItemOption("HOT_GARLIC", "sauce");
+            MenuItemOption HONEY_MUSTARD = new MenuItemOption("HONEY_MUSTARD", "sauce");
+            MenuItemOption GARLIC_PARMESAN = new MenuItemOption("GARLIC_PARMESAN", "sauce");
+            MenuItemOption MANGO_HABANERO = new MenuItemOption("MANGO_HABANERO", "sauce");
+            MenuItemOption DOCS_SPECIAL = new MenuItemOption("DOCS_SPECIAL", "sauce");
+            MenuItemOption MEDIUM = new MenuItemOption("MEDIUM", "sauce");
+            MenuItemOption HOT_HONEY = new MenuItemOption("HOT_HONEY", "sauce");
+            MenuItemOption CAJUN_HONEY = new MenuItemOption("CAJUN_HONEY", "sauce");
+            MenuItemOption TERI_HOT = new MenuItemOption("TERI_HOT", "sauce");
+            MenuItemOption BUFFALO_CAJUN_RANCH = new MenuItemOption("BUFFALO_CAJUN_RANCH", "sauce");
+            MenuItemOption HOT_HONEY_MUSTARD = new MenuItemOption("HOT_HONEY_MUSTARD", "sauce");
+            MenuItemOption HOT = new MenuItemOption("HOT", "sauce");
+            MenuItemOption TERI_CAJUN = new MenuItemOption("TERI_CAJUN", "sauce");
+            MenuItemOption CAJUN = new MenuItemOption("CAJUN", "sauce");
+            MenuItemOption FIRE_ISLAND = new MenuItemOption("FIRE_ISLAND", "sauce");
+            MenuItemOption BLISTERING = new MenuItemOption("BLISTERING", "sauce");
+            MenuItemOption BEYOND_BLISTERING = new MenuItemOption("BEYOND_BLISTERING", "sauce");
+            MenuItemOption CLASSIC = new MenuItemOption("CLASSIC", "sauce");
+            MenuItemOption GOLD = new MenuItemOption("GOLD", "sauce");
+            MenuItemOption PIG_SAUCE = new MenuItemOption("PIG_SAUCE", "sauce");
+            MenuItemOption CAROLINA_RED = new MenuItemOption("CAROLINA_RED", "sauce");
+            MenuItemOption CAROLINA_RUB = new MenuItemOption("CAROLINA_RUB", "sauce");
+            MenuItemOption lemonPepper = new MenuItemOption("Lemon Pepper", "sauce");
+            MenuItemOption none = new MenuItemOption("none", "sauce");
 
-                    MenuItemOptionRule rule = new MenuItemOptionRule();
-                    rule.setMenuItem(item);
-                    rule.setOptionType("sauce");
-                    rule.setQuantity(qty); // quantity now matters
-                    rule.setMinChoices(1);
-                    rule.setMaxChoices(max);
-                    ruleRepository.save(rule);
-                    i[0]++;
-                });
-            }
-            String[] sauces = {"MILD", "MILD_HONEY", "BBQ", "TERIYAKI", "TERI_BBQ", "DOCS_BBQ", "HONEY_BBQ", "HOT_GARLIC", "HONEY_MUSTARD", "GARLIC_PARMESAN", "MANGO_HABANERO", "DOCS_SPECIAL", "MEDIUM", "HOT_HONEY", "CAJUN_HONEY", "TERI_HOT", "BUFFALO_CAJUN_RANCH", "HOT_HONEY_MUSTARD", "HOT", "TERI_CAJUN", "CAJUN", "FIRE_ISLAND", "BLISTERING", "BEYOND_BLISTERING", "CLASSIC", "GOLD", "PIG_SAUCE", "CAROLINA_RED", "CAROLINA_RUB", "LEMON_PEPPER"};
-            List<String> sauceList = Arrays.stream(sauces).toList();
-            MenuItemOption option = new MenuItemOption();
-            option.
+            List<MenuItemOption> wingSauceList = List.of(
+                    mild, MILD_HONEY, BBQ, TERIYAKI, TERI_BBQ, DOCS_BBQ, HONEY_BBQ, HOT_GARLIC, HONEY_MUSTARD,
+                    GARLIC_PARMESAN, MANGO_HABANERO, DOCS_SPECIAL, MEDIUM, HOT_HONEY, CAJUN, CAJUN_HONEY, TERI_HOT, BUFFALO_CAJUN_RANCH,
+                    HOT_HONEY_MUSTARD, HOT, TERI_CAJUN, FIRE_ISLAND, BLISTERING, BEYOND_BLISTERING, CLASSIC, GOLD,
+                    PIG_SAUCE, CAROLINA_RED, CAROLINA_RUB, lemonPepper, none);
+            menuItemOptionRepository.saveAll(wingSauceList);
+            OptionGroup saucesGroup = new OptionGroup();
+            saucesGroup.setName("wing sauces");
+            saucesGroup.setOptions(wingSauceList);
+            menuItemOptionRepository.saveAll(wingSauceList);
+            optionGroupRepository.save(saucesGroup);
+            MenuItemOptionGroup wingSauceGroup = new MenuItemOptionGroup();
+            wingSauceGroup.setOptionGroup(saucesGroup);
+            wingSauceGroup.setOptionType("sauce");
+            wingSauceList.forEach(item -> item.setGroup(saucesGroup));
+            menuItemOptionRepository.saveAll(wingSauceList);
 
+
+            // === DRESSINGS ===
+//            MenuItemOption ranch = new MenuItemOption("Ranch", "dressing");
+//            MenuItemOption blueCheese = new MenuItemOption("Blue Cheese", "dressing");
+//            MenuItemOption italian = new MenuItemOption("Italian", "dressing");
+//
+//            MenuItemOptionGroup dressingGroup = new MenuItemOptionGroup();
+//            dressingGroup.setName("Salad Dressings");
+//            dressingGroup.setOptionType("dressing");
+//            dressingGroup.setOptions(List.of(ranch, blueCheese, italian));
+//
+//            ranch.setGroup(dressingGroup);
+//            blueCheese.setGroup(dressingGroup);
+//            italian.setGroup(dressingGroup);
+
+            // === SAVE GROUPS (cascades options) ===
+            ruleRepository.save(wingSauceGroup);
         };
     }
 

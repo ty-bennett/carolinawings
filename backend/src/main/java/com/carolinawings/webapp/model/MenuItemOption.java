@@ -1,22 +1,24 @@
 package com.carolinawings.webapp.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class MenuItemOption {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name; // sauce/dressing name
-    private String type; // type (sauce or dressing)\
 
     @ManyToOne
-    private MenuItem menuItem;
+    @JoinColumn(name = "option_group_id")
+    private OptionGroup group;
+
+    public MenuItemOption(String mild, String sauce) {
+    }
 }

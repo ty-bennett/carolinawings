@@ -38,6 +38,9 @@ public class MenuItem {
     @JoinColumn(name = "menu_id", nullable = true)
     private Menu menu;
 
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MenuItemOptionGroup> optionGroups = new ArrayList<>();
+
     public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, Boolean enabled) {
         this.name = name;
         this.description = description;
