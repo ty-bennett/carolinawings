@@ -26,9 +26,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.temporal.ValueRange;
 import java.util.*;
 
-import static java.util.Arrays.stream;
 
 @Configuration
 @EnableWebSecurity
@@ -51,8 +51,6 @@ public class WebSecurityConfig {
     private MenuItemOptionRepository optionRepository;
     @Autowired
     private OptionGroupRepository groupRepository;
-    @Autowired
-    private MenuItemOptionGroupRepository ruleRepository;
 
     @Bean
     public AuthTokenFilter authTokenFilter() {
@@ -108,7 +106,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, MenuItemOptionRepository menuItemOptionRepository, OptionGroupRepository optionGroupRepository) {
+    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, MenuItemOptionRepository menuItemOptionRepository, OptionGroupRepository optionGroupRepository, MenuItemOptionGroupRepository menuItemOptionGroupRepository) {
         return args -> {
             // Retrieve or create roles
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -205,56 +203,75 @@ public class WebSecurityConfig {
                     24, 3,
                     50, 4,
                     100, 5);
+            OptionGroup saucesGroup = new OptionGroup();
+            saucesGroup.setName("wing sauces");
+            optionGroupRepository.save(saucesGroup);
 
-            MenuItemOption mild = new MenuItemOption("MILD", "sauce");
-            MenuItemOption MILD_HONEY = new MenuItemOption("MILD_HONEY", "sauce");
-            MenuItemOption BBQ = new MenuItemOption("BBQ", "sauce");
-            MenuItemOption TERIYAKI = new MenuItemOption("TERIYAKI","sauce");
-            MenuItemOption TERI_BBQ = new MenuItemOption("TERI_BBQ", "sauce");
-            MenuItemOption DOCS_BBQ = new MenuItemOption("DOCS_BBQ", "sauce");
-            MenuItemOption HONEY_BBQ = new MenuItemOption("HONEY_BBQ", "sauce");
-            MenuItemOption HOT_GARLIC = new MenuItemOption("HOT_GARLIC", "sauce");
-            MenuItemOption HONEY_MUSTARD = new MenuItemOption("HONEY_MUSTARD", "sauce");
-            MenuItemOption GARLIC_PARMESAN = new MenuItemOption("GARLIC_PARMESAN", "sauce");
-            MenuItemOption MANGO_HABANERO = new MenuItemOption("MANGO_HABANERO", "sauce");
-            MenuItemOption DOCS_SPECIAL = new MenuItemOption("DOCS_SPECIAL", "sauce");
-            MenuItemOption MEDIUM = new MenuItemOption("MEDIUM", "sauce");
-            MenuItemOption HOT_HONEY = new MenuItemOption("HOT_HONEY", "sauce");
-            MenuItemOption CAJUN_HONEY = new MenuItemOption("CAJUN_HONEY", "sauce");
-            MenuItemOption TERI_HOT = new MenuItemOption("TERI_HOT", "sauce");
-            MenuItemOption BUFFALO_CAJUN_RANCH = new MenuItemOption("BUFFALO_CAJUN_RANCH", "sauce");
-            MenuItemOption HOT_HONEY_MUSTARD = new MenuItemOption("HOT_HONEY_MUSTARD", "sauce");
-            MenuItemOption HOT = new MenuItemOption("HOT", "sauce");
-            MenuItemOption TERI_CAJUN = new MenuItemOption("TERI_CAJUN", "sauce");
-            MenuItemOption CAJUN = new MenuItemOption("CAJUN", "sauce");
-            MenuItemOption FIRE_ISLAND = new MenuItemOption("FIRE_ISLAND", "sauce");
-            MenuItemOption BLISTERING = new MenuItemOption("BLISTERING", "sauce");
-            MenuItemOption BEYOND_BLISTERING = new MenuItemOption("BEYOND_BLISTERING", "sauce");
-            MenuItemOption CLASSIC = new MenuItemOption("CLASSIC", "sauce");
-            MenuItemOption GOLD = new MenuItemOption("GOLD", "sauce");
-            MenuItemOption PIG_SAUCE = new MenuItemOption("PIG_SAUCE", "sauce");
-            MenuItemOption CAROLINA_RED = new MenuItemOption("CAROLINA_RED", "sauce");
-            MenuItemOption CAROLINA_RUB = new MenuItemOption("CAROLINA_RUB", "sauce");
-            MenuItemOption lemonPepper = new MenuItemOption("Lemon Pepper", "sauce");
-            MenuItemOption none = new MenuItemOption("none", "sauce");
+            MenuItemOption mild = new MenuItemOption("MILD");
+            MenuItemOption MILD_HONEY = new MenuItemOption("MILD_HONEY");
+            MenuItemOption BBQ = new MenuItemOption("BBQ");
+            MenuItemOption TERIYAKI = new MenuItemOption("TERIYAKI");
+            MenuItemOption TERI_BBQ = new MenuItemOption("TERI_BBQ");
+            MenuItemOption DOCS_BBQ = new MenuItemOption("DOCS_BBQ");
+            MenuItemOption HONEY_BBQ = new MenuItemOption("HONEY_BBQ");
+            MenuItemOption HOT_GARLIC = new MenuItemOption("HOT_GARLIC");
+            MenuItemOption HONEY_MUSTARD = new MenuItemOption("HONEY_MUSTARD");
+            MenuItemOption GARLIC_PARMESAN = new MenuItemOption("GARLIC_PARMESAN");
+            MenuItemOption MANGO_HABANERO = new MenuItemOption("MANGO_HABANERO");
+            MenuItemOption DOCS_SPECIAL = new MenuItemOption("DOCS_SPECIAL");
+            MenuItemOption MEDIUM = new MenuItemOption("MEDIUM");
+            MenuItemOption HOT_HONEY = new MenuItemOption("HOT_HONEY");
+            MenuItemOption CAJUN_HONEY = new MenuItemOption("CAJUN_HONEY");
+            MenuItemOption TERI_HOT = new MenuItemOption("TERI_HOT");
+            MenuItemOption BUFFALO_CAJUN_RANCH = new MenuItemOption("BUFFALO_CAJUN_RANCH");
+            MenuItemOption HOT_HONEY_MUSTARD = new MenuItemOption("HOT_HONEY_MUSTARD");
+            MenuItemOption HOT = new MenuItemOption("HOT");
+            MenuItemOption TERI_CAJUN = new MenuItemOption("TERI_CAJUN");
+            MenuItemOption CAJUN = new MenuItemOption("CAJUN");
+            MenuItemOption FIRE_ISLAND = new MenuItemOption("FIRE_ISLAND");
+            MenuItemOption BLISTERING = new MenuItemOption("BLISTERING");
+            MenuItemOption BEYOND_BLISTERING = new MenuItemOption("BEYOND_BLISTERING");
+            MenuItemOption CLASSIC = new MenuItemOption("CLASSIC");
+            MenuItemOption GOLD = new MenuItemOption("GOLD");
+            MenuItemOption PIG_SAUCE = new MenuItemOption("PIG_SAUCE");
+            MenuItemOption CAROLINA_RED = new MenuItemOption("CAROLINA_RED");
+            MenuItemOption CAROLINA_RUB = new MenuItemOption("CAROLINA_RUB");
+            MenuItemOption lemonPepper = new MenuItemOption("Lemon Pepper");
+            MenuItemOption none = new MenuItemOption("none");
 
             List<MenuItemOption> wingSauceList = List.of(
                     mild, MILD_HONEY, BBQ, TERIYAKI, TERI_BBQ, DOCS_BBQ, HONEY_BBQ, HOT_GARLIC, HONEY_MUSTARD,
                     GARLIC_PARMESAN, MANGO_HABANERO, DOCS_SPECIAL, MEDIUM, HOT_HONEY, CAJUN, CAJUN_HONEY, TERI_HOT, BUFFALO_CAJUN_RANCH,
                     HOT_HONEY_MUSTARD, HOT, TERI_CAJUN, FIRE_ISLAND, BLISTERING, BEYOND_BLISTERING, CLASSIC, GOLD,
                     PIG_SAUCE, CAROLINA_RED, CAROLINA_RUB, lemonPepper, none);
-            menuItemOptionRepository.saveAll(wingSauceList);
-            OptionGroup saucesGroup = new OptionGroup();
-            saucesGroup.setName("wing sauces");
-            saucesGroup.setOptions(wingSauceList);
-            menuItemOptionRepository.saveAll(wingSauceList);
-            optionGroupRepository.save(saucesGroup);
-            MenuItemOptionGroup wingSauceGroup = new MenuItemOptionGroup();
-            wingSauceGroup.setOptionGroup(saucesGroup);
-            wingSauceGroup.setOptionType("sauce");
+
             wingSauceList.forEach(item -> item.setGroup(saucesGroup));
             menuItemOptionRepository.saveAll(wingSauceList);
 
+            menuItemOptionRepository.saveAll(wingSauceList);
+
+            saucesGroup.setOptions(wingSauceList);
+            optionGroupRepository.save(saucesGroup);
+
+            List<MenuItem> menuItemList = menuItemRepository.findAll();
+
+
+            MenuItemOptionGroup wingSauceGroup = new MenuItemOptionGroup();
+            for (MenuItem menuItem : menuItemList) {
+                if(menuItem.getId() != null && menuItem.getId() >= 26 && menuItem.getId() <= 40) {
+                    MenuItemOptionGroup wingSauceGroupTemp = new MenuItemOptionGroup();
+                    wingSauceGroupTemp.setMenuItem(menuItem);
+                    wingSauceGroupTemp.setOptionGroup(saucesGroup);
+                    wingSauceGroupTemp.setOptionType("sauce");
+                    wingSauceGroupTemp.setMaxChoices(3);
+                    menuItem.getOptionGroups().add(wingSauceGroupTemp);
+                    menuItemOptionGroupRepository.save(wingSauceGroupTemp);
+                    menuItemRepository.save(menuItem);
+                }
+            }
+            wingSauceGroup.setOptionGroup(saucesGroup);
+            wingSauceGroup.setOptionType("sauce");
+            menuItemOptionGroupRepository.save(wingSauceGroup);
 
             // === DRESSINGS ===
 //            MenuItemOption ranch = new MenuItemOption("Ranch", "dressing");
@@ -271,7 +288,7 @@ public class WebSecurityConfig {
 //            italian.setGroup(dressingGroup);
 
             // === SAVE GROUPS (cascades options) ===
-            ruleRepository.save(wingSauceGroup);
+            menuItemOptionGroupRepository.save(wingSauceGroup);
         };
     }
 

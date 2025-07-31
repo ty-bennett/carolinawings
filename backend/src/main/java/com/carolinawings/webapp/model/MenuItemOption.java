@@ -17,8 +17,9 @@ public class MenuItemOption {
 
     @ManyToOne
     @JoinColumn(name = "option_group_id")
-    private OptionGroup group;
+    private OptionGroup group = new OptionGroup();
 
-    public MenuItemOption(String mild, String sauce) {
+    public MenuItemOption(String name) {
+        this.name = name;
     }
 }

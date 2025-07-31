@@ -120,10 +120,6 @@ public class CartServiceImplementation implements CartService {
             MenuItemOption option = optionRepository.findById(optionId)
                     .orElseThrow(() -> new APIException("Option not found: " + optionId));
 
-            if (!type.equals(option.getName())) {
-                throw new APIException("Option " + optionId + " is not of type " + type);
-            }
-
             if (!optionGroup.getOptionGroup().getOptions().contains(option)) {
                 throw new APIException("Option " + optionId + " is not valid for this menu item");
             }
