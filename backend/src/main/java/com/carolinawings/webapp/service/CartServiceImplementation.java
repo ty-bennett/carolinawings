@@ -2,6 +2,7 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.AddCartItemDTO;
 import com.carolinawings.webapp.dto.CartDTO;
+import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.*;
@@ -73,8 +74,20 @@ public class CartServiceImplementation implements CartService {
         // ✅ Attach choices and save
         newCartItem.setChoices(choices);
         cart.getCartItems().add(newCartItem);
+        cartItemRepository.save(newCartItem);
 
         cartRepository.save(cart);
+        CartDTO returnCart = modelMapper.map(cart, CartDTO.class);
+        returnCart.getMenuItems().stream().forEach(menuItemDTO -> {
+            MenuItem menuItemToAdd = menuItemRepository.findById(cartItemDTO.getMenuItemId())
+                            .orElse(null);
+            modelMapper.map(menuItemToAdd, MenuItemDTO.class);
+            menuItemDTO.setQuantity(cartItemDTO.getQuantity());
+            menuItemDTO.setMemos(cartItemDTO.getMemos());
+            menuItemDTO.setPrice(menuItemToAdd.getPrice().doubleValue() * cartItemDTO.getQuantity());
+            List<MenuItemOption> options = optionRepository.findAllById(cartItemDTO.getSelectedSauceOptionIds());
+            menuItemDTO.setSauces(options.stream().map(option -> option.getName()).toList());
+        });
 
         return modelMapper.map(cart, CartDTO.class);
     }
