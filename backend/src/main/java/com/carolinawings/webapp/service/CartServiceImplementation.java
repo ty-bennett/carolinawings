@@ -2,6 +2,7 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.AddCartItemDTO;
 import com.carolinawings.webapp.dto.CartDTO;
+import com.carolinawings.webapp.dto.CartItemDTO;
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImplementation implements CartService {
@@ -56,6 +58,7 @@ public class CartServiceImplementation implements CartService {
         }
 
         // ✅ Create a new CartItem object
+
         CartItem newCartItem = new CartItem();
         newCartItem.setCart(cart);
         newCartItem.setMenuItem(menuItem);
@@ -69,27 +72,42 @@ public class CartServiceImplementation implements CartService {
         validateAndAddChoices("sauce", cartItemDTO.getSelectedSauceOptionIds(), menuItem, newCartItem, choices);
 
         // ✅ Validate and add dressings
-        validateAndAddChoices("dressing", cartItemDTO.getSelectedDressingIds(), menuItem, newCartItem, choices);
+//        validateAndAddChoices("dressing", cartItemDTO.getSelectedDressingIds(), menuItem, newCartItem, choices);
 
         // ✅ Attach choices and save
         newCartItem.setChoices(choices);
         cart.getCartItems().add(newCartItem);
+
         cartItemRepository.save(newCartItem);
-
         cartRepository.save(cart);
-        CartDTO returnCart = modelMapper.map(cart, CartDTO.class);
-        returnCart.getMenuItems().stream().forEach(menuItemDTO -> {
-            MenuItem menuItemToAdd = menuItemRepository.findById(cartItemDTO.getMenuItemId())
-                            .orElse(null);
-            modelMapper.map(menuItemToAdd, MenuItemDTO.class);
-            menuItemDTO.setQuantity(cartItemDTO.getQuantity());
-            menuItemDTO.setMemos(cartItemDTO.getMemos());
-            menuItemDTO.setPrice(menuItemToAdd.getPrice().doubleValue() * cartItemDTO.getQuantity());
-            List<MenuItemOption> options = optionRepository.findAllById(cartItemDTO.getSelectedSauceOptionIds());
-            menuItemDTO.setSauces(options.stream().map(option -> option.getName()).toList());
-        });
+        CartDTO returnCart = new CartDTO();
+        returnCart.setCartId(cart.getId());
+        returnCart.setTotalPrice(cart.getTotalPrice());
 
-        return modelMapper.map(cart, CartDTO.class);
+        List<CartItemDTO> cartItemDTOList = new ArrayList<>();
+        for (CartItem item : cart.getCartItems()) {
+            CartItemDTO itemDTO = new CartItemDTO();
+            itemDTO.setCartItemId(item.getId());
+            itemDTO.setQuantity(item.getQuantity());
+            itemDTO.setMemos(item.getMemos());
+
+            MenuItem menuItemToAdd = item.getMenuItem();
+            MenuItemDTO menuItemDTO = modelMapper.map(menuItemToAdd, MenuItemDTO.class);
+            itemDTO.setMenuItem(menuItemDTO);
+            itemDTO.setPrice(menuItemToAdd.getPrice().doubleValue() * item.getQuantity());
+
+            // Collect sauces
+            List<String> sauces = item.getChoices().stream()
+                    .filter(choice -> "sauce".equalsIgnoreCase(choice.getChoiceType()))
+                    .map(choice -> choice.getMenuItemOption().getName())
+                    .toList();
+            itemDTO.setSauces(sauces);
+
+            cartItemDTOList.add(itemDTO);
+        }
+
+        returnCart.setMenuItems(cartItemDTOList);
+        return returnCart;
     }
 
 
