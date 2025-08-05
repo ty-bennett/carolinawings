@@ -106,7 +106,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, MenuItemOptionRepository menuItemOptionRepository, OptionGroupRepository optionGroupRepository, MenuItemOptionGroupRepository menuItemOptionGroupRepository) {
+    public static CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, MenuRepository menuRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, MenuItemOptionRepository menuItemOptionRepository, OptionGroupRepository optionGroupRepository, MenuItemOptionGroupRepository menuItemOptionGroupRepository) {
         return args -> {
             // Retrieve or create roles
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -205,49 +205,12 @@ public class WebSecurityConfig {
                     100, 5);
             OptionGroup saucesGroup = new OptionGroup();
             saucesGroup.setName("wing sauces");
+            OptionGroup ranchAndBleuCheeseSauceGroup = new OptionGroup();
+            ranchAndBleuCheeseSauceGroup.setName("ranch and bleu cheese");
             optionGroupRepository.save(saucesGroup);
+            optionGroupRepository.save(ranchAndBleuCheeseSauceGroup);
 
-            MenuItemOption mild = new MenuItemOption("MILD");
-            MenuItemOption MILD_HONEY = new MenuItemOption("MILD_HONEY");
-            MenuItemOption BBQ = new MenuItemOption("BBQ");
-            MenuItemOption TERIYAKI = new MenuItemOption("TERIYAKI");
-            MenuItemOption TERI_BBQ = new MenuItemOption("TERI_BBQ");
-            MenuItemOption DOCS_BBQ = new MenuItemOption("DOCS_BBQ");
-            MenuItemOption HONEY_BBQ = new MenuItemOption("HONEY_BBQ");
-            MenuItemOption HOT_GARLIC = new MenuItemOption("HOT_GARLIC");
-            MenuItemOption HONEY_MUSTARD = new MenuItemOption("HONEY_MUSTARD");
-            MenuItemOption GARLIC_PARMESAN = new MenuItemOption("GARLIC_PARMESAN");
-            MenuItemOption MANGO_HABANERO = new MenuItemOption("MANGO_HABANERO");
-            MenuItemOption DOCS_SPECIAL = new MenuItemOption("DOCS_SPECIAL");
-            MenuItemOption MEDIUM = new MenuItemOption("MEDIUM");
-            MenuItemOption HOT_HONEY = new MenuItemOption("HOT_HONEY");
-            MenuItemOption CAJUN_HONEY = new MenuItemOption("CAJUN_HONEY");
-            MenuItemOption TERI_HOT = new MenuItemOption("TERI_HOT");
-            MenuItemOption BUFFALO_CAJUN_RANCH = new MenuItemOption("BUFFALO_CAJUN_RANCH");
-            MenuItemOption HOT_HONEY_MUSTARD = new MenuItemOption("HOT_HONEY_MUSTARD");
-            MenuItemOption HOT = new MenuItemOption("HOT");
-            MenuItemOption TERI_CAJUN = new MenuItemOption("TERI_CAJUN");
-            MenuItemOption CAJUN = new MenuItemOption("CAJUN");
-            MenuItemOption FIRE_ISLAND = new MenuItemOption("FIRE_ISLAND");
-            MenuItemOption BLISTERING = new MenuItemOption("BLISTERING");
-            MenuItemOption BEYOND_BLISTERING = new MenuItemOption("BEYOND_BLISTERING");
-            MenuItemOption CLASSIC = new MenuItemOption("CLASSIC");
-            MenuItemOption GOLD = new MenuItemOption("GOLD");
-            MenuItemOption PIG_SAUCE = new MenuItemOption("PIG_SAUCE");
-            MenuItemOption CAROLINA_RED = new MenuItemOption("CAROLINA_RED");
-            MenuItemOption CAROLINA_RUB = new MenuItemOption("CAROLINA_RUB");
-            MenuItemOption lemonPepper = new MenuItemOption("Lemon Pepper");
-            MenuItemOption none = new MenuItemOption("none");
-
-            List<MenuItemOption> wingSauceList = List.of(
-                    mild, MILD_HONEY, BBQ, TERIYAKI, TERI_BBQ, DOCS_BBQ, HONEY_BBQ, HOT_GARLIC, HONEY_MUSTARD,
-                    GARLIC_PARMESAN, MANGO_HABANERO, DOCS_SPECIAL, MEDIUM, HOT_HONEY, CAJUN, CAJUN_HONEY, TERI_HOT, BUFFALO_CAJUN_RANCH,
-                    HOT_HONEY_MUSTARD, HOT, TERI_CAJUN, FIRE_ISLAND, BLISTERING, BEYOND_BLISTERING, CLASSIC, GOLD,
-                    PIG_SAUCE, CAROLINA_RED, CAROLINA_RUB, lemonPepper, none);
-
-            wingSauceList.forEach(item -> item.setGroup(saucesGroup));
-            menuItemOptionRepository.saveAll(wingSauceList);
-
+            List<MenuItemOption> wingSauceList = getMenuItemOptions(saucesGroup);
             menuItemOptionRepository.saveAll(wingSauceList);
 
             saucesGroup.setOptions(wingSauceList);
@@ -290,6 +253,110 @@ public class WebSecurityConfig {
             // === SAVE GROUPS (cascades options) ===
             menuItemOptionGroupRepository.save(wingSauceGroup);
         };
+    }
+
+    private static List<MenuItemOption> getMenuItemOptions(OptionGroup saucesGroup) {
+        MenuItemOption MILD = new MenuItemOption("MILD");
+        MenuItemOption MILD_HONEY = new MenuItemOption("MILD HONEY");
+        MenuItemOption BBQ = new MenuItemOption("BBQ");
+        MenuItemOption TERIYAKI = new MenuItemOption("TERIYAKI");
+        MenuItemOption TERI_BBQ = new MenuItemOption("TERI BBQ");
+        MenuItemOption DOCS_BBQ = new MenuItemOption("DOCS BBQ");
+        MenuItemOption HONEY_BBQ = new MenuItemOption("HONEY BBQ");
+        MenuItemOption HOT_GARLIC = new MenuItemOption("HOT GARLIC");
+        MenuItemOption HONEY_MUSTARD = new MenuItemOption("HONEY MUSTARD");
+        MenuItemOption GARLIC_PARMESAN = new MenuItemOption("GARLIC PARMESAN");
+        MenuItemOption MANGO_HABANERO = new MenuItemOption("MANGO HABANERO");
+        MenuItemOption DOCS_SPECIAL = new MenuItemOption("DOCS SPECIAL");
+        MenuItemOption MEDIUM = new MenuItemOption("MEDIUM");
+        MenuItemOption HOT_HONEY = new MenuItemOption("HOT HONEY");
+        MenuItemOption CAJUN_HONEY = new MenuItemOption("CAJUN HONEY");
+        MenuItemOption TERI_HOT = new MenuItemOption("TERI HOT");
+        MenuItemOption BUFFALO_CAJUN_RANCH = new MenuItemOption("BUFFALO CAJUN RANCH");
+        MenuItemOption HOT_HONEY_MUSTARD = new MenuItemOption("HOT HONEY MUSTARD");
+        MenuItemOption HOT = new MenuItemOption("HOT");
+        MenuItemOption TERI_CAJUN = new MenuItemOption("TERI CAJUN");
+        MenuItemOption CAJUN = new MenuItemOption("CAJUN");
+        MenuItemOption FIRE_ISLAND = new MenuItemOption("FIRE ISLAND");
+        MenuItemOption BLISTERING = new MenuItemOption("BLISTERING");
+        MenuItemOption BEYOND_BLISTERING = new MenuItemOption("BEYOND BLISTERING");
+        MenuItemOption CLASSIC = new MenuItemOption("CLASSIC");
+        MenuItemOption GOLD = new MenuItemOption("GOLD");
+        MenuItemOption PIG_SAUCE = new MenuItemOption("PIG SAUCE");
+        MenuItemOption CAROLINA_RED = new MenuItemOption("CAROLINA RED");
+        MenuItemOption CAROLINA_RUB = new MenuItemOption("CAROLINA RUB");
+        MenuItemOption LEMON_PEPPER = new MenuItemOption("LEMON PEPPER");
+        MenuItemOption PLAIN = new MenuItemOption("PLAIN");
+
+
+        List<MenuItemOption> wingSauceList = List.of(
+                MILD, MILD_HONEY, BBQ, TERIYAKI, TERI_BBQ, DOCS_BBQ, HONEY_BBQ, HOT_GARLIC, HONEY_MUSTARD,
+                GARLIC_PARMESAN, MANGO_HABANERO, DOCS_SPECIAL, MEDIUM, HOT_HONEY, CAJUN, CAJUN_HONEY, TERI_HOT, BUFFALO_CAJUN_RANCH,
+                HOT_HONEY_MUSTARD, HOT, TERI_CAJUN, FIRE_ISLAND, BLISTERING, BEYOND_BLISTERING, CLASSIC, GOLD,
+                PIG_SAUCE, CAROLINA_RED, CAROLINA_RUB, LEMON_PEPPER, PLAIN);
+
+        wingSauceList.forEach(item -> item.setGroup(saucesGroup));
+        return wingSauceList;
+    }
+
+    private static List<MenuItemOption> ranchAndBlueCheeseGroup(OptionGroup ranchAndBleuCheeseSauceGroup) {
+        MenuItemOption RANCH = new MenuItemOption("RANCH");
+        MenuItemOption BLUE_CHEESE = new MenuItemOption("BLEU CHEESE");
+
+        List<MenuItemOption> ranchAndBlueCheeseGroup = List.of(
+                RANCH, BLUE_CHEESE
+        );
+        ranchAndBlueCheeseGroup.forEach(item -> item.setGroup(ranchAndBleuCheeseSauceGroup));
+        return ranchAndBlueCheeseGroup;
+    }
+
+    private static List<MenuItemOption> fishDressingGroup (OptionGroup fishDressingSauceGroup) {
+        MenuItemOption COCKTAIL = new MenuItemOption("COCKTAIL");
+        MenuItemOption TARTAR = new MenuItemOption("TARTAR");
+        List<MenuItemOption> fishDressingGroup = List.of(COCKTAIL, TARTAR);
+        fishDressingGroup.forEach(item -> item.setGroup(fishDressingSauceGroup));
+        return fishDressingGroup;
+    }
+
+    private static List<MenuItemOption> saladDressingGroup (OptionGroup saladDressingGroup) {
+        MenuItemOption RANCH = new MenuItemOption("RANCH");
+        MenuItemOption BLEU_CHEESE = new MenuItemOption("BLEU_CHEESE");
+        MenuItemOption THOUSAND_ISLAND = new MenuItemOption("THOUSAND_ISLAND");
+        MenuItemOption ITALIAN = new MenuItemOption("ITALIAN");
+        MenuItemOption HONEY_MUSTARD = new MenuItemOption("HONEY_MUSTARD");
+        MenuItemOption FRENCH = new MenuItemOption("FRENCH");
+        MenuItemOption BALSAMIC_VINAIGRETTE = new MenuItemOption("BALSAMIC_VINAIGRETTE");
+
+        List<MenuItemOption> saladDressings = List.of(
+                RANCH, BLEU_CHEESE, THOUSAND_ISLAND, ITALIAN, HONEY_MUSTARD, FRENCH, BALSAMIC_VINAIGRETTE
+        );
+        saladDressings.forEach(item -> item.setGroup(saladDressingGroup));
+        return saladDressings;
+    }
+
+    private static List<MenuItemOption> quesadillaAndNachoGroup(OptionGroup salsaSourCreamGroup) {
+        MenuItemOption SALSA = new MenuItemOption("SALSA");
+        MenuItemOption SOUR_CREAM = new MenuItemOption("SOUR_CREAM");
+
+        List<MenuItemOption> salsaSourCream = List.of(
+                SALSA, SOUR_CREAM
+        );
+        salsaSourCream.forEach(item -> item.setGroup(salsaSourCreamGroup));
+        return salsaSourCream;
+    }
+
+    private static List<MenuItemOption> chiliToppingGroup(OptionGroup chiliToppingsGroup)
+    {
+        MenuItemOption CHEESE = new MenuItemOption("CHEESE");
+        MenuItemOption ONIONS = new MenuItemOption("ONIONS");
+        MenuItemOption JALAPENOS = new MenuItemOption("JALAPENOS");
+        MenuItemOption SOUR_CREAM = new MenuItemOption("SOUR_CREAM");
+
+        List<MenuItemOption> chiliToppings = List.of(
+                CHEESE, ONIONS, JALAPENOS, SOUR_CREAM
+        );
+        chiliToppings.forEach(item -> item.setGroup(chiliToppingsGroup));
+        return chiliToppings;
     }
 
     @Bean
