@@ -56,58 +56,29 @@ public class CartServiceImplementation implements CartService {
         if (cartItemDTO.getQuantity() <= 0) {
             throw new APIException("Quantity must be greater than 0");
         }
+        // ✅ Validate and add sauces
+        validateAndAddChoices("sauce", cartItemDTO.getSelectedSauceOptionIds(), menuItem);
 
-        // ✅ Create a new CartItem object
+        // ✅ Validate and add dressings
+//        validateAndAddChoices("dressing", cartItemDTO.getSelectedDressingIds(), menuItem, newCartItem, choices);
+
+        // ✅ Attach choices and save
+//        CartDTO returnCart = new CartDTO();
+//        returnCart.setCartId(cart.getId());
+//        returnCart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * menuItem.getPrice().doubleValue()));
 
         CartItem newCartItem = new CartItem();
         newCartItem.setCart(cart);
         newCartItem.setMenuItem(menuItem);
         newCartItem.setQuantity(cartItemDTO.getQuantity());
         newCartItem.setMemos(cartItemDTO.getMemos());
-
-        // ✅ Collect selected options
-        List<CartItemChoice> choices = new ArrayList<>();
-
-        // ✅ Validate and add sauces
-        validateAndAddChoices("sauce", cartItemDTO.getSelectedSauceOptionIds(), menuItem, newCartItem, choices);
-
-        // ✅ Validate and add dressings
-//        validateAndAddChoices("dressing", cartItemDTO.getSelectedDressingIds(), menuItem, newCartItem, choices);
-
-        // ✅ Attach choices and save
-        newCartItem.setChoices(choices);
-        cart.getCartItems().add(newCartItem);
-
+        newCartItem.setChoices(new ArrayList<>());
         cartItemRepository.save(newCartItem);
+        cart.getCartItems().add(newCartItem);
         cartRepository.save(cart);
-        CartDTO returnCart = new CartDTO();
-        returnCart.setCartId(cart.getId());
-        returnCart.setTotalPrice(cart.getTotalPrice());
+//        CartItemDTO returnCartItem = modelMapper.map(newCartItem, CartItemDTO.class);
 
-        List<CartItemDTO> cartItemDTOList = new ArrayList<>();
-        for (CartItem item : cart.getCartItems()) {
-            CartItemDTO itemDTO = new CartItemDTO();
-            itemDTO.setCartItemId(item.getId());
-            itemDTO.setQuantity(item.getQuantity());
-            itemDTO.setMemos(item.getMemos());
-
-            MenuItem menuItemToAdd = item.getMenuItem();
-            MenuItemDTO menuItemDTO = modelMapper.map(menuItemToAdd, MenuItemDTO.class);
-            itemDTO.setMenuItem(menuItemDTO);
-            itemDTO.setPrice(menuItemToAdd.getPrice().doubleValue() * item.getQuantity());
-
-            // Collect sauces
-            List<String> sauces = item.getChoices().stream()
-                    .filter(choice -> "sauce".equalsIgnoreCase(choice.getChoiceType()))
-                    .map(choice -> choice.getMenuItemOption().getName())
-                    .toList();
-            itemDTO.setSauces(sauces);
-
-            cartItemDTOList.add(itemDTO);
-        }
-
-        returnCart.setMenuItems(cartItemDTOList);
-        return returnCart;
+        return modelMapper.map(cart, CartDTO.class);
     }
 
 
@@ -122,13 +93,15 @@ public class CartServiceImplementation implements CartService {
         return cartRepository.save(cart);
     }
 
-    private void validateAndAddChoices(String type, List<Long> selectedOptionIds, MenuItem menuItem, CartItem cartItem, List<CartItemChoice> choices) {
-        if (selectedOptionIds == null) selectedOptionIds = new ArrayList<>();
+    private void validateAndAddChoices(String type, List<Long> selectedOptionIds, MenuItem menuItem) {
+        if (selectedOptionIds == null) {
+            selectedOptionIds = new ArrayList<>();
+        }
 
         MenuItemOptionGroup optionGroup = menuItem.getOptionGroups().stream()
                 .filter(group -> type.equalsIgnoreCase(group.getOptionType()))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new APIException("Menu item not found with that group: " + menuItem.getOptionGroups().getFirst().getId()));
 
         if (optionGroup == null) {
             if (!selectedOptionIds.isEmpty()) {
@@ -139,7 +112,7 @@ public class CartServiceImplementation implements CartService {
 
         int selectedCount = selectedOptionIds.size();
 
-        if (optionGroup.isRequired() && selectedCount == 0) {
+        if (selectedCount == 0) {
             throw new APIException("At least one " + type + " must be selected");
         }
 
@@ -154,13 +127,6 @@ public class CartServiceImplementation implements CartService {
             if (!optionGroup.getOptionGroup().getOptions().contains(option)) {
                 throw new APIException("Option " + optionId + " is not valid for this menu item");
             }
-
-            CartItemChoice choice = new CartItemChoice();
-            choice.setCartItem(cartItem);
-            choice.setMenuItemOption(option);
-            choice.setChoiceType(type);
-            choices.add(choice);
         }
     }
-
 }

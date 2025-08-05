@@ -13,7 +13,7 @@ public class MenuItemOption {
     @GeneratedValue
     private Long id;
 
-    private String name; // sauce/dressing name
+    private String name; // sauce/dressing/other name
 
     @ManyToOne
     @JoinColumn(name = "option_group_id")

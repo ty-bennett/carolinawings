@@ -20,6 +20,8 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
 
     Page<MenuItem> findAllByMenu_Id(Long menuId, Pageable pageable);
     List<MenuItem> findAllByMenu_Id(Long menuId);
+
+    List<MenuItem> findByNameContaining(String salad);
 //    Optional<MenuItem> findMenuItemById(Integer id);
 //    List<MenuItem> findAll();
 //    Optional<MenuItem> findById(Integer id);

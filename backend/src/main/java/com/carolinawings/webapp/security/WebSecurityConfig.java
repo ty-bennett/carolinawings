@@ -196,13 +196,21 @@ public class WebSecurityConfig {
             Set<Role> sellerRoles = Set.of(restaurantAdminRole);
             Set<Role> adminRoles = Set.of(userRole, restaurantAdminRole, managerRole);
 
-            Map<Integer, Integer> wingSauceQuantities = Map.of(
-                    8, 1,
-                    12, 1,
-                    18, 2,
-                    24, 3,
-                    50, 4,
-                    100, 5);
+            Map<Integer, Integer> wingSauceQuantities = new HashMap<>();
+            wingSauceQuantities.put(27, 1);
+            wingSauceQuantities.put(28, 1);
+            wingSauceQuantities.put(29, 2);
+            wingSauceQuantities.put(30, 3);
+            wingSauceQuantities.put(31, 4);
+            wingSauceQuantities.put(32, 4);
+            wingSauceQuantities.put(33, 4);
+            wingSauceQuantities.put(34, 4);
+            wingSauceQuantities.put(35, 4);
+            wingSauceQuantities.put(36, 4);
+            wingSauceQuantities.put(37, 4);
+            wingSauceQuantities.put(38, 4);
+            wingSauceQuantities.put(39, 4);
+
             OptionGroup saucesGroup = new OptionGroup();
             saucesGroup.setName("wing sauces");
             OptionGroup ranchAndBleuCheeseSauceGroup = new OptionGroup();
@@ -226,7 +234,8 @@ public class WebSecurityConfig {
                     wingSauceGroupTemp.setMenuItem(menuItem);
                     wingSauceGroupTemp.setOptionGroup(saucesGroup);
                     wingSauceGroupTemp.setOptionType("sauce");
-                    wingSauceGroupTemp.setMaxChoices(3);
+                    int sauceCount = wingSauceQuantities.getOrDefault(menuItem.getId(), 1);
+                    wingSauceGroupTemp.setMaxChoices(wingSauceQuantities.getOrDefault(sauceCount, 3));
                     menuItem.getOptionGroups().add(wingSauceGroupTemp);
                     menuItemOptionGroupRepository.save(wingSauceGroupTemp);
                     menuItemRepository.save(menuItem);
@@ -236,22 +245,19 @@ public class WebSecurityConfig {
             wingSauceGroup.setOptionType("sauce");
             menuItemOptionGroupRepository.save(wingSauceGroup);
 
-            // === DRESSINGS ===
-//            MenuItemOption ranch = new MenuItemOption("Ranch", "dressing");
-//            MenuItemOption blueCheese = new MenuItemOption("Blue Cheese", "dressing");
-//            MenuItemOption italian = new MenuItemOption("Italian", "dressing");
-//
-//            MenuItemOptionGroup dressingGroup = new MenuItemOptionGroup();
-//            dressingGroup.setName("Salad Dressings");
-//            dressingGroup.setOptionType("dressing");
-//            dressingGroup.setOptions(List.of(ranch, blueCheese, italian));
-//
-//            ranch.setGroup(dressingGroup);
-//            blueCheese.setGroup(dressingGroup);
-//            italian.setGroup(dressingGroup);
+            MenuItemOptionGroup dressingGroup = new MenuItemOptionGroup();
+            OptionGroup saladGroup = new OptionGroup();
+            saladGroup.setName("salad dressings");
+            saladGroup.setOptions(saladDressingGroup(saladGroup));
+            List<MenuItem> saladMenuItemList = menuItemRepository.findByNameContaining("salad");
+            for(MenuItem menuItem : saladMenuItemList) {
+                dressingGroup.setMenuItem(menuItem);
+                dressingGroup.setOptionType("dressing");
+                dressingGroup.setOptionGroup(saladGroup);
+            }
 
-            // === SAVE GROUPS (cascades options) ===
-            menuItemOptionGroupRepository.save(wingSauceGroup);
+
+
         };
     }
 

@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDTO {
-    private Long cartId;
-    private Double totalPrice = 0.0;
-    private List<MenuItemDTO> menuItems = new ArrayList<>();
+public class OptionGroupDTO {
+    private String id;
+    private String name;
+    private List<MenuItemOptionDTO> options;
 }
