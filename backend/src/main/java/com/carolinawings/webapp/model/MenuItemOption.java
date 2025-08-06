@@ -14,10 +14,9 @@ public class MenuItemOption {
     private Long id;
 
     private String name; // sauce/dressing/other name
-
+    private Long price; //price of sauce if not
     @ManyToOne
-    @JoinColumn(name = "option_group_id")
-    private OptionGroup group = new OptionGroup();
+    private OptionGroup optionGroup;
 
     public MenuItemOption(String name) {
         this.name = name;

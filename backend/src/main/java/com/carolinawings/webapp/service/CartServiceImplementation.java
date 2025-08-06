@@ -1,16 +1,16 @@
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.dto.AddCartItemDTO;
-import com.carolinawings.webapp.dto.CartDTO;
-import com.carolinawings.webapp.dto.CartItemDTO;
-import com.carolinawings.webapp.dto.MenuItemDTO;
+import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.util.AuthUtil;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.logging.LoggingSystemFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImplementation implements CartService {
-
+    private static final Logger logger = LoggerFactory.getLogger(CartServiceImplementation.class);
     @Autowired
     private CartRepository cartRepository;
     @Autowired
@@ -56,16 +56,11 @@ public class CartServiceImplementation implements CartService {
         if (cartItemDTO.getQuantity() <= 0) {
             throw new APIException("Quantity must be greater than 0");
         }
-        // ✅ Validate and add sauces
-        validateAndAddChoices("sauce", cartItemDTO.getSelectedSauceOptionIds(), menuItem);
-
-        // ✅ Validate and add dressings
-//        validateAndAddChoices("dressing", cartItemDTO.getSelectedDressingIds(), menuItem, newCartItem, choices);
 
         // ✅ Attach choices and save
-//        CartDTO returnCart = new CartDTO();
-//        returnCart.setCartId(cart.getId());
-//        returnCart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * menuItem.getPrice().doubleValue()));
+        CartDTO returnCart = new CartDTO();
+        returnCart.setCartId(cart.getId());
+        returnCart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * menuItem.getPrice().doubleValue()));
 
         CartItem newCartItem = new CartItem();
         newCartItem.setCart(cart);
@@ -73,12 +68,13 @@ public class CartServiceImplementation implements CartService {
         newCartItem.setQuantity(cartItemDTO.getQuantity());
         newCartItem.setMemos(cartItemDTO.getMemos());
         newCartItem.setChoices(new ArrayList<>());
+
+        validateAndAddChoices(newCartItem, menuItem, cartItemDTO.getSelectedOptionGroups());
         cartItemRepository.save(newCartItem);
         cart.getCartItems().add(newCartItem);
         cartRepository.save(cart);
-//        CartItemDTO returnCartItem = modelMapper.map(newCartItem, CartItemDTO.class);
 
-        return modelMapper.map(cart, CartDTO.class);
+        return returnCart;
     }
 
 
@@ -92,41 +88,54 @@ public class CartServiceImplementation implements CartService {
         cart.setUser(authUtil.loggedInUser());
         return cartRepository.save(cart);
     }
+    private void validateAndAddChoices(
+            CartItem newCartItem,
+            MenuItem menuItem,
+            List<SelectedOptionGroupDTO> selectedGroups
+    ) {
+        for (SelectedOptionGroupDTO groupDTO : selectedGroups) {
+            String groupName = groupDTO.getGroupName();
+            List<String> selectedNames = groupDTO.getSelectedOptionNames();
+            logger.info("Adding choice " + selectedNames + " to " + groupName);
 
-    private void validateAndAddChoices(String type, List<Long> selectedOptionIds, MenuItem menuItem) {
-        if (selectedOptionIds == null) {
-            selectedOptionIds = new ArrayList<>();
-        }
+            // 1. Find the MenuItemOptionGroup for this menuItem by group name
+            menuItem.getOptionGroups().stream().forEach(optionGroup -> { logger.info(optionGroup.getOptionGroup().getName()); });
+            MenuItemOptionGroup itemOptionGroup = menuItem.getOptionGroups().stream()
+                    .filter(g -> g.getOptionGroup().getName().equalsIgnoreCase(groupName))
+                    .findFirst()
+                    .orElseThrow(() -> {
+                        logger.debug(groupName + "does not exist");
+                        logger.error("Group not found with name " + groupName);
+                        return new APIException("No option group found for: " + groupName);
+                    });
 
-        MenuItemOptionGroup optionGroup = menuItem.getOptionGroups().stream()
-                .filter(group -> type.equalsIgnoreCase(group.getOptionType()))
-                .findFirst()
-                .orElseThrow(() -> new APIException("Menu item not found with that group: " + menuItem.getOptionGroups().getFirst().getId()));
+            // 2. Get allowed options from the OptionGroup
+            List<MenuItemOption> allowedOptions = itemOptionGroup.getOptionGroup().getOptions();
 
-        if (optionGroup == null) {
-            if (!selectedOptionIds.isEmpty()) {
-                throw new APIException("No option group for " + type + " expected, but options were provided");
+            // 3. Find matching selected options
+            List<MenuItemOption> matchedOptions = allowedOptions.stream()
+                    .filter(opt -> selectedNames.contains(opt.getName()))
+                    .toList();
+
+            // 4. Validate count
+            int selectedCount = matchedOptions.size();
+            if (itemOptionGroup.isRequired() && selectedCount == 0) {
+                throw new APIException("You must select at least one option from: " + groupName);
             }
-            return; // skip, nothing to validate or add
-        }
 
-        int selectedCount = selectedOptionIds.size();
+            if (itemOptionGroup.getMaxChoices() != -1 &&
+                    selectedCount > itemOptionGroup.getMaxChoices()) {
+                throw new APIException("Too many options selected for " + groupName + ". Max: " + itemOptionGroup.getMaxChoices());
+            }
 
-        if (selectedCount == 0) {
-            throw new APIException("At least one " + type + " must be selected");
-        }
-
-        if (selectedCount < optionGroup.getMinChoices() || selectedCount > optionGroup.getMaxChoices()) {
-            throw new APIException("You must select between " + optionGroup.getMinChoices() + " and " + optionGroup.getMaxChoices() + " " + type + "(s)");
-        }
-
-        for (Long optionId : selectedOptionIds) {
-            MenuItemOption option = optionRepository.findById(optionId)
-                    .orElseThrow(() -> new APIException("Option not found: " + optionId));
-
-            if (!optionGroup.getOptionGroup().getOptions().contains(option)) {
-                throw new APIException("Option " + optionId + " is not valid for this menu item");
+            // 5. Attach each Option as CartItemOption
+            for (MenuItemOption option : matchedOptions) {
+                CartItemMenuItemOption cartItemOption = new CartItemMenuItemOption();
+                cartItemOption.setCartItem(newCartItem);
+                cartItemOption.setMenuItemOption(option);
+                newCartItem.getChoices().add(cartItemOption);
             }
         }
     }
+
 }

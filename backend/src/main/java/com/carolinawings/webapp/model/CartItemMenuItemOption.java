@@ -9,24 +9,16 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class MenuItemOptionGroup {
+@NoArgsConstructor
+public class CartItemMenuItemOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String optionType; // e.g., "sauce", "dressing"
-    private boolean required;
-    private int minChoices = 1;
-    private int maxChoices;
-    private boolean overrideMaxChoices;
+    @ManyToOne
+    private CartItem cartItem;
 
     @ManyToOne
-    private MenuItem menuItem;
-
-    @ManyToOne
-    private OptionGroup optionGroup;
+    MenuItemOption menuItemOption;
 }
-
-

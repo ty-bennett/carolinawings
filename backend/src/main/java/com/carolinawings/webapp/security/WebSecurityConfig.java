@@ -202,17 +202,19 @@ public class WebSecurityConfig {
             wingSauceQuantities.put(29, 2);
             wingSauceQuantities.put(30, 3);
             wingSauceQuantities.put(31, 4);
-            wingSauceQuantities.put(32, 4);
-            wingSauceQuantities.put(33, 4);
-            wingSauceQuantities.put(34, 4);
-            wingSauceQuantities.put(35, 4);
+            wingSauceQuantities.put(32, 1);
+            wingSauceQuantities.put(33, 1);
+            wingSauceQuantities.put(34, 2);
+            wingSauceQuantities.put(35, 3);
             wingSauceQuantities.put(36, 4);
-            wingSauceQuantities.put(37, 4);
-            wingSauceQuantities.put(38, 4);
-            wingSauceQuantities.put(39, 4);
+            wingSauceQuantities.put(37, 1);
+            wingSauceQuantities.put(38, 1);
+            wingSauceQuantities.put(39, 1);
+            wingSauceQuantities.put(40, 1);
+            wingSauceQuantities.put(41, 1);
 
             OptionGroup saucesGroup = new OptionGroup();
-            saucesGroup.setName("wing sauces");
+            saucesGroup.setName("WING_SAUCES");
             OptionGroup ranchAndBleuCheeseSauceGroup = new OptionGroup();
             ranchAndBleuCheeseSauceGroup.setName("ranch and bleu cheese");
             optionGroupRepository.save(saucesGroup);
@@ -229,7 +231,7 @@ public class WebSecurityConfig {
 
             MenuItemOptionGroup wingSauceGroup = new MenuItemOptionGroup();
             for (MenuItem menuItem : menuItemList) {
-                if(menuItem.getId() != null && menuItem.getId() >= 26 && menuItem.getId() <= 40) {
+                if(menuItem.getId() != null && menuItem.getId() >= 26 && menuItem.getId() <= 41) {
                     MenuItemOptionGroup wingSauceGroupTemp = new MenuItemOptionGroup();
                     wingSauceGroupTemp.setMenuItem(menuItem);
                     wingSauceGroupTemp.setOptionGroup(saucesGroup);
@@ -301,7 +303,7 @@ public class WebSecurityConfig {
                 HOT_HONEY_MUSTARD, HOT, TERI_CAJUN, FIRE_ISLAND, BLISTERING, BEYOND_BLISTERING, CLASSIC, GOLD,
                 PIG_SAUCE, CAROLINA_RED, CAROLINA_RUB, LEMON_PEPPER, PLAIN);
 
-        wingSauceList.forEach(item -> item.setGroup(saucesGroup));
+        wingSauceList.forEach(item -> item.setOptionGroup(saucesGroup));
         return wingSauceList;
     }
 
@@ -312,7 +314,7 @@ public class WebSecurityConfig {
         List<MenuItemOption> ranchAndBlueCheeseGroup = List.of(
                 RANCH, BLUE_CHEESE
         );
-        ranchAndBlueCheeseGroup.forEach(item -> item.setGroup(ranchAndBleuCheeseSauceGroup));
+        ranchAndBlueCheeseGroup.forEach(item -> item.setOptionGroup(ranchAndBleuCheeseSauceGroup));
         return ranchAndBlueCheeseGroup;
     }
 
@@ -320,7 +322,7 @@ public class WebSecurityConfig {
         MenuItemOption COCKTAIL = new MenuItemOption("COCKTAIL");
         MenuItemOption TARTAR = new MenuItemOption("TARTAR");
         List<MenuItemOption> fishDressingGroup = List.of(COCKTAIL, TARTAR);
-        fishDressingGroup.forEach(item -> item.setGroup(fishDressingSauceGroup));
+        fishDressingGroup.forEach(item -> item.setOptionGroup(fishDressingSauceGroup));
         return fishDressingGroup;
     }
 
@@ -336,7 +338,7 @@ public class WebSecurityConfig {
         List<MenuItemOption> saladDressings = List.of(
                 RANCH, BLEU_CHEESE, THOUSAND_ISLAND, ITALIAN, HONEY_MUSTARD, FRENCH, BALSAMIC_VINAIGRETTE
         );
-        saladDressings.forEach(item -> item.setGroup(saladDressingGroup));
+        saladDressings.forEach(item -> item.setOptionGroup(saladDressingGroup));
         return saladDressings;
     }
 
@@ -347,7 +349,7 @@ public class WebSecurityConfig {
         List<MenuItemOption> salsaSourCream = List.of(
                 SALSA, SOUR_CREAM
         );
-        salsaSourCream.forEach(item -> item.setGroup(salsaSourCreamGroup));
+        salsaSourCream.forEach(item -> item.setOptionGroup(salsaSourCreamGroup));
         return salsaSourCream;
     }
 
@@ -361,7 +363,7 @@ public class WebSecurityConfig {
         List<MenuItemOption> chiliToppings = List.of(
                 CHEESE, ONIONS, JALAPENOS, SOUR_CREAM
         );
-        chiliToppings.forEach(item -> item.setGroup(chiliToppingsGroup));
+        chiliToppings.forEach(item -> item.setOptionGroup(chiliToppingsGroup));
         return chiliToppings;
     }
 

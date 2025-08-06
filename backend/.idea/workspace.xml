@@ -5,14 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuItemOptionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuItemOptionGroupDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OptionGroupDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/SelectedOptionGroupDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/CartItemMenuItemOption.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/CartDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/CartDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/MenuItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/AddCartItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/AddCartItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/CartItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItemOption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItemOption.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/MenuItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItemOptionGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/MenuItemOptionGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OptionGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OptionGroup.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/WebSecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/CartServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/CartServiceImplementation.java" afterDir="false" />
     </list>
@@ -223,6 +223,7 @@
       <workItem from="1753939633350" duration="4295000" />
       <workItem from="1754104103698" duration="3666000" />
       <workItem from="1754262503108" duration="3767000" />
+      <workItem from="1754439897847" duration="7880000" />
     </task>
     <servers />
   </component>

@@ -31,5 +31,5 @@ public class CartItem {
     private String memos;
 
     @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItemChoice> choices = new ArrayList<>();
+    private List<CartItemMenuItemOption> choices = new ArrayList<>();
 }
