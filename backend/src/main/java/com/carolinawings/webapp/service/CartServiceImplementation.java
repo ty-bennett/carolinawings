@@ -99,18 +99,17 @@ public class CartServiceImplementation implements CartService {
             logger.info("Adding choice " + selectedNames + " to " + groupName);
 
             // 1. Find the MenuItemOptionGroup for this menuItem by group name
-            menuItem.getOptionGroups().stream().forEach(optionGroup -> { logger.info(optionGroup.getOptionGroup().getName()); });
+            menuItem.getOptionGroups().stream().forEach(optionGroup -> {
             MenuItemOptionGroup itemOptionGroup = menuItem.getOptionGroups().stream()
-                    .filter(g -> g.getOptionGroup().getName().equalsIgnoreCase(groupName))
+                    .filter(group -> group.getOptionGroup().getName().equalsIgnoreCase(groupName))
                     .findFirst()
                     .orElseThrow(() -> {
-                        logger.debug(groupName + "does not exist");
                         logger.error("Group not found with name " + groupName);
                         return new APIException("No option group found for: " + groupName);
                     });
-
+            OptionGroup optionGroupToSearch = optionGroup.getOptionGroup();
             // 2. Get allowed options from the OptionGroup
-            List<MenuItemOption> allowedOptions = itemOptionGroup.getOptionGroup().getOptions();
+            List<MenuItemOption> allowedOptions = optionGroupToSearch.getOptions();
 
             // 3. Find matching selected options
             List<MenuItemOption> matchedOptions = allowedOptions.stream()
