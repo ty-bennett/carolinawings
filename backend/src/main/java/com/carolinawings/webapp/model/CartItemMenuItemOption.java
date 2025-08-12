@@ -17,8 +17,10 @@ public class CartItemMenuItemOption {
     private Long id;
 
     @ManyToOne
-    private CartItem cartItem;
+    @JoinColumn(name = "cart_item_id")
 
-    @ManyToOne
-    MenuItemOption menuItemOption;
+    private CartItem cartItem;
+    private String optionGroupName;
+    private String optionName;
+    private Double price;
 }

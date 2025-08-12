@@ -2,139 +2,105 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.exceptions.APIException;
-import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
-import com.carolinawings.webapp.util.AuthUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.logging.LoggingSystemFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class CartServiceImplementation implements CartService {
-    private static final Logger logger = LoggerFactory.getLogger(CartServiceImplementation.class);
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private AuthUtil authUtil;
-    @Autowired
-    private MenuItemRepository menuItemRepository;
-    @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private MenuItemOptionRepository optionRepository;
-    @Autowired
-    MenuItemOptionGroupRepository ruleRepository;
 
+    private final CartRepository cartRepository;
+    private final MenuItemRepository menuItemRepository;
+    private final MenuItemOptionRepository optionRepository;
+    private final MenuItemOptionGroupRepository menuItemOptionGroupRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartItemOptionRepository cartItemOptionRepository;
+    private final ModelMapper modelMapper;
 
     @Override
-    public CartDTO addMenuItemToCart(@RequestBody AddCartItemDTO cartItemDTO) {
-        Cart cart = createCart();
+    @Transactional
+    public CartDTO addMenuItemToCart(AddCartItemDTO cartItemDTO) {
+        // 1. Find cart
+        Cart cart = cartRepository.findById(cartItemDTO.getCartId())
+                .orElseThrow(() -> new APIException(STR."Cart not found with id: \{cartItemDTO.getCartId()}"));
 
+        // 2. Find menu item
         MenuItem menuItem = menuItemRepository.findById(cartItemDTO.getMenuItemId())
-                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuitemID", cartItemDTO.getMenuItemId()));
+                .orElseThrow(() -> new APIException(STR."MenuItem not found with menuitemID: \{cartItemDTO.getMenuItemId()}"));
 
-        CartItem existingItem = cartItemRepository.findCartItemByMenuItemIdAndCartId(cart.getId(), cartItemDTO.getMenuItemId());
-        if (existingItem != null) {
-            throw new APIException("Menu item " + menuItem.getName() + " already exists inside cart");
+        // 3. Create cart item
+        CartItem cartItem = new CartItem();
+        cartItem.setCart(cart);
+        cartItem.setMenuItem(menuItem);
+        cartItem.setQuantity(cartItemDTO.getQuantity());
+        cartItem.setMemos(cartItemDTO.getMemos());
+
+        cartItemRepository.save(cartItem);
+
+        // 4. Add options by group name
+        if (cartItemDTO.getSelectedOptionGroups() != null) {
+            for (SelectedOptionGroupDTO selectedGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
+                String groupName = selectedGroupDTO.getGroupName().trim().toLowerCase();
+
+                MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository
+                        .findByMenuItem_Id(menuItem.getId()).stream()
+                        .filter(g -> g.getOptionGroup().getName().trim().toLowerCase().equals(groupName))
+                        .findFirst()
+                        .orElseThrow(() -> new APIException(STR."No option group found for: \{selectedGroupDTO.getGroupName()}"));
+
+                log.info("Adding choice {} to {}", selectedGroupDTO.getSelectedOptionNames(), selectedGroupDTO.getGroupName());
+
+                for (String optionName : selectedGroupDTO.getSelectedOptionNames()) {
+                    MenuItemOption option = optionRepository.findByName(optionName)
+                            .orElseThrow(() -> new APIException(STR."Option not found with name: \{optionName}"));
+
+                    CartItemChoice cartItemOption = new CartItemChoice();
+                    cartItemOption.setCartItem(cartItem);
+                    cartItemOption.setMenuItemOption(option);
+                    cartItemOptionRepository.save(cartItemOption);
+                }
+            }
         }
 
-        if (!menuItem.getEnabled()) {
-            throw new APIException("Menu item " + menuItem.getName() + " is unavailable");
+        // 5. Recalculate total price
+        recalculateCartTotal(cart);
+
+        return convertToDTO(cart);
+    }
+
+    private void recalculateCartTotal(Cart cart) {
+        double total = 0.0;
+        for (CartItem item : cart.getCartItems()) {
+            double itemPrice = item.getMenuItem().getPrice().doubleValue();
+
+            for (CartItem option : item.getCart().getCartItems()) {
+                if (option.getMenuItem().getPrice() != null) {
+                    itemPrice += option.getPrice();
+                }
+            }
+
+            total += itemPrice * item.getQuantity();
         }
-
-        if (cartItemDTO.getQuantity() <= 0) {
-            throw new APIException("Quantity must be greater than 0");
-        }
-
-        // ✅ Attach choices and save
-        CartDTO returnCart = new CartDTO();
-        returnCart.setCartId(cart.getId());
-        returnCart.setTotalPrice(cart.getTotalPrice() + (cartItemDTO.getQuantity() * menuItem.getPrice().doubleValue()));
-
-        CartItem newCartItem = new CartItem();
-        newCartItem.setCart(cart);
-        newCartItem.setMenuItem(menuItem);
-        newCartItem.setQuantity(cartItemDTO.getQuantity());
-        newCartItem.setMemos(cartItemDTO.getMemos());
-        newCartItem.setChoices(new ArrayList<>());
-
-        validateAndAddChoices(newCartItem, menuItem, cartItemDTO.getSelectedOptionGroups());
-        cartItemRepository.save(newCartItem);
-        cart.getCartItems().add(newCartItem);
+        cart.setTotalPrice(total);
         cartRepository.save(cart);
-
-        return returnCart;
     }
 
+    private CartDTO convertToDTO(Cart cart) {
+        CartDTO dto = new CartDTO();
+        dto.setCartId(cart.getId());
+        dto.setTotalPrice(cart.getTotalPrice());
+        // mapping of cart items can go here
+        List<CartItemDTO> cartItems = cart.getCartItems().stream()
+                .map(item -> modelMapper.map(item, CartItemDTO.class)).toList();
 
-    private Cart createCart() {
-        Cart userCart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
-        if (userCart != null) {
-            return userCart;
-        }
-        Cart cart = new Cart();
-        cart.setTotalPrice(0.0);
-        cart.setUser(authUtil.loggedInUser());
-        return cartRepository.save(cart);
+        return dto;
     }
-    private void validateAndAddChoices(
-            CartItem newCartItem,
-            MenuItem menuItem,
-            List<SelectedOptionGroupDTO> selectedGroups
-    ) {
-        for (SelectedOptionGroupDTO groupDTO : selectedGroups) {
-            String groupName = groupDTO.getGroupName();
-            List<String> selectedNames = groupDTO.getSelectedOptionNames();
-            logger.info("Adding choice " + selectedNames + " to " + groupName);
-
-            // 1. Find the MenuItemOptionGroup for this menuItem by group name
-            menuItem.getOptionGroups().stream().forEach(optionGroup -> {
-            MenuItemOptionGroup itemOptionGroup = menuItem.getOptionGroups().stream()
-                    .filter(group -> group.getOptionGroup().getName().equalsIgnoreCase(groupName))
-                    .findFirst()
-                    .orElseThrow(() -> {
-                        logger.error("Group not found with name " + groupName);
-                        return new APIException("No option group found for: " + groupName);
-                    });
-            OptionGroup optionGroupToSearch = optionGroup.getOptionGroup();
-            // 2. Get allowed options from the OptionGroup
-            List<MenuItemOption> allowedOptions = optionGroupToSearch.getOptions();
-
-            // 3. Find matching selected options
-            List<MenuItemOption> matchedOptions = allowedOptions.stream()
-                    .filter(opt -> selectedNames.contains(opt.getName()))
-                    .toList();
-
-            // 4. Validate count
-            int selectedCount = matchedOptions.size();
-            if (itemOptionGroup.isRequired() && selectedCount == 0) {
-                throw new APIException("You must select at least one option from: " + groupName);
-            }
-
-            if (itemOptionGroup.getMaxChoices() != -1 &&
-                    selectedCount > itemOptionGroup.getMaxChoices()) {
-                throw new APIException("Too many options selected for " + groupName + ". Max: " + itemOptionGroup.getMaxChoices());
-            }
-
-            // 5. Attach each Option as CartItemOption
-            for (MenuItemOption option : matchedOptions) {
-                CartItemMenuItemOption cartItemOption = new CartItemMenuItemOption();
-                cartItemOption.setCartItem(newCartItem);
-                cartItemOption.setMenuItemOption(option);
-                newCartItem.getChoices().add(cartItemOption);
-            }
-        }
-    }
-
 }

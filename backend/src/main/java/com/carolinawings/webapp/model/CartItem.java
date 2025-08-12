@@ -29,6 +29,7 @@ public class CartItem {
 
     private Integer quantity;
     private String memos;
+    private Double price;
 
     @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItemMenuItemOption> choices = new ArrayList<>();
