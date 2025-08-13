@@ -216,7 +216,7 @@ public class WebSecurityConfig {
             OptionGroup saucesGroup = new OptionGroup();
             saucesGroup.setName("WING_SAUCES");
             OptionGroup ranchAndBleuCheeseSauceGroup = new OptionGroup();
-            ranchAndBleuCheeseSauceGroup.setName("ranch and bleu cheese");
+            ranchAndBleuCheeseSauceGroup.setName("RANCH_BLEU_CHEESE");
             optionGroupRepository.save(saucesGroup);
             optionGroupRepository.save(ranchAndBleuCheeseSauceGroup);
 
@@ -257,9 +257,6 @@ public class WebSecurityConfig {
                 dressingGroup.setOptionType("dressing");
                 dressingGroup.setOptionGroup(saladGroup);
             }
-
-
-
         };
     }
 

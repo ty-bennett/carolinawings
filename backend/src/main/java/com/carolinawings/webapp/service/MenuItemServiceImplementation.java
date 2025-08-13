@@ -145,7 +145,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
             menuItem.setName(requestMenuItem.getName());
             menuItem.setDescription(requestMenuItem.getDescription());
             menuItem.setImageURL(requestMenuItem.getImageUrl());
-            menuItem.setPrice(new BigDecimal(requestMenuItem.getPrice()));
+            menuItem.setPrice(requestMenuItem.getPrice());
             menuItem.setCategory(requestMenuItem.getCategory());
             menuItem.setMenu(menu);
 
@@ -199,7 +199,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
         menuItem.setName(menuItemDTO.getName());
         menuItem.setDescription(menuItemDTO.getDescription());
         menuItem.setImageURL(menuItemDTO.getImageUrl());
-        menuItem.setPrice(new BigDecimal(menuItemDTO.getPrice()));
+        menuItem.setPrice(menuItemDTO.getPrice());
         menuItem.setCategory(menuItemDTO.getCategory());
         menuItem.setEnabled(menuItemDTO.getEnabled());
         menuItem.setMenu(menu);

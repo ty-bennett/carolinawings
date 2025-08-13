@@ -1,9 +1,12 @@
 package com.carolinawings.webapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CartDTO {
     private Long cartId;
-    private Double totalPrice = 0.0;
-    private List<MenuItemDTO> menuItems = new ArrayList<>();
+    private BigDecimal totalPrice = new BigDecimal(0);
+    @JsonManagedReference
+    private List<CartItemDTO> menuItems = new ArrayList<>();
 }

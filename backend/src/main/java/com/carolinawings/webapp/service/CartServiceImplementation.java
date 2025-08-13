@@ -4,13 +4,17 @@ import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
+import com.carolinawings.webapp.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -25,13 +29,12 @@ public class CartServiceImplementation implements CartService {
     private final CartItemRepository cartItemRepository;
     private final CartItemOptionRepository cartItemOptionRepository;
     private final ModelMapper modelMapper;
+    private final AuthUtil authUtil;
 
     @Override
     @Transactional
     public CartDTO addMenuItemToCart(AddCartItemDTO cartItemDTO) {
-        // 1. Find cart
-        Cart cart = cartRepository.findById(cartItemDTO.getCartId())
-                .orElseThrow(() -> new APIException("Cart not found with id: " + cartItemDTO.getCartId()));
+        Cart cart = createCart();
 
         // 2. Find menu item
         MenuItem menuItem = menuItemRepository.findById(cartItemDTO.getMenuItemId())
@@ -43,19 +46,21 @@ public class CartServiceImplementation implements CartService {
         cartItem.setMenuItem(menuItem);
         cartItem.setQuantity(cartItemDTO.getQuantity());
         cartItem.setMemos(cartItemDTO.getMemos());
+        cartItem.setPrice(menuItem.getPrice().multiply(new BigDecimal(cartItemDTO.getQuantity())));
 
         cartItemRepository.save(cartItem);
+        cartItemRepository.flush();
 
         // 4. Add options by group name
         if (cartItemDTO.getSelectedOptionGroups() != null) {
             for (SelectedOptionGroupDTO selectedGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
-                String groupName = selectedGroupDTO.getGroupName().trim().toLowerCase();
+                String groupName = selectedGroupDTO.getGroupName();
 
                 MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository
                         .findByMenuItem_Id(menuItem.getId()).stream()
-                        .filter(g -> g.getOptionGroup().getName().trim().toLowerCase().equals(groupName))
+                        .filter(g -> g.getOptionGroup().getName().equalsIgnoreCase(groupName))
                         .findFirst()
-                        .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName()));
+                        .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName().trim().toLowerCase()));
 
                 log.info("Adding choice {} to {}", selectedGroupDTO.getSelectedOptionNames(), selectedGroupDTO.getGroupName());
 
@@ -66,42 +71,164 @@ public class CartServiceImplementation implements CartService {
                     CartItemChoice cartItemOption = new CartItemChoice();
                     cartItemOption.setCartItem(cartItem);
                     cartItemOption.setMenuItemOption(option);
-                    cartItemOptionRepository.save(cartItemOption);
+                    cartItemOption.setChoiceType(option.getName());
+                    cartItemOptionRepository.saveAndFlush(cartItemOption);
                 }
             }
         }
 
         // 5. Recalculate total price
-        recalculateCartTotal(cart);
+        BigDecimal recalculatedTotal = recalculateCartTotal(cart);
+        cart.setTotalPrice(recalculatedTotal);
+        cartRepository.save(cart);
+        cartRepository.flush();
 
-        return convertToDTO(cart);
+        Cart fullCart = cartRepository.findByIdWithCartItemsAndChoices(cart.getId())
+                .orElseThrow(() -> new APIException("Cart not found after save"));
+
+        BigDecimal newTotal = recalculateCartTotal(fullCart);
+        fullCart.setTotalPrice(newTotal);
+        cartRepository.save(fullCart);
+        cartRepository.flush();
+
+        return convertToDTO(fullCart);
     }
 
-    private void recalculateCartTotal(Cart cart) {
-        double total = 0.0;
-        for (CartItem item : cart.getCartItems()) {
-            double itemPrice = item.getMenuItem().getPrice().doubleValue();
+    private BigDecimal recalculateCartTotal(Cart cart) {
+        BigDecimal total = BigDecimal.ZERO;
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
+        for (CartItem item : cartItems){
+            // Start with base menu item price
+            BigDecimal itemPrice = item.getMenuItem().getPrice() != null
+                    ? item.getMenuItem().getPrice()
+                    : BigDecimal.ZERO;
 
-            for (CartItem option : item.getCart().getCartItems()) {
-                if (option.getMenuItem().getPrice() != null) {
-                    itemPrice += option.getPrice();
+            // Fetch related choices for this cart item
+            List<CartItemChoice> choices = cartItemOptionRepository.findByCartItem(item);
+
+            // Add prices for each option
+            for (CartItemChoice choice : choices) {
+                if (choice.getMenuItemOption() != null && choice.getMenuItemOption().getPrice() != null) {
+                    itemPrice = itemPrice.add(choice.getMenuItemOption().getPrice());
                 }
             }
 
-            total += itemPrice * item.getQuantity();
+            // Multiply by quantity
+            total = total.add(itemPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
         }
+
         cart.setTotalPrice(total);
         cartRepository.save(cart);
+        cartRepository.flush();
+
+
+        return total;
     }
 
     private CartDTO convertToDTO(Cart cart) {
         CartDTO dto = new CartDTO();
         dto.setCartId(cart.getId());
         dto.setTotalPrice(cart.getTotalPrice());
-        // mapping of cart items can go here
-        List<CartItemDTO> cartItems = cart.getCartItems().stream()
-                .map(item -> modelMapper.map(item, CartItemDTO.class)).toList();
+        log.info("CartItem has {} total price, with {}", cart.getTotalPrice(), cart.getCartItems().toString());
+        List<CartItemDTO> cartItemDTOs = cart.getCartItems().stream()
+                .map(this::mapCartItemToDTO)
+                .toList();
+        dto.setMenuItems(cartItemDTOs);
+        return dto;
+    }
+
+    private CartItemDTO mapCartItemToDTO(CartItem cartItem) {
+        CartItemDTO dto = new CartItemDTO();
+        dto.setCartItemId(cartItem.getId());
+        dto.setQuantity(cartItem.getQuantity());
+        dto.setMemos(cartItem.getMemos());
+        dto.setPrice(cartItem.getPrice() != null ? cartItem.getPrice().doubleValue() : 0.0);
+
+        // Map MenuItem
+        dto.setMenuItem(mapMenuItemToDTO(cartItem.getMenuItem()));
+
+        // Map selected options (sauces, dressings, etc.) as list of option names
+        List<String> selectedOptionNames = cartItem.getChoices().stream()
+                .map(choice -> choice.getMenuItemOption().getName())
+                .toList();
+
+        dto.setSauces(selectedOptionNames);
 
         return dto;
+    }
+
+    private MenuItemDTO mapMenuItemToDTO(MenuItem menuItem) {
+        MenuItemDTO dto = new MenuItemDTO();
+        dto.setId(menuItem.getId());
+        dto.setName(menuItem.getName());
+        dto.setDescription(menuItem.getDescription());
+        dto.setImageUrl(menuItem.getImageURL());
+        dto.setPrice(menuItem.getPrice() != null ? menuItem.getPrice() : BigDecimal.ZERO);
+        dto.setCategory(menuItem.getCategory());
+        dto.setEnabled(menuItem.getEnabled());
+
+        // Map option groups (entities to DTOs)
+        List<MenuItemOptionGroupDTO> optionGroupDTOs = menuItem.getOptionGroups().stream()
+                .map(this::mapMenuItemOptionGroupToDTO)
+                .toList();
+
+        dto.setOptionGroups(optionGroupDTOs);
+
+        return dto;
+    }
+
+    private MenuItemOptionGroupDTO mapMenuItemOptionGroupToDTO(MenuItemOptionGroup group) {
+        MenuItemOptionGroupDTO dto = new MenuItemOptionGroupDTO();
+        dto.setId(group.getId() != null ? group.getId().toString() : null);
+        dto.setOptionType(group.getOptionType());
+        dto.setMinChoices(group.getMinChoices() > 0 ? group.getMinChoices() : 0);
+        dto.setMaxChoices(group.getMaxChoices() > 0 ? group.getMaxChoices() : 0);
+
+        // Map option group entity to DTO (no circular menuItem)
+        OptionGroup optionGroupEntity = group.getOptionGroup();
+        OptionGroupDTO optionGroupDTO = new OptionGroupDTO();
+        optionGroupDTO.setId(optionGroupEntity.getId() != null ? optionGroupEntity.getId().toString() : null);
+        optionGroupDTO.setName(optionGroupEntity.getName());
+
+        // Map options inside group
+        List<MenuItemOptionDTO> optionDTOs = optionGroupEntity.getOptions().stream()
+                .map(this::mapMenuItemOptionToDTO)
+                .toList();
+
+        optionGroupDTO.setOptions(optionDTOs);
+        dto.setOptionGroup(optionGroupDTO);
+
+        return dto;
+    }
+
+    private MenuItemOptionDTO mapMenuItemOptionToDTO(MenuItemOption option) {
+        MenuItemOptionDTO dto = new MenuItemOptionDTO();
+        dto.setId(option.getId() != null ? option.getId().toString() : null);
+        dto.setName(option.getName());
+
+        // Map option's group without exposing entity
+        OptionGroup group = option.getOptionGroup();
+        OptionGroupDTO groupDTO = new OptionGroupDTO();
+        groupDTO.setId(group.getId() != null ? group.getId().toString() : null);
+        groupDTO.setName(group.getName());
+        dto.setGroup(groupDTO);
+
+        return dto;
+    }
+
+
+
+    private Cart createCart() {
+       Cart userCart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
+       if (userCart != null) {
+          return userCart;
+       }
+
+       Cart cart = new Cart();
+       cart.setTotalPrice(new BigDecimal(0.0));
+       cart.setUser(authUtil.loggedInUser());
+       Cart newCart = cartRepository.save(cart);
+       cartRepository.flush();
+       return newCart;
     }
 }

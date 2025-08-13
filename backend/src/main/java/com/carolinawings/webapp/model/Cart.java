@@ -1,16 +1,17 @@
 package com.carolinawings.webapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "carts")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart {
@@ -25,7 +26,7 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> cartItems = new ArrayList<>();
 
-    private Double totalPrice = 0.0;
+    private BigDecimal totalPrice;
 }
 
 //decided to handle server side b/c it could be saved across devics and people could come back later to order stuff

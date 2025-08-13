@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 public class MenuItemOptionGroupDTO {
     private String id;
     private String optionType;
-    private String required;
-    private String minChoices;
-    private String maxChoices;
+    private int minChoices;
+    private int maxChoices;
     private MenuItemDTO menuItem;
     private OptionGroupDTO optionGroup;
 }
