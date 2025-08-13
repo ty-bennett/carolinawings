@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -30,11 +31,11 @@ public class CartServiceImplementation implements CartService {
     public CartDTO addMenuItemToCart(AddCartItemDTO cartItemDTO) {
         // 1. Find cart
         Cart cart = cartRepository.findById(cartItemDTO.getCartId())
-                .orElseThrow(() -> new APIException(STR."Cart not found with id: \{cartItemDTO.getCartId()}"));
+                .orElseThrow(() -> new APIException("Cart not found with id: " + cartItemDTO.getCartId()));
 
         // 2. Find menu item
         MenuItem menuItem = menuItemRepository.findById(cartItemDTO.getMenuItemId())
-                .orElseThrow(() -> new APIException(STR."MenuItem not found with menuitemID: \{cartItemDTO.getMenuItemId()}"));
+                .orElseThrow(() -> new APIException("MenuItem not found with menuitemID: " + cartItemDTO.getMenuItemId()));
 
         // 3. Create cart item
         CartItem cartItem = new CartItem();
@@ -54,13 +55,13 @@ public class CartServiceImplementation implements CartService {
                         .findByMenuItem_Id(menuItem.getId()).stream()
                         .filter(g -> g.getOptionGroup().getName().trim().toLowerCase().equals(groupName))
                         .findFirst()
-                        .orElseThrow(() -> new APIException(STR."No option group found for: \{selectedGroupDTO.getGroupName()}"));
+                        .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName()));
 
                 log.info("Adding choice {} to {}", selectedGroupDTO.getSelectedOptionNames(), selectedGroupDTO.getGroupName());
 
                 for (String optionName : selectedGroupDTO.getSelectedOptionNames()) {
                     MenuItemOption option = optionRepository.findByName(optionName)
-                            .orElseThrow(() -> new APIException(STR."Option not found with name: \{optionName}"));
+                            .orElseThrow(() -> new APIException("Option not found with name: " + optionName));
 
                     CartItemChoice cartItemOption = new CartItemChoice();
                     cartItemOption.setCartItem(cartItem);
