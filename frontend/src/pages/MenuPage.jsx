@@ -23,7 +23,7 @@ function MenuPage() {
       const token = localStorage.getItem("token");
       const restaurant = localStorage.getItem("restaurants");
 
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/admin/restaurants/${restaurant}/menus`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/restaurants/${restaurant}/menus`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMenus(res.data.content || []);
