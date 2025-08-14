@@ -11,10 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -60,7 +58,9 @@ public class CartServiceImplementation implements CartService {
                         .findByMenuItem_Id(menuItem.getId()).stream()
                         .filter(g -> g.getOptionGroup().getName().equalsIgnoreCase(groupName))
                         .findFirst()
-                        .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName().trim().toLowerCase()));
+                        .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName()));
+                menuItemOptionGroupRepository.save(menuItemOptionGroup);
+                menuItemOptionGroupRepository.flush();
 
                 log.info("Adding choice {} to {}", selectedGroupDTO.getSelectedOptionNames(), selectedGroupDTO.getGroupName());
 
@@ -83,15 +83,28 @@ public class CartServiceImplementation implements CartService {
         cartRepository.save(cart);
         cartRepository.flush();
 
-        Cart fullCart = cartRepository.findByIdWithCartItemsAndChoices(cart.getId())
-                .orElseThrow(() -> new APIException("Cart not found after save"));
+//        Cart fullCart = cartRepository.findByIdWithCartItemsAndChoices(cart.getId())
+//                .orElseThrow(() -> new APIException("Cart not found after save"));
 
-        BigDecimal newTotal = recalculateCartTotal(fullCart);
-        fullCart.setTotalPrice(newTotal);
-        cartRepository.save(fullCart);
-        cartRepository.flush();
-
-        return convertToDTO(fullCart);
+//        BigDecimal newTotal = recalculateCartTotal(fullCart);
+//        fullCart.setTotalPrice(newTotal);
+//        cartRepository.save(fullCart);
+//        cartRepository.flush();
+        CartDTO dto = new CartDTO();
+        Cart returnCart = cartRepository.findById(cart.getId()).orElseThrow(() -> new APIException("no cart found"));
+        dto.setCartId(returnCart.getId());
+        dto.setTotalPrice(returnCart.getTotalPrice());
+        List<CartItem> cartItemList = returnCart.getCartItems();
+        log.info(cartItemList.toString());
+        log.info("CartItem has {} total price, with {}", returnCart.getTotalPrice(), returnCart.getCartItems().toString());
+        List<CartItemDTO> cartItemDTOs = cartItemList.stream()
+                        .map(itemDTO -> {
+                            CartItemDTO ret = mapCartItemToDTO(itemDTO);
+                            return ret;
+                        }).toList();
+        dto.setMenuItems(cartItemDTOs);
+        log.info(dto.toString());
+        return dto;
     }
 
     private BigDecimal recalculateCartTotal(Cart cart) {
@@ -120,8 +133,6 @@ public class CartServiceImplementation implements CartService {
         cart.setTotalPrice(total);
         cartRepository.save(cart);
         cartRepository.flush();
-
-
         return total;
     }
 
@@ -142,7 +153,7 @@ public class CartServiceImplementation implements CartService {
         dto.setCartItemId(cartItem.getId());
         dto.setQuantity(cartItem.getQuantity());
         dto.setMemos(cartItem.getMemos());
-        dto.setPrice(cartItem.getPrice() != null ? cartItem.getPrice().doubleValue() : 0.0);
+        dto.setPrice(cartItem.getPrice() != null ? cartItem.getPrice() : BigDecimal.ZERO);
 
         // Map MenuItem
         dto.setMenuItem(mapMenuItemToDTO(cartItem.getMenuItem()));
@@ -151,9 +162,7 @@ public class CartServiceImplementation implements CartService {
         List<String> selectedOptionNames = cartItem.getChoices().stream()
                 .map(choice -> choice.getMenuItemOption().getName())
                 .toList();
-
         dto.setSauces(selectedOptionNames);
-
         return dto;
     }
 
