@@ -13,66 +13,90 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class CartServiceImplementation implements CartService {
 
-    private final CartRepository cartRepository;
-    private final MenuItemRepository menuItemRepository;
-    private final MenuItemOptionRepository optionRepository;
-    private final MenuItemOptionGroupRepository menuItemOptionGroupRepository;
-    private final CartItemRepository cartItemRepository;
-    private final CartItemOptionRepository cartItemOptionRepository;
-    private final ModelMapper modelMapper;
-    private final AuthUtil authUtil;
+    private CartRepository cartRepository;
+    private MenuItemRepository menuItemRepository;
+    private MenuItemOptionRepository optionRepository;
+    private MenuItemOptionGroupRepository menuItemOptionGroupRepository;
+    private CartItemRepository cartItemRepository;
+    private CartItemOptionRepository cartItemOptionRepository;
+    private ModelMapper modelMapper;
+    private AuthUtil authUtil;
 
+    public CartServiceImplementation(
+            CartRepository cartRepository,
+            MenuItemRepository menuItemRepository,
+            MenuItemOptionRepository optionRepository,
+            MenuItemOptionGroupRepository menuItemOptionGroupRepository,
+            CartItemRepository cartItemRepository,
+            CartItemOptionRepository cartItemOptionRepository,
+            ModelMapper modelMapper,
+            AuthUtil authUtil
+    ) {
+        this.cartRepository = cartRepository;
+        this.menuItemRepository = menuItemRepository;
+        this.optionRepository = optionRepository;
+        this.menuItemOptionGroupRepository = menuItemOptionGroupRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.cartItemOptionRepository = cartItemOptionRepository;
+        this.modelMapper = modelMapper;
+        this.authUtil = authUtil;
+    }
     @Override
     @Transactional
     public CartDTO addMenuItemToCart(AddCartItemDTO cartItemDTO) {
-        Cart cart = createCart();
+        Cart cart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
+        if(cart == null) {
+            cart = createCart();
+        }
 
         // 2. Find menu item
         MenuItem menuItem = menuItemRepository.findById(cartItemDTO.getMenuItemId())
                 .orElseThrow(() -> new APIException("MenuItem not found with menuitemID: " + cartItemDTO.getMenuItemId()));
+        log.info(menuItem.toString());
+        if(menuItem.getEnabled() == false)
+        {
+            throw new APIException("Menu item is disabled");
+        }
 
         // 3. Create cart item
         CartItem cartItem = new CartItem();
+        cart.getCartItems().add(cartItem);
         cartItem.setCart(cart);
         cartItem.setMenuItem(menuItem);
         cartItem.setQuantity(cartItemDTO.getQuantity());
         cartItem.setMemos(cartItemDTO.getMemos());
         cartItem.setPrice(menuItem.getPrice().multiply(new BigDecimal(cartItemDTO.getQuantity())));
-
+        log.info(cartItem.toString());
         cartItemRepository.save(cartItem);
-        cartItemRepository.flush();
 
         // 4. Add options by group name
         if (cartItemDTO.getSelectedOptionGroups() != null) {
             for (SelectedOptionGroupDTO selectedGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
-                String groupName = selectedGroupDTO.getGroupName();
-
                 MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository
-                        .findByMenuItem_Id(menuItem.getId()).stream()
-                        .filter(g -> g.getOptionGroup().getName().equalsIgnoreCase(groupName))
-                        .findFirst()
+                        .findByMenuItem_Id(menuItem.getId())
                         .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName()));
                 menuItemOptionGroupRepository.save(menuItemOptionGroup);
-                menuItemOptionGroupRepository.flush();
-
+                log.info(menuItemOptionGroup.toString());
                 log.info("Adding choice {} to {}", selectedGroupDTO.getSelectedOptionNames(), selectedGroupDTO.getGroupName());
 
                 for (String optionName : selectedGroupDTO.getSelectedOptionNames()) {
                     MenuItemOption option = optionRepository.findByName(optionName)
                             .orElseThrow(() -> new APIException("Option not found with name: " + optionName));
+                    log.info(option.toString());
 
                     CartItemChoice cartItemOption = new CartItemChoice();
                     cartItemOption.setCartItem(cartItem);
                     cartItemOption.setMenuItemOption(option);
                     cartItemOption.setChoiceType(option.getName());
-                    cartItemOptionRepository.saveAndFlush(cartItemOption);
+                    cartItemOptionRepository.save(cartItemOption);
+                    log.info(cartItemOption.toString());
                 }
             }
         }
@@ -80,8 +104,7 @@ public class CartServiceImplementation implements CartService {
         // 5. Recalculate total price
         BigDecimal recalculatedTotal = recalculateCartTotal(cart);
         cart.setTotalPrice(recalculatedTotal);
-        cartRepository.save(cart);
-        cartRepository.flush();
+        cart = cartRepository.save(cart);
 
 //        Cart fullCart = cartRepository.findByIdWithCartItemsAndChoices(cart.getId())
 //                .orElseThrow(() -> new APIException("Cart not found after save"));
@@ -90,18 +113,29 @@ public class CartServiceImplementation implements CartService {
 //        fullCart.setTotalPrice(newTotal);
 //        cartRepository.save(fullCart);
 //        cartRepository.flush();
-        CartDTO dto = new CartDTO();
-        Cart returnCart = cartRepository.findById(cart.getId()).orElseThrow(() -> new APIException("no cart found"));
-        dto.setCartId(returnCart.getId());
-        dto.setTotalPrice(returnCart.getTotalPrice());
-        List<CartItem> cartItemList = returnCart.getCartItems();
+
+        cartRepository.flush();
+        cartItemRepository.flush();
+        optionRepository.flush();
+
+        Cart updatedCart = cartRepository.findCartByIdWithOptions(cart.getId());
+
+        Set<CartItem> cartItemList = updatedCart.getCartItems();
+        if(cartItemList.isEmpty()) {
+            log.info("No cart items found");
+            throw new APIException("No cart items found");
+        }
+
         log.info(cartItemList.toString());
-        log.info("CartItem has {} total price, with {}", returnCart.getTotalPrice(), returnCart.getCartItems().toString());
+        log.info("CartItem has {} total price, with {}", updatedCart.getTotalPrice(), updatedCart.getCartItems().toString());
+
         List<CartItemDTO> cartItemDTOs = cartItemList.stream()
-                        .map(itemDTO -> {
-                            CartItemDTO ret = mapCartItemToDTO(itemDTO);
-                            return ret;
-                        }).toList();
+                        .map(this::mapCartItemToDTO)
+                        .toList();
+
+        CartDTO dto = new CartDTO();
+        dto.setCartId(cart.getId());
+        dto.setTotalPrice(cart.getTotalPrice());
         dto.setMenuItems(cartItemDTOs);
         log.info(dto.toString());
         return dto;
@@ -199,7 +233,7 @@ public class CartServiceImplementation implements CartService {
         optionGroupDTO.setId(optionGroupEntity.getId() != null ? optionGroupEntity.getId().toString() : null);
         optionGroupDTO.setName(optionGroupEntity.getName());
 
-        // Map options inside group
+        // Map options inside grouItems
         List<MenuItemOptionDTO> optionDTOs = optionGroupEntity.getOptions().stream()
                 .map(this::mapMenuItemOptionToDTO)
                 .toList();
@@ -237,7 +271,6 @@ public class CartServiceImplementation implements CartService {
        cart.setTotalPrice(new BigDecimal(0.0));
        cart.setUser(authUtil.loggedInUser());
        Cart newCart = cartRepository.save(cart);
-       cartRepository.flush();
        return newCart;
     }
 }

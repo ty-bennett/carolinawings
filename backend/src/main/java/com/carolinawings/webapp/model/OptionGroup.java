@@ -19,8 +19,4 @@ public class OptionGroup {
 
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL)
     private List<MenuItemOption> options = new ArrayList<>();
-
-    public OptionGroup(String name) {
-        this.name = name;
-    }
 }
