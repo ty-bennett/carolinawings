@@ -3,6 +3,7 @@ package com.carolinawings.webapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.core.annotation.Order;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @OrderBy("id ASC")
     private Set<CartItem> cartItems = new HashSet<>();
 
     private BigDecimal totalPrice;

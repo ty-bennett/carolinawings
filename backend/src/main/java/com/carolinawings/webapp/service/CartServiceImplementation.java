@@ -95,6 +95,7 @@ public class CartServiceImplementation implements CartService {
                     cartItemOption.setCartItem(cartItem);
                     cartItemOption.setMenuItemOption(option);
                     cartItemOption.setChoiceType(option.getName());
+                    cartItem.getChoices().add(cartItemOption);
                     cartItemOptionRepository.save(cartItemOption);
                     log.info(cartItemOption.toString());
                 }
