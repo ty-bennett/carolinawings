@@ -14,20 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Service
 @Slf4j
 public class CartServiceImplementation implements CartService {
 
-    private CartRepository cartRepository;
-    private MenuItemRepository menuItemRepository;
-    private MenuItemOptionRepository optionRepository;
-    private MenuItemOptionGroupRepository menuItemOptionGroupRepository;
-    private CartItemRepository cartItemRepository;
-    private CartItemOptionRepository cartItemOptionRepository;
-    private ModelMapper modelMapper;
-    private AuthUtil authUtil;
+    private final CartRepository cartRepository;
+    private final MenuItemRepository menuItemRepository;
+    private final MenuItemOptionRepository optionRepository;
+    private final MenuItemOptionGroupRepository menuItemOptionGroupRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartItemOptionRepository cartItemOptionRepository;
+    private final ModelMapper modelMapper;
+    private final AuthUtil authUtil;
 
     public CartServiceImplementation(
             CartRepository cartRepository,
@@ -107,14 +108,6 @@ public class CartServiceImplementation implements CartService {
         cart.setTotalPrice(recalculatedTotal);
         cart = cartRepository.save(cart);
 
-//        Cart fullCart = cartRepository.findByIdWithCartItemsAndChoices(cart.getId())
-//                .orElseThrow(() -> new APIException("Cart not found after save"));
-
-//        BigDecimal newTotal = recalculateCartTotal(fullCart);
-//        fullCart.setTotalPrice(newTotal);
-//        cartRepository.save(fullCart);
-//        cartRepository.flush();
-
         cartRepository.flush();
         cartItemRepository.flush();
         optionRepository.flush();
@@ -140,6 +133,18 @@ public class CartServiceImplementation implements CartService {
         dto.setMenuItems(cartItemDTOs);
         log.info(dto.toString());
         return dto;
+    }
+
+    public CartDTO getUserCart(String userEmail) {
+        Cart cart = cartRepository.findCartByUserEmail(userEmail);
+        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+        List<CartItem> cartItemList = cart.getCartItems().stream().toList();
+        cartItemList.stream().map(item ->
+            {
+                CartItemDTO  
+            });
+
+
     }
 
     private BigDecimal recalculateCartTotal(Cart cart) {
