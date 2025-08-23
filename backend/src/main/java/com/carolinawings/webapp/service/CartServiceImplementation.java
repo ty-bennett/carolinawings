@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -135,23 +136,16 @@ public class CartServiceImplementation implements CartService {
         return dto;
     }
 
-    public CartDTO getUserCart(String userEmail) {
-        Cart cart = cartRepository.findCartByUserEmail(userEmail);
+    public CartDTO getUserCart(String userEmail, Long cartId) {
+        Cart cart = cartRepository.findCartByUserEmailAndId(userEmail, cartId);
+        if(cart == null) {
+            throw new APIException("Cart not found");
+        }
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         List<CartItem> cartItemList = cart.getCartItems().stream().toList();
-        cartItemList.stream().map(item ->
-            {
-                CartItemDTO dto = new CartItemDTO();
-                dto.setCart(cartDTO);
-                dto.setQuantity(item.getQuantity());
-                dto.setCartItemId(item.getId());
-                dto.setMemos(item.getMemos());
-                dto.setPrice(item.getPrice());
-                dto.setMenuItem(modelMapper.map(item.getMenuItem(), MenuItemDTO.class));
-                dto.setSauces(item.getChoices().stream().map(CartItemChoice::getChoiceType).toList());
-            });
-
-
+        List<CartItemDTO> cartItemDTOs = cartItemList.stream().map(item -> mapCartItemToDTO(item)).toList();
+        cartDTO.setMenuItems(cartItemDTOs);
+        return cartDTO;
     }
 
     private BigDecimal recalculateCartTotal(Cart cart) {
