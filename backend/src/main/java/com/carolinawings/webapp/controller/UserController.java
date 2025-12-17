@@ -43,4 +43,5 @@ public class UserController {
         UserResponseDTO savedUserDTO = userServiceImplementation.updateUser(userDTO, id);
         return new ResponseEntity<>(savedUserDTO, HttpStatus.OK);
     }
+
 }
