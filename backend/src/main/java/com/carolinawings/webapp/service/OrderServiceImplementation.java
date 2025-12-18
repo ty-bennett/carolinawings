@@ -25,9 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,27 +48,32 @@ public class OrderServiceImplementation implements OrderService {
         this.orderRepository = orderRepository;
     }
 
+//    public OrderResponse getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
+//        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+//        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", restaurantId));
+//        Page<Order> orders = orderRepository.findOrdersByRestaurantAssignedTo(restaurantId, pageDetails);
+//
+//        if (orders.isEmpty())
+//            throw new APIException("No orders present");
+//        List<OrderDTO> orderDTOS = orders.stream()
+//                .map(order -> modelMapper.map(order, OrderDTO.class))
+//                .toList();
+//
+//        OrderResponse oR = new OrderResponse();
+//        oR.setContent(orderDTOS);
+//        oR.setPageNumber(orders.getNumber());
+//        oR.setPageSize(orders.getSize());
+//        oR.setTotalElements(orders.getTotalElements());
+//        oR.setTotalPages(orders.getTotalPages());
+//        oR.setLastPage(orders.isLast());
+//        return oR;
+//    }
+//
+
+    @Override
     public OrderResponse getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", restaurantId));
-        Page<Order> orders = orderRepository.findOrdersByRestaurantAssignedTo(restaurantId, pageDetails);
-
-        if (orders.isEmpty())
-            throw new APIException("No orders present");
-        List<OrderDTO> orderDTOS = orders.stream()
-                .map(order -> modelMapper.map(order, OrderDTO.class))
-                .toList();
-
-        OrderResponse oR = new OrderResponse();
-        oR.setContent(orderDTOS);
-        oR.setPageNumber(orders.getNumber());
-        oR.setPageSize(orders.getSize());
-        oR.setTotalElements(orders.getTotalElements());
-        oR.setTotalPages(orders.getTotalPages());
-        oR.setLastPage(orders.isLast());
-        return oR;
+        return null;
     }
-
 
     @Override
     public Optional<OrderDTO> getOrderById(UUID id) {
@@ -91,29 +95,6 @@ public class OrderServiceImplementation implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "orderId", id));
         Order order = modelMapper.map(orderDTO, Order.class);
         order.setId(id);
-        Order savedOrderToRepo = orderRepository.save(order);
-        return modelMapper.map(savedOrderToRepo, OrderDTO.class);
-    }
-
-    public OrderDTO createOrderByRestaurant(Long id, @Valid OrderDTO orderDTO) {
-        Order orderReq = modelMapper.map(orderDTO, Order.class);
-        Restaurant restaurant = restaurantRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", id));
-        User user = userRepository.findById(orderReq.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", orderReq.getUser().getId()));
-
-        List<MenuItem> menuItemsList = menuItemRepository.findAllById(orderDTO.getListOfItems());
-
-        LocalTime pickupTime = LocalTime.parse(orderDTO.getPickupTime());
-        BigDecimal orderAmount = new BigDecimal(orderDTO.getOrderAmount());
-
-        Order order = modelMapper.map(orderDTO, Order.class);
-        order.setUser(user);
-        order.setPickupTime(pickupTime);
-        order.setOrderAmount(orderAmount);
-        order.setListOfMenuItems(menuItemsList);
-        order.setRestaurantAssignedTo(restaurant.getId());
-
         Order savedOrderToRepo = orderRepository.save(order);
         return modelMapper.map(savedOrderToRepo, OrderDTO.class);
     }
