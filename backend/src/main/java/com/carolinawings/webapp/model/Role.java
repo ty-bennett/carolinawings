@@ -3,6 +3,7 @@ Ty Bennett
 */
 package com.carolinawings.webapp.model;
 
+import com.carolinawings.webapp.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
+@ToString
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class Role {
     @ToString.Exclude
     @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "role_name")
-    private RoleName name;
+    private RoleName roleName;
     @ManyToMany
     @JoinTable(
             name = "role_permissions",
@@ -29,25 +31,4 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissionsList;
-
-    public Role(RoleName name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", permissionsList=" + permissionsList +
-                '}';
-    }
-
-    public boolean equals(Role r)
-    {
-        return r != null &&
-            this.getId().equals(r.getId()) &&
-            this.getName().equals(r.getName()) &&
-            this.getPermissionsList().equals(r.getPermissionsList());
-    }
 }

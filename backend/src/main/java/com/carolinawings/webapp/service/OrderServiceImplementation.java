@@ -5,28 +5,17 @@ Written by Ty Bennett
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.OrderDTO;
-import com.carolinawings.webapp.dto.OrderResponse;
-import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.dto.OrderResponseDTO;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
-import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.model.Order;
-import com.carolinawings.webapp.model.Restaurant;
-import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.OrderRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import com.carolinawings.webapp.repository.UserRepository;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,7 +60,7 @@ public class OrderServiceImplementation implements OrderService {
 //
 
     @Override
-    public OrderResponse getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
+    public OrderResponseDTO getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
         return null;
     }
 

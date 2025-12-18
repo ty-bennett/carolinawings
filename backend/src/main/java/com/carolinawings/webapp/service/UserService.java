@@ -17,4 +17,5 @@ public interface UserService {
     UserResponseDTO createUser(UserRequestDTO user);
     UserResponseDTO deleteUser(UUID id);
     UserResponseDTO updateUser(UserRequestDTO user, UUID id);
+    boolean userManagesRestaurant(UUID id, Long restaurantId);
 }

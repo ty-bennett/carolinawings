@@ -1,6 +1,7 @@
 package com.carolinawings.webapp.dto;
 
-import com.carolinawings.webapp.model.OrderStatus;
+import com.carolinawings.webapp.enums.OrderStatus;
+import com.carolinawings.webapp.enums.OrderType;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -24,9 +25,10 @@ public class OrderResponseDTO {
     private OffsetDateTime updatedAt;
     private OffsetDateTime pickupTime;
     private Long restaurantId;
+    private String restaurantName;
     private String customerName;
     private String customerPhone;
     private String customerNotes;
     private OrderType orderType;
-    private List<OrderItemResponse> items;
+    private List<OrderItemDTO> items;
 }

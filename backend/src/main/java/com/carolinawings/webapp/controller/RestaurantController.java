@@ -9,16 +9,12 @@ import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import com.carolinawings.webapp.service.OrderServiceImplementation;
 import com.carolinawings.webapp.service.RestaurantServiceImplementation;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin")
@@ -89,7 +85,7 @@ public class RestaurantController {
 
     // Get all orders by restaurant id with pagination
     @GetMapping("/restaurants/{id}/orders")
-    public ResponseEntity<OrderResponse> getOrders(
+    public ResponseEntity<OrderResponseDTO> getOrders(
             @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
             @PathVariable Long id)

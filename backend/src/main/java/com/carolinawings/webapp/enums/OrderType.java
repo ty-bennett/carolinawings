@@ -1,4 +1,4 @@
-package com.carolinawings.webapp.dto;
+package com.carolinawings.webapp.enums;
 
 
 public enum OrderType {

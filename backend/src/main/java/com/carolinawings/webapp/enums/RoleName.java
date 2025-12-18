@@ -1,11 +1,10 @@
-package com.carolinawings.webapp.model;
+package com.carolinawings.webapp.enums;
 
 
 public enum RoleName {
     ROLE_USER,
     ROLE_CUSTOMER,
     ROLE_MANAGER,
-    ROLE_RESTAURANTADMIN,
-    ROLE_COMPANYADMIN,
+    ROLE_RESTAURANT_ADMIN,
     ROLE_ADMIN
 }

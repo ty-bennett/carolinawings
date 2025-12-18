@@ -1,5 +1,6 @@
 package com.carolinawings.webapp.dto;
 
+import com.carolinawings.webapp.enums.OrderType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;

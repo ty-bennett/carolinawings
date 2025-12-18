@@ -97,4 +97,16 @@ public class UserServiceImplementation implements UserService {
         User savedUserToRepo = userRepository.save(user);
         return modelMapper.map(savedUserToRepo, UserResponseDTO.class);
     }
+
+    @Override
+    public boolean userManagesRestaurant(UUID id, Long restaurantId) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "userId", id));
+        boolean exists = user.getRestaurants()
+                .stream()
+                .filter(r -> r.getId()
+                        .equals(restaurantId))
+                .findFirst()
+                .isPresent();
+        return exists;
+    }
 }

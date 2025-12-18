@@ -8,9 +8,11 @@
 
 package com.carolinawings.webapp.model;
 
+import com.carolinawings.webapp.dto.OrderItemOptionDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import java.util.List;
 
 import java.math.BigDecimal;
 
@@ -39,6 +41,7 @@ public class OrderItem {
     private Integer quantity;
     @Column(precision = 10, scale = 2)
     private BigDecimal totalPrice;
+    private List<OrderItemOptionDTO> options;
 
 
     @PrePersist

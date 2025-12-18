@@ -6,7 +6,7 @@ Written by Ty Bennett
 package com.carolinawings.webapp.repository;
 
 import com.carolinawings.webapp.model.Role;
-import com.carolinawings.webapp.model.RoleName;
+import com.carolinawings.webapp.enums.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

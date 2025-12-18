@@ -9,6 +9,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.carolinawings.webapp.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -53,6 +55,8 @@ public class Order {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private OrderStatus status;
+
+	private String customerNotes;
 
 	@PrePersist
 	public void prePersist() {

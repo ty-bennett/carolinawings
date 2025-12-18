@@ -1,7 +1,7 @@
 package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.model.Role;
-import com.carolinawings.webapp.model.RoleName;
+import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.RoleRepository;
 import com.carolinawings.webapp.repository.UserRepository;
@@ -101,7 +101,7 @@ public class AuthController {
             setRoles.forEach(role -> {
                 switch (role) {
                     case "restaurantadmin":
-                        Role restaurantAdminRole = roleRepository.findByName(RoleName.ROLE_RESTAURANTADMIN)
+                        Role restaurantAdminRole = roleRepository.findByName(RoleName.ROLE_RESTAURANT_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: role is not found"));
                         roles.add(restaurantAdminRole);
                         break;

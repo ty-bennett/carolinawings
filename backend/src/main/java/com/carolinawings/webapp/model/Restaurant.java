@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Table(name = "restaurants")
 @Getter
 @Setter
+@ToString
 public class Restaurant {
 
     @Id
@@ -36,24 +38,6 @@ public class Restaurant {
     }
 
     public Restaurant() {}
-
-    public boolean equals(Restaurant r)
-    {
-        return r != null &&
-            this.getId().equals(r.getId()) &&
-            this.getName().equals(r.getName()) &&
-            this.getAddress().equals(r.getAddress()) &&
-            this.getRestaurantAdmin().equals(r.getRestaurantAdmin());
-    }
-
-    public String toString() {
-        return "Restaurant{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", restaurantAdmin=" + restaurantAdmin +
-                '}';
-    }
 }
 
 

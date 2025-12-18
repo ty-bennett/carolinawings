@@ -16,9 +16,6 @@ public class OrderItemOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_item_id", nullable = false)
-    private OrderItem orderItem;
     private String groupName;
     private String optionName;
     @Column(precision = 10, scale = 2)

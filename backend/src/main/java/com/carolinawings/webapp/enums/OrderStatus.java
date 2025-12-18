@@ -1,4 +1,4 @@
-package com.carolinawings.webapp.model;
+package com.carolinawings.webapp.enums;
 
 public enum OrderStatus {
     PENDING,
