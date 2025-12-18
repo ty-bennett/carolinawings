@@ -31,14 +31,14 @@ public class MenuItem {
     private String category;
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CartItem> menuItems = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = true)
     private Menu menu;
 
-    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MenuItemOptionGroup> optionGroups = new ArrayList<>();
 
     public MenuItem(String name, String description, String imageURL, BigDecimal price, String category, Boolean enabled) {

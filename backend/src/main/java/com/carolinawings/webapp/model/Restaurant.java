@@ -25,7 +25,7 @@ public class Restaurant {
     private String address;
     @ManyToMany(mappedBy = "restaurants")
     private Set<User> restaurantAdmin;
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Menu> menus;
 
     public Restaurant(String name, String address, Set<User> restaurantAdmin, Set<Menu> menus) {

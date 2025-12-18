@@ -79,13 +79,13 @@ public class RestaurantController {
 
     //create order at restaurant
 
-    @PostMapping("/restaurants/{id}/orders")
-    @Transactional
-    public ResponseEntity<OrderDTO> createOrderByRestaurant(@Valid @RequestBody OrderDTO orderDTO, @PathVariable Long id)
-    {
-        OrderDTO savedOrderDTO = orderServiceImplementation.createOrderByRestaurant(id, orderDTO);
-        return new ResponseEntity<>(savedOrderDTO, HttpStatus.CREATED);
-    }
+//    @PostMapping("/restaurants/{id}/orders")
+//    @Transactional
+//    public ResponseEntity<OrderDTO> createOrderByRestaurant(@Valid @RequestBody OrderDTO orderDTO, @PathVariable Long id)
+//    {
+//        OrderDTO savedOrderDTO = orderServiceImplementation.createOrderByRestaurant(id, orderDTO);
+//        return new ResponseEntity<>(savedOrderDTO, HttpStatus.CREATED);
+//    }
 
     // Get all orders by restaurant id with pagination
     @GetMapping("/restaurants/{id}/orders")

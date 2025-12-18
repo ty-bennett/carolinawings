@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "menus")
-
+@ToString(exclude = "restaurant")
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,24 +34,6 @@ public class Menu {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     private Boolean isPrimary;
-
-    public Menu(String name, String description, List<MenuItem> menuItemsList, Restaurant restaurant, Boolean isPrimary) {
-        this.name = name;
-        this.description = description;
-        this.menuItemsList = menuItemsList;
-        this.restaurant = restaurant;
-        this.isPrimary = isPrimary;
-    }
-
-    public String toString() {
-        return "Menu{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description=" + description + '\'' +
-                ", menuItemsList=" + menuItemsList + '\'' +
-                ", isPrimary=" + isPrimary +
-                '}';
-    }
 
     public boolean equals(Menu m)
     {
