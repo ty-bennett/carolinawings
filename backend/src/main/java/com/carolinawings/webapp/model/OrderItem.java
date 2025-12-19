@@ -12,6 +12,8 @@ import com.carolinawings.webapp.dto.OrderItemOptionDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.math.BigDecimal;
@@ -41,7 +43,8 @@ public class OrderItem {
     private Integer quantity;
     @Column(precision = 10, scale = 2)
     private BigDecimal totalPrice;
-    private List<OrderItemOptionDTO> options;
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemOption> options = new ArrayList<>();
 
 
     @PrePersist

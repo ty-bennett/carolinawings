@@ -29,6 +29,8 @@ public class Cart {
     @OrderBy("id ASC")
     private Set<CartItem> cartItems = new HashSet<>();
 
+    private BigDecimal totalTax;
+    private BigDecimal subtotal;
     private BigDecimal totalPrice;
 }
 

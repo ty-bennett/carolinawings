@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.carolinawings.webapp.enums.OrderStatus;
+import com.carolinawings.webapp.enums.OrderType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,7 +57,13 @@ public class Order {
 	@Column(nullable = false)
 	private OrderStatus status;
 
+	private String customerName;
+	private String customerPhone;
 	private String customerNotes;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private OrderType orderType;
 
 	@PrePersist
 	public void prePersist() {
@@ -67,6 +74,8 @@ public class Order {
 		if(this.pickupTime == null) {
 			this.pickupTime = OffsetDateTime.now().plusMinutes(15);
 		}
+		if(this.orderType == null) this.orderType = OrderType.PICKUP;
+
 	}
 	@PreUpdate
 	public void preUpdate() {

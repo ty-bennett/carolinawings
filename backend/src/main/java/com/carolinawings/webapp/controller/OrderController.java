@@ -1,12 +1,15 @@
 package com.carolinawings.webapp.controller;
 
+import com.carolinawings.webapp.dto.OrderCreateRequest;
 import com.carolinawings.webapp.dto.OrderDTO;
+import com.carolinawings.webapp.dto.OrderResponseDTO;
 import com.carolinawings.webapp.service.OrderServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,8 +22,6 @@ public class OrderController {
     public OrderController(OrderServiceImplementation orderServiceImplementation) {
         this.orderServiceImplementation = orderServiceImplementation;
     }
-
-
 
     // Get an order by its UUID
     @GetMapping("/orders/{id}")
@@ -41,6 +42,11 @@ public class OrderController {
                                                 @PathVariable UUID id) {
         OrderDTO savedOrderDTO = orderServiceImplementation.updateOrder(orderDTO, id);
         return new ResponseEntity<>(savedOrderDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/orders")
+    public ResponseEntity<OrderResponseDTO> createOrderFromCart(@Valid @RequestBody OrderCreateRequest request) {
+       return new ResponseEntity<>(orderServiceImplementation.createOrderFromCart(request), HttpStatus.OK);
     }
 
 }

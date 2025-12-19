@@ -39,7 +39,7 @@ GET localhost:8080/admin/menus/1/menuitems/sort?sortBy=price
 
 ### add new menu item to a menu
 
-    ###First create menu
+###First create menu
 
 POST localhost:8080/admin/menus
 Content-Type: application/json
@@ -139,6 +139,24 @@ Content-Type: application/json
   "userAssignedTo": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
   "listOfItems": [1, 2, 3]
 }
+
+### create order from cart
+
+POST localhost:8080/admin/orders
+Content-Type: application/json
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": "2025-01-10 18:30:00"
+}
+
+
+
 
 
 

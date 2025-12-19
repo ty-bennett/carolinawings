@@ -23,7 +23,7 @@ public class Role {
     @ToString.Exclude
     @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "role_name")
-    private RoleName roleName;
+    private RoleName name;
     @ManyToMany
     @JoinTable(
             name = "role_permissions",

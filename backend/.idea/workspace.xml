@@ -5,30 +5,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="add: created Order-related DTOS and request and response objects with relevant info for order confirmation pages, and manager admin panel info.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderItemDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderItemOptionDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.devcontainer/devcontainer.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Docs/keymapp-latest.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230257.400.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230259.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230301.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230304.404.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230308.500.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230325.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230511.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230514.404.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T230552.400.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231023.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231033.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231039.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231052.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231218.400.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231221.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231227.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231353.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231359.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231424.405.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231519.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-07T231521.404.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T001819.404.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T001849.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T001851.500.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T004215.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T004244.404.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T004315.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T004318.404.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T004357.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T004422.500.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T005116.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2025-07-08T005119.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/RestaurantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/controller/RestaurantController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderCreateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/dto/OrderType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/enums/OrderType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Cart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OrderItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OrderItemOption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OrderItemOption.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/OrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/enums/OrderStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Restaurant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Restaurant.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/model/RoleName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/enums/RoleName.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/CartRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/RestaurantRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/RestaurantRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderServiceImplementation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/UserServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/UserServiceImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,6 +137,8 @@
     &quot;HTTP Request.Company REST Endpoints | Then add that sample menu to the restaurant by id.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.Company REST Endpoints | add new menu item to a menu.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.Company REST Endpoints | create a userr.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.Company REST Endpoints | create order from car.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.Company REST Endpoints | create order from cart.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.Company REST Endpoints | create order.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.Company REST Endpoints | create restaurant.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.Company REST Endpoints | get the menu items and sort by their price ascending.executor&quot;: &quot;Run&quot;,
@@ -157,19 +183,22 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.OrderSystemApplication">
-    <configuration name="Company REST Endpoints | Create restaurant" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="Create restaurant" index="8" runType="Run single request">
+    <configuration name="Company REST Endpoints | Get users" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="Get users" index="18" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="Company REST Endpoints | GET all restaurants" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="GET all restaurants" index="14" runType="Run single request">
+    <configuration name="Company REST Endpoints | create order from car" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="create order from car" index="20" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="Company REST Endpoints | Get menus" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="Get menus" index="9" runType="Run single request">
+    <configuration name="Company REST Endpoints | create order from cart" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="create order from cart" index="20" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="Company REST Endpoints | POst new menu item to menu" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="POst new menu item to menu" index="10" runType="Run single request">
+    <configuration name="Company REST Endpoints | create order" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="create order" index="19" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="Company REST Endpoints | add new menu item to a menu" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="add new menu item to a menu" index="7" runType="Run single request">
+    <configuration name="Company REST Endpoints | get the menu items and sort by their price ascending" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/Company REST Endpoints.http" executionIdentifier="get the menu items and sort by their price ascending" index="6" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="createOrderFromCart" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" path="">
       <method v="2" />
     </configuration>
     <configuration name="OrderSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -181,20 +210,21 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="HTTP Request.Company REST Endpoints | Get menus" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | Create restaurant" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | GET all restaurants" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | POst new menu item to menu" />
-      <item itemvalue="HTTP Request.Company REST Endpoints | add new menu item to a menu" />
+      <item itemvalue="HTTP Request.createOrderFromCart" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | Get users" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | create order" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | create order from car" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | create order from cart" />
+      <item itemvalue="HTTP Request.Company REST Endpoints | get the menu items and sort by their price ascending" />
       <item itemvalue="Spring Boot.OrderSystemApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.Company REST Endpoints | Get menus" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | Create restaurant" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | add new menu item to a menu" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | POst new menu item to menu" />
-        <item itemvalue="HTTP Request.Company REST Endpoints | GET all restaurants" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | create order from cart" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | get the menu items and sort by their price ascending" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | create order" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | Get users" />
+        <item itemvalue="HTTP Request.Company REST Endpoints | create order from car" />
       </list>
     </recent_temporary>
   </component>
@@ -248,7 +278,8 @@
       <workItem from="1765861721673" duration="646000" />
       <workItem from="1765912874661" duration="10853000" />
       <workItem from="1766000967981" duration="4574000" />
-      <workItem from="1766068045815" duration="7119000" />
+      <workItem from="1766068045815" duration="19283000" />
+      <workItem from="1766132508653" duration="9000" />
     </task>
     <task id="LOCAL-00001" summary="Config options to get Hibernate to work and app to run in container. Also, added a migration file that works with the tables that revolve around the orders.">
       <option name="closed" value="true" />

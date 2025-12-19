@@ -4,6 +4,7 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
+import com.carolinawings.webapp.dto.OrderCreateRequest;
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
 
@@ -16,4 +17,5 @@ public interface OrderService {
     //OrderDTO createOrderByRestaurant(Long id, OrderDTO order);
     OrderDTO deleteOrderById(UUID id);
     OrderDTO updateOrder(OrderDTO order, UUID id);
+    OrderResponseDTO createOrderFromCart(OrderCreateRequest request);
 }
