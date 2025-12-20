@@ -57,7 +57,9 @@ public class Order {
 	@Column(nullable = false)
 	private OrderStatus status;
 
+	@Column(nullable = false)
 	private String customerName;
+	@Column(nullable = false)
 	private String customerPhone;
 	private String customerNotes;
 

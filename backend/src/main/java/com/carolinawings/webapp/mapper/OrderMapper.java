@@ -1,14 +1,15 @@
 package com.carolinawings.webapp.mapper;
 
+import com.carolinawings.webapp.dto.OrderItemOptionDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
+import com.carolinawings.webapp.enums.OrderType;
 import com.carolinawings.webapp.model.Order;
 import com.carolinawings.webapp.dto.OrderItemDTO;
 import com.carolinawings.webapp.model.OrderItem;
+import com.carolinawings.webapp.model.OrderItemOption;
 
-import java.util.ArrayList;
-
-public final class OrderMapper {
-    private OrderMapper() {}
+public class OrderMapper {
+    public OrderMapper() {}
 
     public static OrderResponseDTO toOrderResponseDTO(Order order) {
         if (order == null) return null;
@@ -24,10 +25,11 @@ public final class OrderMapper {
                 .restaurantId(order.getRestaurant() != null ?
                         order.getRestaurant().getId()
                         : null)
-                //.customerName(order.getUser() != null ? order.getUser().getName() : null)
-                //.customerPhone(order.getUser() != null ? order.getUser().getPhoneNumber() : null)
-                //.customerNotes(order.getCustomerNotes())
-                //.orderType(OrderType.PICKUP)
+                .restaurantName(order.getRestaurant().getName())
+                .customerName(order.getUser() != null ? order.getUser().getName() : null)
+                .customerPhone(order.getUser() != null ? order.getUser().getPhoneNumber() : null)
+                .customerNotes(order.getCustomerNotes())
+                .orderType(OrderType.PICKUP)
                 .items(order.getItems().stream().map(OrderMapper::toOrderItemDTO).toList())
                 .build();
     }
@@ -41,7 +43,17 @@ public final class OrderMapper {
                 .unitPrice(item.getMenuItemPrice())
                 .quantity(item.getQuantity())
                 .lineTotal(item.getTotalPrice())
-                .options(new ArrayList<>())
+                .options(item.getOptions().stream().map(OrderMapper::toOrderItemOptionDTO).toList())
+                .build();
+    }
+
+    public static OrderItemOptionDTO toOrderItemOptionDTO(OrderItemOption option) {
+        if (option == null) return null;
+        return OrderItemOptionDTO.builder()
+                .optionId(option.getId())
+                .optionName(option.getOptionName())
+                .extraPrice(option.getExtraPrice())
+                .optionGroupName(option.getGroupName())
                 .build();
     }
 }

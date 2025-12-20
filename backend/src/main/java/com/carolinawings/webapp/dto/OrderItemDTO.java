@@ -11,7 +11,6 @@ public class OrderItemDTO {
     private Long id;
     private Long menuItemId;
     private String menuItemName;
-    private String optionGroupName;
     private BigDecimal unitPrice;
     private Integer quantity;
     private BigDecimal lineTotal;

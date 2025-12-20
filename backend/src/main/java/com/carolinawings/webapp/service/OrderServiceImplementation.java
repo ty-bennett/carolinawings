@@ -7,6 +7,7 @@ package com.carolinawings.webapp.service;
 import com.carolinawings.webapp.dto.OrderCreateRequest;
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
+import com.carolinawings.webapp.dto.PagedOrderResponseDTO;
 import com.carolinawings.webapp.enums.OrderStatus;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
@@ -16,20 +17,27 @@ import com.carolinawings.webapp.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class OrderServiceImplementation implements OrderService {
 
     private final OrderRepository orderRepository;
-
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -44,28 +52,6 @@ public class OrderServiceImplementation implements OrderService {
     public OrderServiceImplementation(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
-
-//    public OrderResponse getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
-//        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
-//        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "id", restaurantId));
-//        Page<Order> orders = orderRepository.findOrdersByRestaurantAssignedTo(restaurantId, pageDetails);
-//
-//        if (orders.isEmpty())
-//            throw new APIException("No orders present");
-//        List<OrderDTO> orderDTOS = orders.stream()
-//                .map(order -> modelMapper.map(order, OrderDTO.class))
-//                .toList();
-//
-//        OrderResponse oR = new OrderResponse();
-//        oR.setContent(orderDTOS);
-//        oR.setPageNumber(orders.getNumber());
-//        oR.setPageSize(orders.getSize());
-//        oR.setTotalElements(orders.getTotalElements());
-//        oR.setTotalPages(orders.getTotalPages());
-//        oR.setLastPage(orders.isLast());
-//        return oR;
-//    }
-//
 
     @Override
     public OrderResponseDTO getAllOrdersByRestaurantPaged(Integer pageNumber, Integer pageSize, Long restaurantId) {
@@ -110,7 +96,12 @@ public class OrderServiceImplementation implements OrderService {
         // load the restaurant
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                         .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", request.getRestaurantId()));
-        Order order = modelMapper.map(request, Order.class);
+        Order order = new Order();
+
+        order.setCustomerName(request.getCustomerName());
+        order.setCustomerPhone(request.getCustomerPhone());
+        order.setCustomerNotes(request.getCustomerNotes());
+
         order.setRestaurant(restaurant);
         order.setStatus(OrderStatus.PENDING);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -133,18 +124,27 @@ public class OrderServiceImplementation implements OrderService {
             orderItem.setOrder(order);
 
             MenuItem menuItem = cartItem.getMenuItem();
+
             orderItem.setMenuItemId(menuItem.getId());
             orderItem.setMenuItemName(menuItem.getName());
             orderItem.setMenuItemPrice(menuItem.getPrice());
             orderItem.setQuantity(cartItem.getQuantity());
 
             // total price will be filled by an @PrePersist method
+            List<OrderItemOption> options = new ArrayList<>();
 
+            for(CartItemChoice choice : cartItem.getChoices()) {
+                MenuItemOption menuItemOption = choice.getMenuItemOption();
 
-            //TODO: map cart item options -> orderItemOption and attach!
-            for(CartItemChoice cartItemChoice : cartItem.getChoices()) {
+                OrderItemOption orderItemOption = new OrderItemOption();
+                orderItemOption.setOrderItem(orderItem);
+                orderItemOption.setOptionName(menuItemOption.getName());
+                orderItemOption.setExtraPrice(menuItemOption.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+                orderItemOption.setGroupName(choice.getChoiceType());
+                options.add(orderItemOption);
             }
 
+            orderItem.setOptions(options);
             orderItems.add(orderItem);
         }
 
@@ -153,6 +153,93 @@ public class OrderServiceImplementation implements OrderService {
         Order saved = orderRepository.save(order);
 
         return OrderMapper.toOrderResponseDTO(saved);
+    }
+
+    @Override
+    public PagedOrderResponseDTO getOrdersForRestaurantByManager(
+            Long restaurantId,
+            Integer page,
+            Integer pageSize,
+            OrderStatus statusFilter
+    ) {
+        User currentUser = getCurrentUser();
+
+        Restaurant restaurant =  restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+
+        if(!userManagesRestaurant(currentUser, restaurant)) {
+            throw new APIException("User does not have access to manage that restaurant" + restaurantId);
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<Order> orderPage;
+        if(statusFilter != null) {
+            orderPage = orderRepository.findOrdersByRestaurantIdAndStatus(restaurantId, statusFilter, pageable);
+        } else {
+            orderPage = orderRepository.findOrdersByRestaurantId(restaurantId, pageable);
+        }
+
+        if(orderPage.isEmpty()) {
+            throw new APIException("No orders found for this restaurant" + restaurant.getName());
+        }
+
+        List<OrderResponseDTO> dtos = orderPage
+                .getContent()
+                .stream()
+                .map(OrderMapper::toOrderResponseDTO)
+                .collect(Collectors.toList());
+
+        return PagedOrderResponseDTO.builder()
+                .content(dtos)
+                .totalElements(orderPage.getTotalElements())
+                .pageNumber(orderPage.getNumber())
+                .pageSize(orderPage.getSize())
+                .totalPages(orderPage.getTotalPages())
+                .lastPage(orderPage.isLast())
+                .build();
+    }
+
+    @Override
+    public OrderResponseDTO updateOrderStatusForManager(UUID orderId, OrderStatus orderStatus) {
+        User currentUser = getCurrentUser();
+
+        Order order = orderRepository.findOrderById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException());
+
+        Restaurant restaurant = order.getRestaurant();
+        if(!userManagesRestaurant(currentUser, restaurant)) {
+            throw new APIException("User does not have access to manage that restaurant" + restaurant.getName());
+        }
+
+        order.setStatus(orderStatus);
+        Order saved = orderRepository.save(order);
+
+        return OrderMapper.toOrderResponseDTO(saved);
+    }
+
+
+    // private helper methods
+    private boolean userManagesRestaurant(User user, Restaurant restaurant) {
+        if(user == null || restaurant == null) return false;
+
+        return user.getRestaurants() != null && user.getRestaurants().contains(restaurant);
+    }
+
+    private User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null || !auth.isAuthenticated()) return null;
+
+        String username;
+        Object principal = auth.getPrincipal();
+        if(principal instanceof UserDetails ud) {
+            username = ud.getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
 }
 

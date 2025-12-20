@@ -7,6 +7,8 @@ package com.carolinawings.webapp.service;
 import com.carolinawings.webapp.dto.OrderCreateRequest;
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
+import com.carolinawings.webapp.dto.PagedOrderResponseDTO;
+import com.carolinawings.webapp.enums.OrderStatus;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,4 +20,13 @@ public interface OrderService {
     OrderDTO deleteOrderById(UUID id);
     OrderDTO updateOrder(OrderDTO order, UUID id);
     OrderResponseDTO createOrderFromCart(OrderCreateRequest request);
+
+    PagedOrderResponseDTO getOrdersForRestaurantByManager(
+            Long restaurantId,
+            Integer page,
+            Integer pageSize,
+            OrderStatus statusFilter
+    );
+
+    OrderResponseDTO updateOrderStatusForManager(UUID orderId, OrderStatus orderStatus);
 }

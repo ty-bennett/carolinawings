@@ -3,6 +3,12 @@ package com.carolinawings.webapp.controller;
 import com.carolinawings.webapp.dto.OrderCreateRequest;
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
+import com.carolinawings.webapp.mapper.OrderMapper;
+import com.carolinawings.webapp.model.Order;
+import com.carolinawings.webapp.model.Restaurant;
+import com.carolinawings.webapp.repository.OrderRepository;
+import com.carolinawings.webapp.repository.RestaurantRepository;
 import com.carolinawings.webapp.service.OrderServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,9 +24,13 @@ import java.util.UUID;
 public class OrderController {
 
     private final OrderServiceImplementation orderServiceImplementation;
+    private final RestaurantRepository restaurantRepository;
+    private final OrderRepository orderRepository;
 
-    public OrderController(OrderServiceImplementation orderServiceImplementation) {
+    public OrderController(OrderServiceImplementation orderServiceImplementation, RestaurantRepository restaurantRepository, OrderRepository orderRepository) {
         this.orderServiceImplementation = orderServiceImplementation;
+        this.restaurantRepository = restaurantRepository;
+        this.orderRepository = orderRepository;
     }
 
     // Get an order by its UUID
@@ -48,5 +58,4 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> createOrderFromCart(@Valid @RequestBody OrderCreateRequest request) {
        return new ResponseEntity<>(orderServiceImplementation.createOrderFromCart(request), HttpStatus.OK);
     }
-
 }
