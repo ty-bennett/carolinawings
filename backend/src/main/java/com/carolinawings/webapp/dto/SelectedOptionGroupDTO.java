@@ -11,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SelectedOptionGroupDTO {
-    @JsonIgnore
-    private Long groupId;
-    private String groupName;
-    private List<String> selectedOptionNames;
+    private Long optionGroupId;
+    private List<Long> selectedOptionIds;
 }

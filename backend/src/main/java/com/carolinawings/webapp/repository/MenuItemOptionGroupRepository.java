@@ -9,5 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface MenuItemOptionGroupRepository extends JpaRepository<MenuItemOptionGroup, Long> {
-    Optional<MenuItemOptionGroup> findByMenuItem_Id(Long menuItemId);
+    Optional<MenuItemOptionGroup> findByMenuItemIdAndOptionGroupId(Long menuItemId, Long optionGroupId);
+    Optional<MenuItemOptionGroup> findByMenuItemIdAndOptionGroupNameIgnoreCase(Long menuItemId, String optionGroupName);
 }

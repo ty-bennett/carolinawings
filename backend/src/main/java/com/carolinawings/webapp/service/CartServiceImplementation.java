@@ -1,6 +1,7 @@
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.*;
+import com.carolinawings.webapp.enums.CartStatus;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -30,6 +28,7 @@ public class CartServiceImplementation implements CartService {
     private final CartItemOptionRepository cartItemOptionRepository;
     private final ModelMapper modelMapper;
     private final AuthUtil authUtil;
+    private final MenuItemOptionRepository menuItemOptionRepository;
 
     public CartServiceImplementation(
             CartRepository cartRepository,
@@ -39,8 +38,8 @@ public class CartServiceImplementation implements CartService {
             CartItemRepository cartItemRepository,
             CartItemOptionRepository cartItemOptionRepository,
             ModelMapper modelMapper,
-            AuthUtil authUtil
-    ) {
+            AuthUtil authUtil,
+            MenuItemOptionRepository menuItemOptionRepository) {
         this.cartRepository = cartRepository;
         this.menuItemRepository = menuItemRepository;
         this.optionRepository = optionRepository;
@@ -49,6 +48,7 @@ public class CartServiceImplementation implements CartService {
         this.cartItemOptionRepository = cartItemOptionRepository;
         this.modelMapper = modelMapper;
         this.authUtil = authUtil;
+        this.menuItemOptionRepository = menuItemOptionRepository;
     }
     @Override
     @Transactional
@@ -66,8 +66,6 @@ public class CartServiceImplementation implements CartService {
         {
             throw new APIException("Menu item is disabled");
         }
-
-        // 3. Create cart item
         CartItem cartItem = new CartItem();
         cart.getCartItems().add(cartItem);
         cartItem.setCart(cart);
@@ -78,69 +76,103 @@ public class CartServiceImplementation implements CartService {
         log.info(cartItem.toString());
         cartItemRepository.save(cartItem);
 
-        // 4. Add options by group name
-        if (cartItemDTO.getSelectedOptionGroups() != null) {
-            for (SelectedOptionGroupDTO selectedGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
-                MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository
-                        .findByMenuItem_Id(menuItem.getId())
-                        .orElseThrow(() -> new APIException("No option group found for: " + selectedGroupDTO.getGroupName()));
-                menuItemOptionGroupRepository.save(menuItemOptionGroup);
-                log.info(menuItemOptionGroup.toString());
-                log.info("Adding choice {} to {}", selectedGroupDTO.getSelectedOptionNames(), selectedGroupDTO.getGroupName());
+        // get each option translated over
 
-                for (String optionName : selectedGroupDTO.getSelectedOptionNames()) {
-                    MenuItemOption option = optionRepository.findByName(optionName)
-                            .orElseThrow(() -> new APIException("Option not found with name: " + optionName));
-                    log.info(option.toString());
+        Map<MenuItemOptionGroup, List<MenuItemOption>> selectionsByGroup = new HashMap<>();
 
-                    CartItemChoice cartItemOption = new CartItemChoice();
-                    cartItemOption.setCartItem(cartItem);
-                    cartItemOption.setMenuItemOption(option);
-                    cartItemOption.setChoiceType(option.getName());
-                    cartItem.getChoices().add(cartItemOption);
-                    cartItemOptionRepository.save(cartItemOption);
-                    log.info(cartItemOption.toString());
+        if(cartItemDTO.getSelectedOptionGroups() != null) {
+
+            for (SelectedOptionGroupDTO selectedOptionGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
+                for (SelectedOptionGroupDTO optionGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
+                    MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository.findByMenuItemIdAndOptionGroupId(
+                                    menuItem.getId(),
+                                    optionGroupDTO.getOptionGroupId()
+                            )
+                            .orElseThrow(() ->
+                                    new APIException("Invalid option group for this menu item")
+                            );
+
+                    for (Long optionId : selectedOptionGroupDTO.getSelectedOptionIds()) {
+                        MenuItemOption menuItemOption = menuItemOptionRepository.findByOptionGroupIdAndId(menuItemOptionGroup.getId(), optionId)
+                                .orElseThrow(() ->
+                                        new APIException("Invalid option for this option group")
+                                );
+
+                        selectionsByGroup.computeIfAbsent(menuItemOptionGroup, g -> new ArrayList<>()).add(menuItemOption);
+                    }
+
+                }
+
+            }
+
+            for (MenuItemOptionGroup group : menuItem.getOptionGroups()) {
+                int selectedQuantity = selectionsByGroup.getOrDefault(group, List.of()).size();
+
+                if (group.isRequired() && selectedQuantity == 0) {
+                    throw new APIException("" +
+                            "Option group " + group.getOptionGroup().getName() + " is required"
+                    );
+                }
+
+                if (group.getMinChoices() != 0 && selectedQuantity < group.getMinChoices()) {
+                    throw new APIException(
+                            "Must select at least " + group.getMinChoices() +
+                                    " option(s) for '" + group.getOptionGroup().getName() + "'"
+                    );
+                }
+
+                if (group.getMaxChoices() != 0 && selectedQuantity > group.getMaxChoices()) {
+                    throw new APIException(
+                            "Cannot select more than " + group.getMaxChoices() +
+                                    " option(s) for '" + group.getOptionGroup().getName() + "'"
+                    );
                 }
             }
+
+            for (Map.Entry<MenuItemOptionGroup, List<MenuItemOption>> entry : selectionsByGroup.entrySet()) {
+
+                for (MenuItemOption option : entry.getValue()) {
+                    CartItemChoice choice = CartItemChoice.builder()
+                            .cartItem(cartItem)
+                            .menuItemOption(option)
+                            .choiceType(entry.getKey().getOptionGroup().getName())
+                            .build();
+                    cartItem.getChoices().add(choice);
+                }
+            }
+            cartItemRepository.save(cartItem);
+
+            // 5. Recalculate total price
+            BigDecimal recalculatedTotal = recalculateCartTotal(cart);
+            cart.setTotalPrice(recalculatedTotal);
+            cart = cartRepository.save(cart);
+
+            Cart updatedCart = cartRepository.findCartByIdWithOptions(cart.getId());
+
+            Set<CartItem> cartItemList = updatedCart.getCartItems();
+            if (cartItemList.isEmpty()) {
+                log.info("No cart items found");
+                throw new APIException("No cart items found");
+            }
+            List<CartItemDTO> cartItemDTOs = cartItemList.stream()
+                    .map(this::mapCartItemToDTO)
+                    .toList();
+            CartDTO dto = new CartDTO();
+            dto.setCartId(cart.getId());
+            dto.setTotalPrice(cart.getTotalPrice());
+            dto.setMenuItems(cartItemDTOs);
+            log.info(dto.toString());
+            return dto;
+        } else {
+            throw new APIException("Invalid menu item");
         }
-
-        // 5. Recalculate total price
-        BigDecimal recalculatedTotal = recalculateCartTotal(cart);
-        cart.setTotalPrice(recalculatedTotal);
-        cart = cartRepository.save(cart);
-
-        cartRepository.flush();
-        cartItemRepository.flush();
-        optionRepository.flush();
-
-        Cart updatedCart = cartRepository.findCartByIdWithOptions(cart.getId());
-
-        Set<CartItem> cartItemList = updatedCart.getCartItems();
-        if(cartItemList.isEmpty()) {
-            log.info("No cart items found");
-            throw new APIException("No cart items found");
-        }
-
-        log.info(cartItemList.toString());
-        log.info("CartItem has {} total price, with {}", updatedCart.getTotalPrice(), updatedCart.getCartItems().toString());
-
-        List<CartItemDTO> cartItemDTOs = cartItemList.stream()
-                        .map(this::mapCartItemToDTO)
-                        .toList();
-
-        CartDTO dto = new CartDTO();
-        dto.setCartId(cart.getId());
-        dto.setTotalPrice(cart.getTotalPrice());
-        dto.setMenuItems(cartItemDTOs);
-        log.info(dto.toString());
-        return dto;
     }
 
     public CartDTO getUserCart(String userEmail, Long cartId) {
-        Cart cart = cartRepository.findCartByUserEmailAndId(userEmail, cartId);
-        if(cart == null) {
-            throw new APIException("Cart not found");
-        }
+        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                        authUtil.loggedInEmail(), CartStatus.ACTIVE)
+                .orElseGet(this::createCart);
+
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         List<CartItem> cartItemList = cart.getCartItems().stream().toList();
         List<CartItemDTO> cartItemDTOs = cartItemList.stream().map(item -> mapCartItemToDTO(item)).toList();

@@ -8,6 +8,7 @@ import com.carolinawings.webapp.dto.OrderCreateRequest;
 import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
 import com.carolinawings.webapp.dto.PagedOrderResponseDTO;
+import com.carolinawings.webapp.enums.CartStatus;
 import com.carolinawings.webapp.enums.OrderStatus;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
@@ -24,8 +25,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -35,6 +38,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 public class OrderServiceImplementation implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -87,6 +91,10 @@ public class OrderServiceImplementation implements OrderService {
         // load the cart
         Cart cart = cartRepository.findCartById(request.getCartId())
                         .orElseThrow(() -> new ResourceNotFoundException("Cart", "cartId", request.getCartId()));
+        if(cart.getCartStatus() != CartStatus.ACTIVE) {
+            throw new APIException("CART IS NOT ACTIVE");
+        }
+
         // validate the cart has items in it
         Set<CartItem> cartItems = cart.getCartItems();
         if(cartItems == null || cartItems.isEmpty()) {
@@ -96,6 +104,15 @@ public class OrderServiceImplementation implements OrderService {
         // load the restaurant
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                         .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", request.getRestaurantId()));
+
+        //get restaurant from cart if possible
+        Restaurant restaurantFromCart = getRestaurantFromCart(cart);
+
+        if(restaurantFromCart == null || !restaurantFromCart.getId().equals(restaurant.getId())) {
+            throw new APIException("Cart does not belong to that restaurant");
+        }
+
+
         Order order = new Order();
 
         order.setCustomerName(request.getCustomerName());
@@ -104,9 +121,12 @@ public class OrderServiceImplementation implements OrderService {
 
         order.setRestaurant(restaurant);
         order.setStatus(OrderStatus.PENDING);
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         OffsetDateTime pickupTime;
-        if(request.getRequestedPickupTime().isBlank() || request.getRequestedPickupTime() == null) {
+        String requestedPickupTime = request.getRequestedPickupTime();
+
+        if(requestedPickupTime == null || requestedPickupTime.isBlank() ) {
             pickupTime = OffsetDateTime.now().plusMinutes(15);
         } else {
             pickupTime = LocalDateTime.parse(request.getRequestedPickupTime(), formatter).atOffset(ZoneOffset.of("-05:00"));
@@ -139,7 +159,7 @@ public class OrderServiceImplementation implements OrderService {
                 OrderItemOption orderItemOption = new OrderItemOption();
                 orderItemOption.setOrderItem(orderItem);
                 orderItemOption.setOptionName(menuItemOption.getName());
-                orderItemOption.setExtraPrice(menuItemOption.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+                orderItemOption.setExtraPrice(menuItemOption.getPrice().setScale(2, RoundingMode.HALF_UP));
                 orderItemOption.setGroupName(choice.getChoiceType());
                 options.add(orderItemOption);
             }
@@ -151,6 +171,8 @@ public class OrderServiceImplementation implements OrderService {
         order.setItems(orderItems);
         // order build from cart
         Order saved = orderRepository.save(order);
+        cart.setCartStatus(CartStatus.CHECKED_OUT);
+        cartRepository.save(cart);
 
         return OrderMapper.toOrderResponseDTO(saved);
     }
@@ -171,13 +193,14 @@ public class OrderServiceImplementation implements OrderService {
             throw new APIException("User does not have access to manage that restaurant" + restaurantId);
         }
 
+
         Pageable pageable = PageRequest.of(page, pageSize);
 
         Page<Order> orderPage;
         if(statusFilter != null) {
-            orderPage = orderRepository.findOrdersByRestaurantIdAndStatus(restaurantId, statusFilter, pageable);
+            orderPage = orderRepository.findByRestaurantIdAndStatus(restaurantId, statusFilter, pageable);
         } else {
-            orderPage = orderRepository.findOrdersByRestaurantId(restaurantId, pageable);
+            orderPage = orderRepository.findByRestaurantId(restaurantId, pageable);
         }
 
         if(orderPage.isEmpty()) {
@@ -204,7 +227,7 @@ public class OrderServiceImplementation implements OrderService {
     public OrderResponseDTO updateOrderStatusForManager(UUID orderId, OrderStatus orderStatus) {
         User currentUser = getCurrentUser();
 
-        Order order = orderRepository.findOrderById(orderId)
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException());
 
         Restaurant restaurant = order.getRestaurant();
@@ -240,6 +263,17 @@ public class OrderServiceImplementation implements OrderService {
 
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    }
+
+    private Restaurant getRestaurantFromCart(Cart cart) {
+        return cart.getCartItems().stream()
+                .map(CartItem::getMenuItem)
+                .filter(Objects::nonNull)
+                .map(MenuItem::getMenu)
+                .filter(Objects::nonNull)
+                .map(Menu::getRestaurant)
+                .findFirst()
+                .orElse(null);
     }
 }
 

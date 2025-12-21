@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -22,11 +21,10 @@ import java.util.UUID;
 public class AdminOrderController {
 
     private final OrderService orderService;
-    private final OrderRepository orderRepository;
 
     // GET /api/manager/restaurants/{restaurantId}/orders
     @GetMapping("/restaurants/{restaurantId}/orders")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_RESTAURANT_ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN', 'RESTAURANT_ADMIN')")
     public ResponseEntity<PagedOrderResponseDTO> getAllOrders(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "0") Integer page,
@@ -40,13 +38,13 @@ public class AdminOrderController {
 
     // PATCH /api/manager/orders/{orderId}/status
     @PatchMapping("/orders/{orderId}/status")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_RESTAURANT_ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN', 'RESTAURANT_ADMIN')")
     public ResponseEntity<OrderResponseDTO> updateOrderStatus(
             @PathVariable UUID orderId,
-            @RequestBody UpdateOrderStatusRequest status
+            @RequestBody UpdateOrderStatusRequest orderStatus
     ) {
         OrderResponseDTO dto =
-                orderService.updateOrderStatusForManager(orderId, status.getOrderStatus());
+                orderService.updateOrderStatusForManager(orderId, orderStatus.getOrderStatus());
 
        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
