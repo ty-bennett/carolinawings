@@ -1,5 +1,4 @@
 package com.carolinawings.webapp.controller;
-
 import com.carolinawings.webapp.model.Role;
 import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.model.User;
@@ -77,7 +76,7 @@ public class AuthController {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Account already registered!" + HttpStatus.BAD_REQUEST));
+                    .body(new MessageResponse("Error: Account already registered!" + "ERROR:" + HttpStatus.BAD_REQUEST));
         }
 
         User user = new User(toDisplayCase(signUpRequest.getUsername()),
@@ -94,19 +93,19 @@ public class AuthController {
 
         if(setRoles == null)
         {
-            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+            Role userRole = roleRepository.findByName(RoleName.USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             roles.add(userRole);
         } else {
             setRoles.forEach(role -> {
                 switch (role) {
                     case "restaurantadmin":
-                        Role restaurantAdminRole = roleRepository.findByName(RoleName.ROLE_RESTAURANT_ADMIN)
+                        Role restaurantAdminRole = roleRepository.findByName(RoleName.RESTAURANT_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: role is not found"));
                         roles.add(restaurantAdminRole);
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                        Role userRole = roleRepository.findByName(RoleName.USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         roles.add(userRole);
                         break;

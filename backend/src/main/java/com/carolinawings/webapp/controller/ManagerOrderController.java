@@ -4,8 +4,6 @@ import com.carolinawings.webapp.dto.OrderResponseDTO;
 import com.carolinawings.webapp.dto.PagedOrderResponseDTO;
 import com.carolinawings.webapp.dto.UpdateOrderStatusRequest;
 import com.carolinawings.webapp.enums.OrderStatus;
-import com.carolinawings.webapp.model.Order;
-import com.carolinawings.webapp.repository.OrderRepository;
 import com.carolinawings.webapp.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/manager")
 @RequiredArgsConstructor
-public class AdminOrderController {
+public class ManagerOrderController {
 
     private final OrderService orderService;
 
@@ -46,6 +44,6 @@ public class AdminOrderController {
         OrderResponseDTO dto =
                 orderService.updateOrderStatusForManager(orderId, orderStatus.getOrderStatus());
 
-       return new ResponseEntity<>(dto, HttpStatus.OK);
+       return ResponseEntity.ok(dto);
     }
 }
