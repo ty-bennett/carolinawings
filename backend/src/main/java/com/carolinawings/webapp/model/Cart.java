@@ -1,6 +1,7 @@
 package com.carolinawings.webapp.model;
 
 // import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.carolinawings.webapp.enums.CartStatus;
 import jakarta.persistence.*;
 import lombok.*;
 // import org.springframework.core.annotation.Order;
@@ -32,6 +33,8 @@ public class Cart {
     private BigDecimal totalTax;
     private BigDecimal subtotal;
     private BigDecimal totalPrice;
+    @Enumerated(EnumType.STRING)
+    private CartStatus cartStatus;
 }
 
 //decided to handle server side b/c it could be saved across devics and people could come back later to order stuff
