@@ -15,7 +15,13 @@ public class AuthUtil {
     @Autowired
     private UserRepository userRepository;
 
+    private static final ThreadLocal<User> testUser = new ThreadLocal<>();
+
     public String loggedInEmail(){
+        if(testUser.get()==null){
+            return testUser.get().getUsername();
+        }
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
@@ -30,9 +36,16 @@ public class AuthUtil {
     }
 
     public User loggedInUser(){
+        if(testUser.get() == null){
+            return testUser.get();
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         return user;
+    }
+
+    public void setTestUser(User user) {
+        testUser.set(user);
     }
 }

@@ -1,6 +1,151 @@
 POST http://localhost:8080/admin/orders
 Content-Type: application/json
 Content-Length: 217
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.7
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": "2025-01-10 18:30:00"
+}
+
+<> 2025-12-19T200954.200.json
+
+###
+
+POST http://localhost:8080/admin/restaurants/1/orders
+Content-Type: application/json
+Content-Length: 162
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.7
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "restaurantId": 1,
+  "pickupTime": "18:45",
+  "orderAmount": "20.35",
+  "userAssignedTo": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
+  "listOfItems": [1, 2, 3]
+}
+
+<> 2025-12-19T200949.405.json
+
+###
+
+POST http://localhost:8080/admin/orders
+Content-Type: application/json
+Content-Length: 217
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1.7
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": "2025-01-10 18:30:00"
+}
+
+<> 2025-12-19T200937.200.json
+
+###
+
+POST http://localhost:8080/admin/orders
+Content-Type: application/json
+Content-Length: 217
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": "2025-01-10 18:30:00"
+}
+
+<> 2025-12-19T194233.200.json
+
+###
+
+POST http://localhost:8080/admin/orders
+Content-Type: application/json
+Content-Length: 198
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": ""
+}
+
+<> 2025-12-19T194103.500.json
+
+###
+
+POST http://localhost:8080/admin/orders
+Content-Type: application/json
+Content-Length: 217
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": "2025-01-10 18:30:00"
+}
+
+<> 2025-12-19T193929.500.json
+
+###
+
+POST http://localhost:8080/admin/orders
+Content-Type: application/json
+Content-Length: 217
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "cartId": 1,
+  "restaurantId": 1,
+  "customerName": "John Doe",
+  "customerPhone": "803-555-1234",
+  "customerNotes": "Ring me when ready",
+  "orderType": "PICKUP",
+  "requestedPickupTime": "2025-01-10 18:30:00"
+}
+
+<> 2025-12-19T191450.500.json
+
+###
+
+POST http://localhost:8080/admin/orders
+Content-Type: application/json
+Content-Length: 217
 User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
 Accept-Encoding: br, deflate, gzip, x-gzip
 Accept: */*
@@ -699,105 +844,6 @@ Accept-Encoding: br, deflate, gzip, x-gzip
 Accept: */*
 
 <> 2025-07-10T210550.200.json
-
-###
-
-POST http://localhost:8080/admin/restaurants
-Content-Type: application/json
-Content-Length: 52
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-{
-  "name": "Carolina Wings Test",
-  "address": ""
-}
-
-<> 2025-07-10T210535.201.json
-
-###
-
-GET http://localhost:8080/admin/restaurants
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-10T210527.200.json
-
-###
-
-GET http://localhost:8080/admin/restaurants
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-10T210511.200.json
-
-###
-
-POST http://localhost:8080/admin/restaurants
-Content-Type: application/json
-Content-Length: 117
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-{
-  "name": "Carolina Wings",
-  "address": "123 Wing Street, Charlotte, NC",
-  "restaurantAdmin": [],
-  "menus": []
-}
-
-<> 2025-07-10T210454.201.json
-
-###
-
-POST http://localhost:8080/admin/restaurants/1/orders
-Content-Type: application/json
-Content-Length: 162
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-{
-  "restaurantId": 1,
-  "pickupTime": "18:45",
-  "orderAmount": "20.35",
-  "userAssignedTo": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
-  "listOfItems": [1, 2, 3]
-}
-
-<> 2025-07-08T005642.500.json
-
-###
-
-GET http://localhost:8080/admin/users
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-<> 2025-07-08T005305.200.json
-
-###
-
-POST http://localhost:8080/admin/restaurants/1/orders
-Content-Type: application/json
-Content-Length: 162
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.1
-Accept-Encoding: br, deflate, gzip, x-gzip
-Accept: */*
-
-{
-  "restaurantId": 1,
-  "pickupTime": "18:45",
-  "orderAmount": "20.35",
-  "userAssignedTo": "b25fdd39-5013-45cd-b52e-5a6b2f19cbd7",
-  "listOfItems": [1, 2, 3]
-}
-
-<> 2025-07-08T005134.500.json
 
 ###
 
