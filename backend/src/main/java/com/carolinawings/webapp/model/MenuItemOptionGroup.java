@@ -7,6 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(
+        name = "menu_item_option_groups",
+        uniqueConstraints = @UniqueConstraint(columnNames = {
+                "menu_item_id", "option_group_id"
+        })
+)
 @Getter
 @Setter
 @NoArgsConstructor

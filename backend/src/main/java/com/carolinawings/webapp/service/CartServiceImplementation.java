@@ -54,7 +54,7 @@ public class CartServiceImplementation implements CartService {
     @Transactional
     public CartDTO addMenuItemToCart(AddCartItemDTO cartItemDTO) {
         Cart cart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
-        if(cart == null) {
+        if (cart == null) {
             cart = createCart();
         }
 
@@ -62,8 +62,7 @@ public class CartServiceImplementation implements CartService {
         MenuItem menuItem = menuItemRepository.findById(cartItemDTO.getMenuItemId())
                 .orElseThrow(() -> new APIException("MenuItem not found with menuitemID: " + cartItemDTO.getMenuItemId()));
         log.info(menuItem.toString());
-        if(menuItem.getEnabled() == false)
-        {
+        if (menuItem.getEnabled() == false) {
             throw new APIException("Menu item is disabled");
         }
         CartItem cartItem = new CartItem();
@@ -80,92 +79,107 @@ public class CartServiceImplementation implements CartService {
 
         Map<MenuItemOptionGroup, List<MenuItemOption>> selectionsByGroup = new HashMap<>();
 
-        if(cartItemDTO.getSelectedOptionGroups() != null) {
-
-            for (SelectedOptionGroupDTO selectedOptionGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
-                for (SelectedOptionGroupDTO optionGroupDTO : cartItemDTO.getSelectedOptionGroups()) {
-                    MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository.findByMenuItemIdAndOptionGroupId(
-                                    menuItem.getId(),
-                                    optionGroupDTO.getOptionGroupId()
-                            )
-                            .orElseThrow(() ->
-                                    new APIException("Invalid option group for this menu item")
-                            );
-
-                    for (Long optionId : selectedOptionGroupDTO.getSelectedOptionIds()) {
-                        MenuItemOption menuItemOption = menuItemOptionRepository.findByOptionGroupIdAndId(menuItemOptionGroup.getId(), optionId)
-                                .orElseThrow(() ->
-                                        new APIException("Invalid option for this option group")
-                                );
-
-                        selectionsByGroup.computeIfAbsent(menuItemOptionGroup, g -> new ArrayList<>()).add(menuItemOption);
-                    }
-
-                }
-
-            }
-
-            for (MenuItemOptionGroup group : menuItem.getOptionGroups()) {
-                int selectedQuantity = selectionsByGroup.getOrDefault(group, List.of()).size();
-
-                if (group.isRequired() && selectedQuantity == 0) {
-                    throw new APIException("" +
-                            "Option group " + group.getOptionGroup().getName() + " is required"
+        for (SelectedOptionGroupDTO groupDTO : cartItemDTO.getSelectedOptionGroups()) {
+            MenuItemOptionGroup menuItemOptionGroup = menuItemOptionGroupRepository
+                    .findByMenuItemIdAndOptionGroupId(
+                            menuItem.getId(),
+                            groupDTO.getOptionGroupId()
+                    )
+                    .orElseThrow(() -> new APIException("Invalid option group for this menu item")
                     );
+
+            List<MenuItemOption> selectedOptions = new ArrayList<>();
+
+            for (Long optionId : groupDTO.getSelectedOptionIds()) {
+                MenuItemOption option = menuItemOptionRepository
+                        .findById(optionId)
+                        .orElseThrow(() ->
+                                new APIException("Invalid option selected")
+                        );
+
+                if (!option.getOptionGroup().getId().equals(menuItemOptionGroup.getId())) {
+                    throw new APIException("Option does not belong to option group");
                 }
 
-                if (group.getMinChoices() != 0 && selectedQuantity < group.getMinChoices()) {
-                    throw new APIException(
-                            "Must select at least " + group.getMinChoices() +
-                                    " option(s) for '" + group.getOptionGroup().getName() + "'"
-                    );
-                }
-
-                if (group.getMaxChoices() != 0 && selectedQuantity > group.getMaxChoices()) {
-                    throw new APIException(
-                            "Cannot select more than " + group.getMaxChoices() +
-                                    " option(s) for '" + group.getOptionGroup().getName() + "'"
-                    );
-                }
+                selectedOptions.add(option);
             }
-
-            for (Map.Entry<MenuItemOptionGroup, List<MenuItemOption>> entry : selectionsByGroup.entrySet()) {
-
-                for (MenuItemOption option : entry.getValue()) {
-                    CartItemChoice choice = CartItemChoice.builder()
-                            .cartItem(cartItem)
-                            .menuItemOption(option)
-                            .choiceType(entry.getKey().getOptionGroup().getName())
-                            .build();
-                    cartItem.getChoices().add(choice);
-                }
-            }
-            cartItemRepository.save(cartItem);
-
-            // 5. Recalculate total price
-            BigDecimal recalculatedTotal = recalculateCartTotal(cart);
-            cart.setTotalPrice(recalculatedTotal);
-            cart = cartRepository.save(cart);
-
-            Cart updatedCart = cartRepository.findCartByIdWithOptions(cart.getId());
-
-            Set<CartItem> cartItemList = updatedCart.getCartItems();
-            if (cartItemList.isEmpty()) {
-                log.info("No cart items found");
-                throw new APIException("No cart items found");
-            }
-            List<CartItemDTO> cartItemDTOs = cartItemList.stream()
-                    .map(this::mapCartItemToDTO)
-                    .toList();
-            CartDTO dto = new CartDTO();
-            dto.setCartId(cart.getId());
-            dto.setTotalPrice(cart.getTotalPrice());
-            dto.setMenuItems(cartItemDTOs);
-            log.info(dto.toString());
-            return dto;
-        } else {
-            throw new APIException("Invalid menu item");
+            selectionsByGroup.put(menuItemOptionGroup, selectedOptions);
         }
+
+        List<MenuItemOptionGroup> optionGroups =
+                menuItemOptionGroupRepository.findByMenuItem(menuItem);
+
+        for (MenuItemOptionGroup group : optionGroups) {
+            int selectedQuantity = selectionsByGroup.getOrDefault(group, List.of()).size();
+
+            int defaultCount = optionRepository
+                    .findByOptionGroup(group.getOptionGroup())
+                    .stream()
+                    .filter(MenuItemOption::isDefaultSelected)
+                    .toList()
+                    .size();
+
+            int effectiveCount = selectedQuantity + defaultCount;
+
+            if (group.isRequired() && effectiveCount == 0) {
+                throw new APIException("" +
+                        "Option group " + group.getOptionGroup().getName() + " is required"
+                );
+            }
+
+            if (group.getMinChoices() > 0 && effectiveCount < group.getMinChoices()) {
+                throw new APIException(
+                        "Must select at least " + group.getMinChoices() +
+                                " option(s) for '" + group.getOptionGroup().getName() + "'"
+                );
+            }
+
+            if (group.getMaxChoices() > 0 && effectiveCount > group.getMaxChoices()) {
+                throw new APIException(
+                        "Cannot select more than " + group.getMaxChoices() +
+                                " option(s) for '" + group.getOptionGroup().getName() + "'"
+                );
+            }
+        }
+
+        for (Map.Entry<MenuItemOptionGroup, List<MenuItemOption>> entry : selectionsByGroup.entrySet()) {
+
+            for (MenuItemOption option : entry.getValue()) {
+                CartItemChoice choice = CartItemChoice.builder()
+                        .cartItem(cartItem)
+                        .menuItemOption(option)
+                        .choiceType(entry.getKey().getOptionGroup().getName())
+                        .build();
+
+                cartItem.getChoices().add(choice);
+            }
+        }
+        cartItemRepository.save(cartItem);
+
+        // 5. Recalculate total price
+        BigDecimal recalculatedTotal = recalculateCartTotal(cart);
+        cart.setTotalPrice(recalculatedTotal);
+        cart = cartRepository.save(cart);
+
+        Cart updatedCart = cartRepository.findCartByIdWithOptions(cart.getId());
+
+        Set<CartItem> cartItemList = updatedCart.getCartItems();
+        if (cartItemList.isEmpty()) {
+            log.info("No cart items found");
+            throw new APIException("No cart items found");
+        }
+        List<CartItemDTO> cartItemDTOs = cartItemList.stream()
+                .map(this::mapCartItemToDTO)
+                .toList();
+        CartDTO dto = new CartDTO();
+        dto.setCartId(cart.getId());
+        dto.setTotalPrice(cart.getTotalPrice());
+        dto.setMenuItems(cartItemDTOs);
+        log.info(dto.toString());
+        return dto;
+//        } else {
+//            throw new APIException("Invalid menu item");
+//        }
     }
 
     public CartDTO getUserCart(String userEmail, Long cartId) {

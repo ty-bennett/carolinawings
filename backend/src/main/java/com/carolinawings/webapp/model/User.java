@@ -14,7 +14,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
-@Table(name="users")
+@Table(name="users",
+uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,6 +36,7 @@ public class User {
     //email of users
     @Email(message = "Email should be valid")
     @Size(max=50, min = 7, message = "Email must be a valid email")
+    @Column(nullable = false, unique = true)
     private String username;
     @Size(min=8, max=120, message = "Password must be at least 8 characters long")
     @Column(name = "password")
