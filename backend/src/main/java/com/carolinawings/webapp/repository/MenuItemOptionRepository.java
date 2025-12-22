@@ -7,6 +7,7 @@ import com.carolinawings.webapp.model.OptionGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,5 @@ public interface MenuItemOptionRepository extends JpaRepository<MenuItemOption, 
     Optional<MenuItemOption> findByOptionGroupIdAndId(Long optionGroupId, Long id);
     Optional<MenuItemOption> findByOptionGroupIdAndNameIgnoreCase(Long optionGroupId, String name);
     Optional<MenuItemOption> findByOptionGroup(OptionGroup optionGroup);
+    List<MenuItemOption> findAllByOptionGroup(OptionGroup optionGroup);
 }

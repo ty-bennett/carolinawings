@@ -87,8 +87,8 @@ public class MenuServiceImplementation implements MenuService {
 
     @Override
     public Optional<MenuDTO> getMenuById(Long id) {
-        Optional<Menu> menu = menuRepository.findById(id);
-        return menu.map(element -> modelMapper.map(element, MenuDTO.class));
+        return menuRepository.findById(id)
+                .map(menu -> modelMapper.map(menu, MenuDTO.class));
     }
 
     @Override

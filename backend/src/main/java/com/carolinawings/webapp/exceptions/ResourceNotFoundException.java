@@ -3,6 +3,7 @@ package com.carolinawings.webapp.exceptions;
 
 import com.carolinawings.webapp.model.Restaurant;
 import jakarta.annotation.Resource;
+import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 

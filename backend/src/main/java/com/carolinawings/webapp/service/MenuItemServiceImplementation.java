@@ -15,10 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +39,12 @@ public class MenuItemServiceImplementation implements MenuItemService {
 
     @Override
     public MenuItemResponse getAllMenuItems() {
-        List<MenuItem> menuItems = menuItemRepository.findAll();
+        return null;
+    }
+
+    @Override
+    public MenuItemResponse getAllMenuItems(Long menuId) {
+        List<MenuItem> menuItems = menuItemRepository.findAllByMenu_Id(menuId);
         if (menuItems.isEmpty())
             throw new APIException("No menu items present");
         List<MenuItemDTO> menuItemDTOS = menuItems.stream()

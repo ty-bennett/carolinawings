@@ -17,6 +17,9 @@ import java.util.Optional;
 @Service
 public interface MenuItemService {
     MenuItemResponse getAllMenuItems();
+
+    MenuItemResponse getAllMenuItems(Long menuId);
+
     MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize, Long menuId);
     MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection, Long menuId);
     Optional<MenuItemDTO> getMenuItemById(Long id);

@@ -113,7 +113,7 @@ public class CartServiceImplementation implements CartService {
             int selectedQuantity = selectionsByGroup.getOrDefault(group, List.of()).size();
 
             int defaultCount = optionRepository
-                    .findByOptionGroup(group.getOptionGroup())
+                    .findAllByOptionGroup(group.getOptionGroup())
                     .stream()
                     .filter(MenuItemOption::isDefaultSelected)
                     .toList()
@@ -122,7 +122,7 @@ public class CartServiceImplementation implements CartService {
             int effectiveCount = selectedQuantity + defaultCount;
 
             if (group.isRequired() && effectiveCount == 0) {
-                throw new APIException("" +
+                throw new APIException(
                         "Option group " + group.getOptionGroup().getName() + " is required"
                 );
             }

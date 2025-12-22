@@ -10,6 +10,8 @@ import com.carolinawings.webapp.util.AuthUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @WithMockUser(username = "test@example.com")
+@ActiveProfiles("test")
 @Transactional
 public class CartOptionValidation {
 
@@ -40,19 +43,21 @@ public class CartOptionValidation {
     private OptionGroupRepository optionGroupRepository;
     @Autowired
     private AuthUtil authUtil;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
-    @WithMockUser("test@example.com")
     void testWithValidOptions_shouldPass() {
-
-        // --- User ---
-        User user = new User();
-        user.setName("Test User");
-        user.setUsername("test@example.com");
-        user.setPassword("password");
-        user.setPhoneNumber("8035551234");
-        user.setDateJoined(LocalDate.now());
-        user = userRepository.save(user);
+        User user = userRepository.findByUsername("test@example.com")
+                .orElseGet(() -> {
+                    User u = new User();
+                    u.setUsername("test@example.com");
+                    u.setPassword(passwordEncoder.encode("password123"));
+                    u.setName("Test User");
+                    u.setPhoneNumber("8035551234");
+                    u.setDateJoined(LocalDate.now());
+                    return userRepository.save(u);
+                });
 
         authUtil.setTestUser(user);
 
@@ -108,11 +113,20 @@ public class CartOptionValidation {
     }
 
     @Test
+    @WithMockUser("test@example.com")
     void testMoreOptionsThanMaxOptions_shouldFail() {
 
         // --- User ---
         User user = userRepository.findByUsername("test@example.com")
-                .orElseGet(() -> new User());
+                .orElseGet(() -> {
+                    User u = new User();
+                    u.setUsername("test@example.com");
+                    u.setPassword(passwordEncoder.encode("password123"));
+                    u.setName("Test User");
+                    u.setPhoneNumber("8035551234");
+                    u.setDateJoined(LocalDate.now());
+                    return userRepository.save(u);
+                });
         authUtil.setTestUser(user);
 
         // --- OptionGroup (SAVE FIRST) ---
@@ -172,8 +186,66 @@ public class CartOptionValidation {
         assertThrows(APIException.class, () -> cartService.addMenuItemToCart(dto));
     }
 
-//    @Test
-//    @WithMockUser
-//    void TestWith
+    @Test
+    @WithMockUser("test@example.com")
+    void testMissingRequiredOptionGroup_shouldFail() {
+
+
+        // --- User ---
+        User user = userRepository.findByUsername("test@example.com")
+                .orElseGet(() -> {
+                    User u = new User();
+                    u.setUsername("test@example.com");
+                    u.setPassword(passwordEncoder.encode("password123"));
+                    u.setName("Test User");
+                    u.setPhoneNumber("8035551234");
+                    u.setDateJoined(LocalDate.now());
+                    return userRepository.save(u);
+                });
+        authUtil.setTestUser(user);
+
+        // --- OptionGroup (SAVE FIRST) ---
+        OptionGroup sauces = new OptionGroup();
+        sauces.setName("Sauces");
+        sauces = optionGroupRepository.save(sauces);
+
+        // --- MenuItem ---
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName("Wings");
+        menuItem.setPrice(new BigDecimal("10.00"));
+        menuItem.setEnabled(true);
+        menuItem = menuItemRepository.save(menuItem);
+
+        // --- MenuItemOptionGroup ---
+        MenuItemOptionGroup miog = new MenuItemOptionGroup();
+        miog.setMenuItem(menuItem);
+        miog.setOptionGroup(sauces);
+        miog.setRequired(true);
+        miog.setMinChoices(1);
+        miog.setMaxChoices(2);
+        miog = menuItemOptionGroupRepository.save(miog);
+
+        MenuItemOption ranch = new MenuItemOption();
+        ranch.setName("Ranch");
+        ranch.setPrice(BigDecimal.ZERO);
+        ranch.setOptionGroup(sauces);
+        ranch.setDefaultSelected(false);
+        ranch = menuItemOptionRepository.save(ranch);
+
+        MenuItemOption mild = new MenuItemOption();
+        mild.setName("Mild");
+        mild.setPrice(BigDecimal.ZERO);
+        mild.setOptionGroup(sauces);
+        mild.setDefaultSelected(false);
+        mild = menuItemOptionRepository.save(mild);
+
+        AddCartItemDTO dto = new AddCartItemDTO();
+        dto.setMenuItemId(menuItem.getId());
+        dto.setQuantity(1);
+        dto.setSelectedOptionGroups(List.of());
+
+        assertThrows(APIException.class, () -> cartService.addMenuItemToCart(dto));
+
+    }
 
 }
