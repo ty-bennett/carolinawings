@@ -80,7 +80,7 @@ public class MenuServiceImplementation implements MenuService {
     @Override
     public MenuDTO createMenu(MenuDTO menuDTO) {
         Menu menu = modelMapper.map(menuDTO, Menu.class);
-        Menu savedMenu = menuRepository.findByName(menu.getName()).orElseThrow(() -> new APIException("Menu with name "+ menu.getName() + " already exists!"));
+        Menu checkIfexists = menuRepository.findByName(menu.getName()).orElseThrow(() -> new APIException("Menu with name "+ menu.getName() + " already exists!"));
         Menu returnMenu = menuRepository.save(menu);
         return modelMapper.map(returnMenu, MenuDTO.class);
     }
@@ -100,13 +100,24 @@ public class MenuServiceImplementation implements MenuService {
     }
 
     @Override
-    public MenuDTO updateMenu(MenuDTO menuDTO, Long id) {
-        Menu savedMenu = menuRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId: ", id));
-        Menu menu = modelMapper.map(menuDTO, Menu.class);
-        menu.setId(id);
-        Menu savedMenuToRepo = menuRepository.save(menu);
-        return modelMapper.map(savedMenuToRepo, MenuDTO.class);
+    public MenuDTO updateMenu(MenuDTO menu, Long id) {
+        return null;
+    }
+
+    @Override
+    public MenuDTO updateMenu(MenuDTO menuDTO, Long restaurantId, Long menuId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("restaurant", "restaurantId", restaurantId));
+        List<Long> menuIdList = restaurant.getMenus().stream().map(Menu::getId).toList();
+        if(menuIdList.contains(menuId)) {
+           Menu menu = menuRepository.findById(menuId)
+                   .orElseThrow(() -> new ResourceNotFoundException("menu", "menuId", menuId));
+           Menu newMenu = modelMapper.map(menuDTO, Menu.class);
+           newMenu.setId(menu.getId());
+           Menu savedMenuToRepo = menuRepository.save(menu);
+           return modelMapper.map(savedMenuToRepo, MenuDTO.class);
+        }
+        return new MenuDTO();
     }
 
     @Override
@@ -160,7 +171,7 @@ public class MenuServiceImplementation implements MenuService {
     }
 
     @Override
-    public MenuDTO deleteMenuByRestaurant(Long restaurantId, Long menuId) {
+    public void deleteMenuByRestaurant(Long restaurantId, Long menuId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
         Menu menu = menuRepository.findById(menuId)
@@ -170,7 +181,6 @@ public class MenuServiceImplementation implements MenuService {
         menuRepository.deleteById(menuId);
         menuRepository.flush();
         restaurantRepository.save(restaurant);
-        return modelMapper.map(menu, MenuDTO.class);
     }
 
     @Override
@@ -180,17 +190,13 @@ public class MenuServiceImplementation implements MenuService {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
         menu.setRestaurant(restaurant);
-        menu.setIsPrimary(true);
-        menuRepository.save(menu);
-        List<Menu> menuList = restaurant.getMenus().stream().toList();
-        //stream each menu except the one that was passed into the DTO to be disabled
-        menuList.stream().forEach(item -> {
-            if(!item.getId().equals(menu.getId()))
-            {
-                item.setIsPrimary(false);
-                menuRepository.save(item);
-            }
-        });
-        return modelMapper.map(menu, MenuDTO.class);
+        if(menu.getIsPrimary().equals(true)){
+            menu.setIsPrimary(false);
+            menuRepository.save(menu);
+        } else {
+            menu.setIsPrimary(true);
+        }
+        Menu saved = menuRepository.save(menu);
+        return modelMapper.map(saved, MenuDTO.class);
     }
 }

@@ -2,44 +2,79 @@ package com.carolinawings.webapp.controller;
 
 
 import com.carolinawings.webapp.dto.MenuDTO;
+import com.carolinawings.webapp.dto.MenuResponse;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/")
+@RequiredArgsConstructor
+@RequestMapping("/api/admin")
 @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 public class AdminMenuController {
 
     private final MenuServiceImplementation menuServiceImplementation;
 
-    public AdminMenuController(MenuServiceImplementation menuServiceImplementation) {
-        this.menuServiceImplementation = menuServiceImplementation;
+    // ==============================
+    // GET all menus for a restaurant
+    // ==============================
+    @GetMapping("/restaurants/{restaurantId}/menus")
+    public ResponseEntity<MenuResponse> getMenusForRestaurant(
+            @PathVariable Long restaurantId,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        MenuResponse menuResponse =
+                menuServiceImplementation.getAllMenusByRestaurant(page, size,  restaurantId);
+        return ResponseEntity.ok(menuResponse);
     }
 
-    // Create a menu with valid object in request
-    @PostMapping("/menus")
-    public ResponseEntity<MenuDTO> createMenu(@Valid @RequestBody MenuDTO menuDTO) {
-        MenuDTO savedMenuDTO = menuServiceImplementation.createMenu(menuDTO);
-        return new ResponseEntity<>(savedMenuDTO, HttpStatus.CREATED);
+    // ==============================
+    // POST create a menu for a restaurant
+    // ==============================
+    @PostMapping("/restaurants/{restaurantId}/menus")
+    public ResponseEntity<MenuDTO> createMenu(
+            @PathVariable Long restaurantId,
+            @Valid @RequestBody MenuDTO menuDTO) {
+        MenuDTO createdMenu =
+                menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdMenu);
+    }
+    // ==============================
+    // DELETE a menu for a restaurant
+    // ==============================
+    @DeleteMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    public ResponseEntity<Void> deleteMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId) {
+        menuServiceImplementation.deleteMenuByRestaurant(restaurantId, menuId);
+        return ResponseEntity.noContent().build();
     }
 
-    // Delete a menu using its id
-    @DeleteMapping("/menus/{id}")
-    public ResponseEntity<MenuDTO> deleteMenuById(@PathVariable Long id) {
-        MenuDTO deletedMenu = menuServiceImplementation.deleteMenu(id);
-        return new ResponseEntity<>(deletedMenu, HttpStatus.OK);
-    }
-
-    // Change info in a menu
-    @PutMapping("/menus/{id}")
-    public ResponseEntity<MenuDTO> updateMenu(@Valid @RequestBody MenuDTO menuDTO,
-                                              @PathVariable Long id) {
-        MenuDTO savedMenuDTO = menuServiceImplementation.updateMenu(menuDTO, id);
+    // ==============================
+    // UPDATE a menu for a restaurant
+    // ==============================
+    @PutMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    public ResponseEntity<MenuDTO> updateMenu(
+            @Valid @RequestBody MenuDTO menuDTO,
+            @PathVariable Long restaurantId,
+            @PathVariable Long menuId) {
+        MenuDTO savedMenuDTO = menuServiceImplementation.updateMenu(menuDTO, restaurantId, menuId);
         return new ResponseEntity<>(savedMenuDTO, HttpStatus.OK);
+    }
+
+    // ===============================================
+    // PATCH primary status on a menu for a restaurant
+    // ===============================================
+    @PatchMapping("/restaurants/{restaurantId}/menus/{menuId}/primary")
+    public ResponseEntity<MenuDTO> updatePrimaryMenu(
+            @PathVariable Long restaurantId,
+            @PathVariable Long menuId
+    ) {
+        MenuDTO menu =  menuServiceImplementation.setPrimaryMenu(restaurantId, menuId);
+        return ResponseEntity.ok(menu);
     }
 
 }
