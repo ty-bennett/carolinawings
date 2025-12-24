@@ -3,6 +3,7 @@ package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.MenuResponse;
+import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +41,12 @@ public class AdminMenuController {
     public ResponseEntity<MenuDTO> createMenu(
             @PathVariable Long restaurantId,
             @Valid @RequestBody MenuDTO menuDTO) {
+
         MenuDTO createdMenu =
                 menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMenu);
     }
+
     // ==============================
     // DELETE a menu for a restaurant
     // ==============================
@@ -76,5 +79,4 @@ public class AdminMenuController {
         MenuDTO menu =  menuServiceImplementation.setPrimaryMenu(restaurantId, menuId);
         return ResponseEntity.ok(menu);
     }
-
 }
