@@ -1,9 +1,9 @@
 package com.carolinawings.webapp.security;
 
+import com.carolinawings.webapp.enums.OrderStatus;
 import com.carolinawings.webapp.enums.RoleName;
-import com.carolinawings.webapp.model.Order;
-import com.carolinawings.webapp.model.Restaurant;
-import com.carolinawings.webapp.model.User;
+import com.carolinawings.webapp.model.*;
+import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.OrderRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import com.carolinawings.webapp.repository.UserRepository;
@@ -22,17 +22,19 @@ public class SecurityService {
     private final DaoAuthenticationProvider authenticationProvider;
     private final RestaurantRepository restaurantRepository;
     private final OrderRepository orderRepository;
+    private final MenuItemRepository menuItemRepository;
 
     public SecurityService(AuthUtil authUtil,
                            AuthenticationManager authenticationManager,
                            DaoAuthenticationProvider authenticationProvider,
                            RestaurantRepository restaurantRepository,
-                           OrderRepository orderRepository) {
+                           OrderRepository orderRepository, MenuItemRepository menuItemRepository) {
         this.authUtil = authUtil;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
         this.restaurantRepository = restaurantRepository;
         this.orderRepository = orderRepository;
+        this.menuItemRepository = menuItemRepository;
     }
 
     public boolean canManageRestaurant(Long restaurantId) {
@@ -65,7 +67,6 @@ public class SecurityService {
         return (currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.ADMIN));
     }
 
-    //TODO: finish
     public boolean canManageOrder(UUID orderId) {
         User currentUser = authUtil.loggedInUser();
         if (currentUser == null) {
@@ -81,12 +82,10 @@ public class SecurityService {
         Restaurant restaurant = order.getRestaurant();
         if (currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.MANAGER || role.getName() == RoleName.RESTAURANT_ADMIN)) {
             return currentUser.getRestaurants().contains(restaurant);
-        } else if(currentUser.equals(order.getUser())) {
-            return true;
         }
         return false;
     }
-    //TODO: implement
+
     public boolean canCancelOrder(UUID orderId) {
         User currentUser = authUtil.loggedInUser();
         if (currentUser == null) {
@@ -100,7 +99,71 @@ public class SecurityService {
             return false;
         }
 
-        // not right
+        Restaurant restaurant = order.getRestaurant();
+        if (currentUser.getRoles().stream().anyMatch
+                (role -> role.getName() == RoleName.RESTAURANT_ADMIN ||  role.getName() == RoleName.MANAGER)) {
+            return currentUser.getRestaurants().contains(restaurant);
+        }
+
+        OrderStatus status = order.getStatus();
+        if(!(status == OrderStatus.READY || status == OrderStatus.COMPLETED || status == OrderStatus.CANCELLED)) {
+            if(order.getUser().equals(currentUser)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canViewOrder(UUID orderId) {
+        User currentUser = authUtil.loggedInUser();
+        if (currentUser == null) {
+            return false;
+        }
+        if (currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.ADMIN)) {
+            return true;
+        }
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) {
+            return false;
+        }
+        Restaurant restaurant = order.getRestaurant();
+        if(currentUser.getRoles().stream().anyMatch(
+                role -> role.getName() == RoleName.MANAGER || role.getName() == RoleName.RESTAURANT_ADMIN)) {
+            return currentUser.getRestaurants().contains(restaurant);
+        }
+
+        if(order.getUser().equals(currentUser)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canManageMenuItem(Long menuItemId) {
+        User currentUser = authUtil.loggedInUser();
+        if (currentUser == null) {
+            return false;
+        }
+
+        if (currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.ADMIN)) {
+            return true;
+        }
+
+        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElse(null);
+        if(menuItem == null) {
+            return false;
+        }
+
+        Menu menu = menuItem.getMenu();
+        if(menu == null) return false;
+
+        Restaurant restaurant = menu.getRestaurant();
+        if(restaurant == null) return false;
+
+        if(currentUser.getRoles().stream().anyMatch(
+                role -> role.getName() == RoleName.RESTAURANT_ADMIN || role.getName() == RoleName.MANAGER)) {
+            return currentUser.getRestaurants().contains(restaurant);
+        }
+
         return false;
     }
 }
