@@ -12,12 +12,13 @@ import com.carolinawings.webapp.service.RestaurantServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class RestaurantController {
 
     private final RestaurantServiceImplementation restaurantServiceImplementation;
@@ -31,14 +32,9 @@ public class RestaurantController {
 
     }
 
-    // Get all restaurants
-    @GetMapping("/restaurants/all")
-    public ResponseEntity<RestaurantResponse> getRestaurants() {
-        return new ResponseEntity<>(restaurantServiceImplementation.getAllRestaurants(), HttpStatus.OK);
-    }
-
     // Get all restaurants with pagination
-    @GetMapping("/restaurants")
+    @GetMapping("/restaurants/")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'RESTAURANT_ADMIN', 'MANAGER')")
     public ResponseEntity<RestaurantResponse> getAllRestaurants(
             @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize) {
@@ -53,23 +49,26 @@ public class RestaurantController {
 
     // Create a new restaurant
     @PostMapping("/restaurants")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RestaurantDTO> createRestaurant(@Valid @RequestBody RestaurantDTO restaurantDTO) {
         RestaurantDTO savedRestaurantDTO = restaurantServiceImplementation.createRestaurant(restaurantDTO);
         return new ResponseEntity<>(savedRestaurantDTO, HttpStatus.CREATED);
     }
 
     // Delete a restaurant by UUID
-    @DeleteMapping("/restaurants/{id}")
-    public ResponseEntity<RestaurantDTO> deleteRestaurant(@PathVariable Long id) {
-        RestaurantDTO deletedRestaurant = restaurantServiceImplementation.deleteRestaurant(id);
+    @DeleteMapping("/restaurants/{restaurantId}")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+    public ResponseEntity<RestaurantDTO> deleteRestaurant(@PathVariable Long restaurantId) {
+        RestaurantDTO deletedRestaurant = restaurantServiceImplementation.deleteRestaurant(restaurantId);
         return new ResponseEntity<>(deletedRestaurant, HttpStatus.OK);
     }
 
     // Update restaurant info
-    @PutMapping("/restaurants/{id}")
+    @PutMapping("/restaurants/{restaurantId}")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<RestaurantDTO> updateRestaurant(@Valid @RequestBody RestaurantDTO restaurantDTO,
-                                                          @PathVariable Long id) {
-        RestaurantDTO updatedRestaurantDTO = restaurantServiceImplementation.updateRestaurant(restaurantDTO, id);
+                                                          @PathVariable Long restaurantId) {
+        RestaurantDTO updatedRestaurantDTO = restaurantServiceImplementation.updateRestaurant(restaurantDTO, restaurantId);
         return new ResponseEntity<>(updatedRestaurantDTO, HttpStatus.OK);
     }
 
@@ -84,13 +83,14 @@ public class RestaurantController {
 //    }
 
     // Get all orders by restaurant id with pagination
-    @GetMapping("/restaurants/{id}/orders")
+    @GetMapping("/restaurants/{restaurantId}/orders")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<OrderResponseDTO> getOrders(
             @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @PathVariable Long id)
+            @PathVariable Long restaurantId)
     {
-        return new ResponseEntity<>(orderServiceImplementation.getAllOrdersByRestaurantPaged(pageNumber, pageSize, id), HttpStatus.OK);
+        return new ResponseEntity<>(orderServiceImplementation.getAllOrdersByRestaurantPaged(pageNumber, pageSize, restaurantId), HttpStatus.OK);
     }
 
     // Get all menus and paginate results
@@ -103,23 +103,27 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> getMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId) {
         return new ResponseEntity<>(menuServiceImplementation.getMenuByIdAndRestaurantId(restaurantId, menuId), HttpStatus.OK);
     }
 
     @PostMapping("/restaurants/{restaurantId}/menus")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> createMenuByRestaurant(@PathVariable Long restaurantId, @RequestBody MenuDTO menuDTO) {
         MenuDTO newMenu = menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
         return new ResponseEntity<>(newMenu, HttpStatus.CREATED);
     }
 
     @PutMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> updateMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId, @RequestBody MenuDTO menuDTO) {
         MenuDTO menu = menuServiceImplementation.updateMenuByRestaurant(restaurantId, menuId, menuDTO);
         return new ResponseEntity<>(menu, HttpStatus.OK);
     }
 
     @PutMapping("/restaurants/{restaurantId}/menus/{menuId}/primary")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> setPrimaryMenu(@PathVariable Long restaurantId, @PathVariable Long menuId) {
         MenuDTO menu = menuServiceImplementation.setPrimaryMenu(restaurantId, menuId);
         return new ResponseEntity<>(menu, HttpStatus.OK);

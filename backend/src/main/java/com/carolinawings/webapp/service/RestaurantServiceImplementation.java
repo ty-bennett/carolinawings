@@ -7,12 +7,14 @@ package com.carolinawings.webapp.service;
 import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.RestaurantDTO;
 import com.carolinawings.webapp.dto.RestaurantResponse;
+import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.RestaurantRepository;
+import com.carolinawings.webapp.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ public class RestaurantServiceImplementation implements RestaurantService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private AuthUtil authUtil;
 
     public RestaurantServiceImplementation(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
@@ -51,7 +55,19 @@ public class RestaurantServiceImplementation implements RestaurantService {
     @Override
     public RestaurantResponse getAllRestaurantsPaged(Integer pageNumber, Integer pageSize) {
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
-        Page<Restaurant> restaurants = restaurantRepository.findAll(pageDetails);
+        User currentUser = authUtil.loggedInUser();
+
+        Page<Restaurant> restaurants = Page.empty();
+
+        if(currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.ADMIN)) {
+            restaurants = restaurantRepository.findAll(pageDetails);
+        } else if(currentUser.getRoles().stream().anyMatch(
+                role -> role.getName() == RoleName.RESTAURANT_ADMIN || role.getName() == RoleName.MANAGER)) {
+            restaurants = restaurantRepository.findAllRestaurantsByUserId(currentUser.getId(), pageDetails);
+        } else {
+            throw new APIException("User does not have permissions to view restaurants");
+        }
+
         List<Restaurant> pagedContent = restaurants.getContent();
 
         if (pagedContent.isEmpty())
