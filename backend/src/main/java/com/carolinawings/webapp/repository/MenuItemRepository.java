@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
@@ -20,7 +21,7 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
 
     Page<MenuItem> findAllByMenu_Id(Long menuId, Pageable pageable);
     List<MenuItem> findAllByMenu_Id(Long menuId);
-
+    Page<MenuItem> findAllByMenu_Restaurant_RestaurantAdmin_Id(UUID userId, Pageable pageable);
     List<MenuItem> findByNameContaining(String salad);
 //    Optional<MenuItem> findMenuItemById(Integer id);
 //    List<MenuItem> findAll();

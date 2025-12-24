@@ -14,12 +14,15 @@ import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
+import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -159,15 +162,20 @@ public class MenuServiceImplementation implements MenuService {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
 
-        Menu newMenu = modelMapper.map(menuDTO, Menu.class);
-        newMenu.setRestaurant(restaurant);
-        newMenu.setId(menu.getId());
-        List<MenuItemDTO> menuItemDTOS = menu.getMenuItemsList().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).toList();
-        newMenu.setMenuItemsList(menu.getMenuItemsList());
-        menuRepository.save(newMenu);
-        MenuDTO newMenuDTO = modelMapper.map(newMenu, MenuDTO.class);
-        newMenuDTO.setMenuItemsList(menuItemDTOS);
-        return newMenuDTO;
+        if(restaurant.getMenus().contains(menu)) {
+            Menu newMenu = modelMapper.map(menuDTO, Menu.class);
+            newMenu.setRestaurant(restaurant);
+            newMenu.setId(menu.getId());
+            List<MenuItemDTO> menuItemDTOS = menu.getMenuItemsList().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).toList();
+            newMenu.setMenuItemsList(menu.getMenuItemsList());
+            menuRepository.save(newMenu);
+            MenuDTO newMenuDTO = modelMapper.map(newMenu, MenuDTO.class);
+            newMenuDTO.setMenuItemsList(menuItemDTOS);
+            return newMenuDTO;
+        } else {
+            throw new APIException("Menu does not belong to restaurant " + restaurant.getName());
+        }
+
     }
 
     @Override
@@ -177,10 +185,12 @@ public class MenuServiceImplementation implements MenuService {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
 
-        restaurant.getMenus().remove(menu);
-        menuRepository.deleteById(menuId);
-        menuRepository.flush();
-        restaurantRepository.save(restaurant);
+        if(restaurant.getMenus().contains(menu)) {
+            restaurant.getMenus().remove(menu);
+            menuRepository.deleteById(menuId);
+            menuRepository.flush();
+            restaurantRepository.save(restaurant);
+        } else throw new APIException("Menu with name "+ menu.getId() + " does not belong to restaurant!");
     }
 
     @Override
@@ -189,14 +199,14 @@ public class MenuServiceImplementation implements MenuService {
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
-        menu.setRestaurant(restaurant);
-        if(menu.getIsPrimary().equals(true)){
-            menu.setIsPrimary(false);
-            menuRepository.save(menu);
+
+        if(restaurant.getMenus().contains(menu)) {
+            menu.setRestaurant(restaurant);
+            menu.setIsPrimary(!menu.getIsPrimary());
+            Menu saved = menuRepository.save(menu);
+            return modelMapper.map(saved, MenuDTO.class);
         } else {
-            menu.setIsPrimary(true);
+            throw new APIException("Menu with name "+ menu.getId() + " does not belong to restaurant!");
         }
-        Menu saved = menuRepository.save(menu);
-        return modelMapper.map(saved, MenuDTO.class);
     }
 }

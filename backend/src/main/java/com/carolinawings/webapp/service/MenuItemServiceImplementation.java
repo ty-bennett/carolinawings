@@ -1,12 +1,15 @@
 package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.*;
+import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.MenuItem;
+import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
+import com.carolinawings.webapp.util.AuthUtil;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +34,8 @@ public class MenuItemServiceImplementation implements MenuItemService {
 
     @Autowired
     private MenuRepository menuRepository;
+    @Autowired
+    private AuthUtil authUtil;
 
     @Autowired
 
@@ -39,19 +45,31 @@ public class MenuItemServiceImplementation implements MenuItemService {
 
     @Override
     public MenuItemResponse getAllMenuItems() {
-        return null;
+        User currentUser = authUtil.loggedInUser();
+        List<MenuItem> menuItems = new ArrayList<>();
+
+        if(currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.ADMIN)) {
+            menuItems = menuItemRepository.findAll();
+        } else if(currentUser.getRoles().stream().anyMatch(
+                role -> role.getName() == RoleName.RESTAURANT_ADMIN || role.getName() == RoleName.MANAGER)) {
+            Page<MenuItem> pagedItems = menuItemRepository.findAllByMenu_Restaurant_RestaurantAdmin_Id(
+                    currentUser.getId(),
+                    Pageable.unpaged()
+            );
+            menuItems = pagedItems.getContent();
+        }
+        if(menuItems.isEmpty() || menuItems == null) {
+            throw new APIException("No menu items found");
+        }
+        List<MenuItemDTO> menuItemDTOS = menuItems.stream()
+                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
+                .toList();
+        return new MenuItemResponse(menuItemDTOS);
     }
 
     @Override
     public MenuItemResponse getAllMenuItems(Long menuId) {
-        List<MenuItem> menuItems = menuItemRepository.findAllByMenu_Id(menuId);
-        if (menuItems.isEmpty())
-            throw new APIException("No menu items present");
-        List<MenuItemDTO> menuItemDTOS = menuItems.stream()
-                .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
-                .toList();
-
-        return new MenuItemResponse(menuItemDTOS);
+        return null;
     }
 
     @Override

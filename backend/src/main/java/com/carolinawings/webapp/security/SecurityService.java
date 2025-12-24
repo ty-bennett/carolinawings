@@ -3,10 +3,7 @@ package com.carolinawings.webapp.security;
 import com.carolinawings.webapp.enums.OrderStatus;
 import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.model.*;
-import com.carolinawings.webapp.repository.MenuItemRepository;
-import com.carolinawings.webapp.repository.OrderRepository;
-import com.carolinawings.webapp.repository.RestaurantRepository;
-import com.carolinawings.webapp.repository.UserRepository;
+import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.util.AuthUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,18 +20,20 @@ public class SecurityService {
     private final RestaurantRepository restaurantRepository;
     private final OrderRepository orderRepository;
     private final MenuItemRepository menuItemRepository;
+    private final MenuRepository menuRepository;
 
     public SecurityService(AuthUtil authUtil,
                            AuthenticationManager authenticationManager,
                            DaoAuthenticationProvider authenticationProvider,
                            RestaurantRepository restaurantRepository,
-                           OrderRepository orderRepository, MenuItemRepository menuItemRepository) {
+                           OrderRepository orderRepository, MenuItemRepository menuItemRepository, MenuRepository menuRepository) {
         this.authUtil = authUtil;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
         this.restaurantRepository = restaurantRepository;
         this.orderRepository = orderRepository;
         this.menuItemRepository = menuItemRepository;
+        this.menuRepository = menuRepository;
     }
 
     public boolean canManageRestaurant(Long restaurantId) {
@@ -52,6 +51,28 @@ public class SecurityService {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
+        if (restaurant == null) {
+            return false;
+        }
+
+        return currentUser.getRestaurants().contains(restaurant);
+    }
+
+    public boolean canManageMenu(Long menuId) {
+        User currentUser = authUtil.loggedInUser();
+        if (currentUser == null) {
+            return false;
+        }
+        if (currentUser.getRoles().stream().anyMatch(role -> role.getName() == RoleName.ADMIN)) {
+            return true;
+        }
+
+        Menu menu = menuRepository.findById(menuId).orElse(null);
+        if (menu == null) {
+            return false;
+        }
+
+        Restaurant restaurant = menu.getRestaurant();
         if (restaurant == null) {
             return false;
         }

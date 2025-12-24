@@ -3,7 +3,7 @@ package com.carolinawings.webapp.controller;
 
 import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.MenuResponse;
-import com.carolinawings.webapp.model.User;
+import com.carolinawings.webapp.security.SecurityService;
 import com.carolinawings.webapp.service.MenuServiceImplementation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
-@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 public class AdminMenuController {
 
     private final MenuServiceImplementation menuServiceImplementation;
@@ -24,6 +23,7 @@ public class AdminMenuController {
     // GET all menus for a restaurant
     // ==============================
     @GetMapping("/restaurants/{restaurantId}/menus")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuResponse> getMenusForRestaurant(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "0") Integer page,
@@ -38,6 +38,7 @@ public class AdminMenuController {
     // POST create a menu for a restaurant
     // ==============================
     @PostMapping("/restaurants/{restaurantId}/menus")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> createMenu(
             @PathVariable Long restaurantId,
             @Valid @RequestBody MenuDTO menuDTO) {
@@ -51,6 +52,7 @@ public class AdminMenuController {
     // DELETE a menu for a restaurant
     // ==============================
     @DeleteMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<Void> deleteMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId) {
         menuServiceImplementation.deleteMenuByRestaurant(restaurantId, menuId);
         return ResponseEntity.noContent().build();
@@ -60,6 +62,7 @@ public class AdminMenuController {
     // UPDATE a menu for a restaurant
     // ==============================
     @PutMapping("/restaurants/{restaurantId}/menus/{menuId}")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> updateMenu(
             @Valid @RequestBody MenuDTO menuDTO,
             @PathVariable Long restaurantId,
@@ -72,6 +75,7 @@ public class AdminMenuController {
     // PATCH primary status on a menu for a restaurant
     // ===============================================
     @PatchMapping("/restaurants/{restaurantId}/menus/{menuId}/primary")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> updatePrimaryMenu(
             @PathVariable Long restaurantId,
             @PathVariable Long menuId

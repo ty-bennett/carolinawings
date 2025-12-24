@@ -93,35 +93,35 @@ public class RestaurantController {
         return new ResponseEntity<>(orderServiceImplementation.getAllOrdersByRestaurantPaged(pageNumber, pageSize, restaurantId), HttpStatus.OK);
     }
 
-    // Get all menus and paginate results
-    @GetMapping("/restaurants/{restaurantId}/menus")
-    public ResponseEntity<MenuResponse> getMenusByRestaurant(
-            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @PathVariable Long restaurantId) {
-        return new ResponseEntity<>(menuServiceImplementation.getAllMenusByRestaurant(pageNumber, pageSize, restaurantId), HttpStatus.OK);
-    }
+//    // Get all menus and paginate results
+//    @GetMapping("/restaurants/{restaurantId}/menus")
+//    public ResponseEntity<MenuResponse> getMenusByRestaurant(
+//            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+//            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
+//            @PathVariable Long restaurantId) {
+//        return new ResponseEntity<>(menuServiceImplementation.getAllMenusByRestaurant(pageNumber, pageSize, restaurantId), HttpStatus.OK);
+//    }
 
     @GetMapping("/restaurants/{restaurantId}/menus/{menuId}")
     @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> getMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId) {
         return new ResponseEntity<>(menuServiceImplementation.getMenuByIdAndRestaurantId(restaurantId, menuId), HttpStatus.OK);
     }
-
-    @PostMapping("/restaurants/{restaurantId}/menus")
-    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
-    public ResponseEntity<MenuDTO> createMenuByRestaurant(@PathVariable Long restaurantId, @RequestBody MenuDTO menuDTO) {
-        MenuDTO newMenu = menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
-        return new ResponseEntity<>(newMenu, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/restaurants/{restaurantId}/menus/{menuId}")
-    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
-    public ResponseEntity<MenuDTO> updateMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId, @RequestBody MenuDTO menuDTO) {
-        MenuDTO menu = menuServiceImplementation.updateMenuByRestaurant(restaurantId, menuId, menuDTO);
-        return new ResponseEntity<>(menu, HttpStatus.OK);
-    }
-
+//
+//    @PostMapping("/restaurants/{restaurantId}/menus")
+//    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+//    public ResponseEntity<MenuDTO> createMenuByRestaurant(@PathVariable Long restaurantId, @RequestBody MenuDTO menuDTO) {
+//        MenuDTO newMenu = menuServiceImplementation.createMenuByRestaurant(restaurantId, menuDTO);
+//        return new ResponseEntity<>(newMenu, HttpStatus.CREATED);
+////    }
+//
+//    @PutMapping("/restaurants/{restaurantId}/menus/{menuId}")
+//    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+//    public ResponseEntity<MenuDTO> updateMenuByRestaurant(@PathVariable Long restaurantId, @PathVariable Long menuId, @RequestBody MenuDTO menuDTO) {
+//        MenuDTO menu = menuServiceImplementation.updateMenuByRestaurant(restaurantId, menuId, menuDTO);
+//        return new ResponseEntity<>(menu, HttpStatus.OK);
+//    }
+//
     @PutMapping("/restaurants/{restaurantId}/menus/{menuId}/primary")
     @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
     public ResponseEntity<MenuDTO> setPrimaryMenu(@PathVariable Long restaurantId, @PathVariable Long menuId) {

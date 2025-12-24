@@ -7,21 +7,19 @@ package com.carolinawings.webapp.controller;
 import com.carolinawings.webapp.config.ApplicationConstants;
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
-import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
 import com.carolinawings.webapp.service.MenuItemServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.carolinawings.webapp.model.MenuItem;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class MenuItemController {
 
     private final MenuItemServiceImplementation menuItemServiceImplementation;
@@ -35,7 +33,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems/all")
-    public ResponseEntity<MenuItemResponse> getALlMenuItems() {
+    public ResponseEntity<MenuItemResponse> getAllMenuItems() {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItems(), HttpStatus.OK);
     }
 
@@ -56,17 +54,20 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems/{id}")
+
     public ResponseEntity<Optional<MenuItemDTO>> getMenuItemById(@PathVariable Long id) {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemById(id), HttpStatus.OK);
     }
 
 
     @DeleteMapping("/menuitems/{id}")
+    @PreAuthorize("@securityService.canManageMenuItem(#id)")
     public ResponseEntity<MenuItemDTO> deleteMenuItemById(@PathVariable Long id) {
         return new ResponseEntity<>(menuItemServiceImplementation.deleteMenuItem(id), HttpStatus.OK);
     }
 
     @PutMapping("/menuitems/{id}")
+    @PreAuthorize("@securityService.canManageMenuItem(#id)")
     public ResponseEntity<MenuItemDTO> updateMenuItem(@Valid @RequestBody MenuItemDTO menuItemDTO,
                                                  @PathVariable Long id) {
         MenuItemDTO savedMenuItemDTO = menuItemServiceImplementation.updateMenuItem(menuItemDTO, id);
@@ -74,18 +75,21 @@ public class MenuItemController {
     }
 
     @PostMapping("/menus/{id}/menuitems")
+    @PreAuthorize("@securityService.canManageMenu(#id)")
     public ResponseEntity<MenuItemDTO> addMenuItemToMenu(@PathVariable Long id, @Valid @RequestBody MenuItemDTO menuItem) {
         MenuItemDTO responseMenuItem = menuItemServiceImplementation.addMenuItemToMenu(id, menuItem);
         return new ResponseEntity<>(responseMenuItem, HttpStatus.CREATED);
     }
 
     @PutMapping("/menus/{id}/menuitems/{menuItemId}")
+    @PreAuthorize("@securityService.canManageMenu(#id)")
     public ResponseEntity<MenuItemDTO> editMenuItemByMenu(@PathVariable Long id,@PathVariable Long menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO) {
         MenuItemDTO menuItem = menuItemServiceImplementation.editMenuItemByMenu(id, menuItemId, menuItemDTO);
         return new ResponseEntity<>(menuItem, HttpStatus.OK);
     }
 
     @DeleteMapping("/menus/{id}/menuitems/{menuitemid}")
+    @PreAuthorize("@securityService.canManageMenu(#id)")
     public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Long menuitemid)
     {
         MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
