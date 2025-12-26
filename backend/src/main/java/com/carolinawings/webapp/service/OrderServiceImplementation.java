@@ -104,7 +104,9 @@ public class OrderServiceImplementation implements OrderService {
         // load the restaurant
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                         .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", request.getRestaurantId()));
-
+        if(!restaurant.isAcceptingOrders()) {
+           throw new APIException("Restaurant IS NOT ACCEPTING ORDERS");
+        }
         //get restaurant from cart if possible
         Restaurant restaurantFromCart = getRestaurantFromCart(cart);
 
@@ -126,8 +128,8 @@ public class OrderServiceImplementation implements OrderService {
         OffsetDateTime pickupTime;
         String requestedPickupTime = request.getRequestedPickupTime();
 
-        if(requestedPickupTime == null || requestedPickupTime.isBlank() ) {
-            pickupTime = OffsetDateTime.now().plusMinutes(15);
+        if(requestedPickupTime == null || requestedPickupTime.isBlank()) {
+            pickupTime = OffsetDateTime.now().plusMinutes(restaurant.getEstimatedPickupMinutes());
         } else {
             pickupTime = LocalDateTime.parse(request.getRequestedPickupTime(), formatter).atOffset(ZoneOffset.of("-05:00"));
         }

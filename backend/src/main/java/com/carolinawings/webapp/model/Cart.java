@@ -36,6 +36,3 @@ public class Cart {
     @Enumerated(EnumType.STRING)
     private CartStatus cartStatus;
 }
-
-//decided to handle server side b/c it could be saved across devics and people could come back later to order stuff
- //this could be handled clientside, and porbably will be but I will get to it

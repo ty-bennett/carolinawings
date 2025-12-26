@@ -30,26 +30,26 @@ public class AdminOrderController {
     }
 
     // Get an order by its UUID
-    @GetMapping("/orders/{id}")
-    @PreAuthorize("@securityService.canViewOrder(#id)")
-    public ResponseEntity<Optional<OrderDTO>> getOrderById(@PathVariable UUID id) {
-        return new ResponseEntity<>(orderServiceImplementation.getOrderById(id), HttpStatus.OK);
+    @GetMapping("/orders/{orderId}")
+    @PreAuthorize("@securityService.canViewOrder(#orderId)")
+    public ResponseEntity<Optional<OrderDTO>> getOrderById(@PathVariable UUID orderId) {
+        return new ResponseEntity<>(orderServiceImplementation.getOrderById(orderId), HttpStatus.OK);
     }
 
     // Delete an order using its UUID
-    @DeleteMapping("/orders/{id}")
-    @PreAuthorize("@securityService.canManageOrder(#id)")
-    public ResponseEntity<OrderDTO> deleteOrderById(@PathVariable UUID id) {
-        OrderDTO deletedOrder = orderServiceImplementation.deleteOrderById(id);
+    @DeleteMapping("/orders/{orderId}")
+    @PreAuthorize("@securityService.canManageOrder(#orderId)")
+    public ResponseEntity<OrderDTO> deleteOrderById(@PathVariable UUID orderId) {
+        OrderDTO deletedOrder = orderServiceImplementation.deleteOrderById(orderId);
         return new ResponseEntity<>(deletedOrder, HttpStatus.OK);
     }
 
     // Update info in an order
-    @PutMapping("/orders/{id}")
-    @PreAuthorize("@securityService.canManageOrder(#id)")
+    @PutMapping("/orders/{orderId}")
+    @PreAuthorize("@securityService.canManageOrder(#orderId)")
     public ResponseEntity<OrderDTO> updateOrder(@Valid @RequestBody OrderDTO orderDTO,
-                                                @PathVariable UUID id) {
-        OrderDTO savedOrderDTO = orderServiceImplementation.updateOrder(orderDTO, id);
+                                                @PathVariable UUID orderId) {
+        OrderDTO savedOrderDTO = orderServiceImplementation.updateOrder(orderDTO, orderId);
         return new ResponseEntity<>(savedOrderDTO, HttpStatus.OK);
     }
 

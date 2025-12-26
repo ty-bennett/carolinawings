@@ -6,15 +6,20 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.MenuDTO;
 import com.carolinawings.webapp.dto.RestaurantDTO;
+import com.carolinawings.webapp.dto.RestaurantHoursDTO;
 import com.carolinawings.webapp.dto.RestaurantResponse;
+import com.carolinawings.webapp.enums.RestaurantStatus;
 import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.Restaurant;
+import com.carolinawings.webapp.model.RestaurantHours;
 import com.carolinawings.webapp.model.User;
+import com.carolinawings.webapp.repository.RestaurantHoursRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
 import com.carolinawings.webapp.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,8 +40,13 @@ public class RestaurantServiceImplementation implements RestaurantService {
     @Autowired
     private AuthUtil authUtil;
 
-    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository) {
+    private final RestaurantHoursRepository restaurantHoursRepository;
+
+    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository, ModelMapper modelMapper, AuthUtil authUtil, RestaurantHoursRepository restaurantHoursRepository) {
         this.restaurantRepository = restaurantRepository;
+        this.modelMapper = modelMapper;
+        this.authUtil = authUtil;
+        this.restaurantHoursRepository = restaurantHoursRepository;
     }
 
     @Override
@@ -91,7 +101,15 @@ public class RestaurantServiceImplementation implements RestaurantService {
     @Override
     public RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO) {
         Restaurant restaurant = modelMapper.map(restaurantDTO, Restaurant.class);
-        Restaurant existing = restaurantRepository.findByName(restaurant.getName()).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "name", restaurant.getName()));
+
+        Optional<Restaurant> existing = restaurantRepository.findByName(restaurant.getName());
+        if (existing.isPresent()) {
+            throw new APIException("Restaurant with name '" + restaurant.getName() + "' already exists");
+        }
+
+        restaurant.setStatus(RestaurantStatus.OPEN);
+        restaurant.setAcceptingOrders(true);
+        restaurant.setEstimatedPickupMinutes(15);
 
         Restaurant saved = restaurantRepository.save(restaurant);
         return modelMapper.map(saved, RestaurantDTO.class);
@@ -132,5 +150,65 @@ public class RestaurantServiceImplementation implements RestaurantService {
         Set<Menu> menus = restaurant.getMenus();
         return menus.stream().map((element) -> modelMapper.map(element, MenuDTO.class)).collect(Collectors.toSet());
     }
+    @Override
+    public RestaurantDTO setAcceptingOrders(Long restaurantId, boolean accepting) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        restaurant.setAcceptingOrders(accepting);
+        Restaurant saved = restaurantRepository.save(restaurant);
+        return modelMapper.map(saved, RestaurantDTO.class);
+    }
+
+    @Override
+    public RestaurantDTO setEstimatedPickupMinutes(Long restaurantId, Integer minutes) {
+        if (minutes < 1) {
+            throw new APIException("Estimated pickup time must be at least 1 minute");
+        }
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+        restaurant.setEstimatedPickupMinutes(minutes);
+        Restaurant saved = restaurantRepository.save(restaurant);
+        return modelMapper.map(saved, RestaurantDTO.class);
+    }
+
+    @Override
+    public List<RestaurantHoursDTO> getRestaurantHours(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+
+        List<RestaurantHours> hours = restaurantHoursRepository.findByRestaurantIdOrderByDayOfWeek(restaurantId);
+
+        return hours.stream()
+                .map(h -> modelMapper.map(h, RestaurantHoursDTO.class))
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<RestaurantHoursDTO> updateRestaurantHours(Long restaurantId, List<RestaurantHoursDTO> hoursDTO) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", restaurantId));
+
+        // Clear existing hours
+        restaurantHoursRepository.deleteByRestaurantId(restaurantId);
+
+        // Add new hours
+        List<RestaurantHours> newHours = hoursDTO.stream()
+                .map(dto -> RestaurantHours.builder()
+                        .restaurant(restaurant)
+                        .dayOfWeek(dto.getDayOfWeek())
+                        .openTime(dto.getOpenTime())
+                        .closeTime(dto.getCloseTime())
+                        .closed(dto.isClosed())
+                        .build())
+                .toList();
+
+        List<RestaurantHours> saved = restaurantHoursRepository.saveAll(newHours);
+
+        return saved.stream()
+                .map(h -> modelMapper.map(h, RestaurantHoursDTO.class))
+                .toList();
+    }
+
 
 }

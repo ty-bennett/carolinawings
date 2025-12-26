@@ -29,16 +29,16 @@ public class PublicOrderController {
         return new ResponseEntity<>(orderServiceImplementation.createOrderFromCart(request), HttpStatus.OK);
     }
 
-    @GetMapping("/orders/{id}")
-    @PreAuthorize("@securityService.canViewOrder(#id)")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable UUID id) {
-        return new ResponseEntity<>(orderServiceImplementation.getOrderById(id)
+    @GetMapping("/orders/{orderId}")
+    @PreAuthorize("@securityService.canViewOrder(#orderId)")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable UUID orderId) {
+        return new ResponseEntity<>(orderServiceImplementation.getOrderById(orderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)), HttpStatus.OK);
     }
 
-    @PatchMapping("/orders/{id}/cancel")
-    @PreAuthorize("@securityService.canCancelOrder(#id)")
-    public ResponseEntity<OrderDTO> cancelOrderById(@PathVariable UUID id) {
-        return new ResponseEntity(orderServiceImplementation.cancelOrder(id), HttpStatus.OK);
+    @PatchMapping("/orders/{orderId}/cancel")
+    @PreAuthorize("@securityService.canCancelOrder(#orderId)")
+    public ResponseEntity<OrderDTO> cancelOrderById(@PathVariable UUID orderId) {
+        return new ResponseEntity<>(orderServiceImplementation.cancelOrder(orderId), HttpStatus.OK);
     }
 }

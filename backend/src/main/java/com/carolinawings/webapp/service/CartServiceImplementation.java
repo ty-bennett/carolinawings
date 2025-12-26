@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 
@@ -54,7 +55,8 @@ public class CartServiceImplementation implements CartService {
     @Override
     @Transactional
     public CartDTO addMenuItemToCart(AddCartItemDTO cartItemDTO) {
-        Cart cart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
+        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                authUtil.loggedInEmail(), CartStatus.ACTIVE).orElse(null);
         if (cart == null) {
             cart = createCart();
         }
@@ -158,8 +160,7 @@ public class CartServiceImplementation implements CartService {
         cartItemRepository.save(cartItem);
 
         // 5. Recalculate total price
-        BigDecimal recalculatedTotal = recalculateCartTotal(cart);
-        cart.setTotalPrice(recalculatedTotal);
+        recalculateCartTotal(cart);
         cart = cartRepository.save(cart);
 
         Cart updatedCart = cartRepository.findCartByIdWithOptions(cart.getId());
@@ -169,24 +170,15 @@ public class CartServiceImplementation implements CartService {
             log.info("No cart items found");
             throw new APIException("No cart items found");
         }
-        List<CartItemDTO> cartItemDTOs = cartItemList.stream()
-                .map(this::mapCartItemToDTO)
-                .toList();
-        CartDTO dto = new CartDTO();
-        dto.setCartId(cart.getId());
-        dto.setTotalPrice(cart.getTotalPrice());
-        dto.setMenuItems(cartItemDTOs);
-        log.info(dto.toString());
-        return dto;
-//        } else {
-//            throw new APIException("Invalid menu item");
-//        }
+
+        return convertToDTO(updatedCart);
     }
 
     @Override
     public CartDTO removeMenuItemFromCart(Long menuItemId) {
-        User user = authUtil.loggedInUser();
-        Cart cart = cartRepository.findCartByUserEmail(user.getUsername());
+        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                        authUtil.loggedInEmail(), CartStatus.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "user", authUtil.loggedInEmail()));
 
         CartItem itemToRemove = cart.getCartItems().stream()
                 .filter(item -> item.getMenuItem().getId().equals(menuItemId))
@@ -197,17 +189,18 @@ public class CartServiceImplementation implements CartService {
         recalculateCartTotal(cart);
         Cart saved = cartRepository.save(cart);
 
-        return modelMapper.map(saved, CartDTO.class);
+        return convertToDTO(saved);
     }
 
     @Override
     public CartDTO updateCartItemQuantity(Long menuItemId, Integer quantity) {
-        if(quantity < 1) {
+        if (quantity < 1) {
             throw new APIException("Invalid quantity");
         }
 
-        User user = authUtil.loggedInUser();
-        Cart cart = cartRepository.findCartByUserEmail(user.getUsername());
+        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                        authUtil.loggedInEmail(), CartStatus.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "user", authUtil.loggedInEmail()));
 
         CartItem itemToUpdate = cart.getCartItems().stream()
                 .filter(item -> item.getMenuItem().getId().equals(menuItemId))
@@ -218,18 +211,21 @@ public class CartServiceImplementation implements CartService {
 
         Cart saved = cartRepository.save(cart);
 
-        return modelMapper.map(saved, CartDTO.class);
+        return convertToDTO(saved);
     }
 
     @Override
     public CartDTO clearCart() {
-        User user = authUtil.loggedInUser();
-        Cart cart = cartRepository.findCartByUserEmail(user.getUsername());
+        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                        authUtil.loggedInEmail(), CartStatus.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "user", authUtil.loggedInEmail()));
+
         cart.getCartItems().clear();
         recalculateCartTotal(cart);
+
         Cart saved = cartRepository.save(cart);
 
-        return modelMapper.map(saved, CartDTO.class);
+        return convertToDTO(saved);
     }
 
     public CartDTO getUserCart(String userEmail, Long cartId) {
@@ -237,7 +233,7 @@ public class CartServiceImplementation implements CartService {
                         authUtil.loggedInEmail(), CartStatus.ACTIVE)
                 .orElseGet(this::createCart);
 
-        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+        CartDTO cartDTO = convertToDTO(cart);
         List<CartItem> cartItemList = cart.getCartItems().stream().toList();
         List<CartItemDTO> cartItemDTOs = cartItemList.stream().map(item -> mapCartItemToDTO(item)).toList();
         cartDTO.setMenuItems(cartItemDTOs);
@@ -245,31 +241,31 @@ public class CartServiceImplementation implements CartService {
     }
 
     private BigDecimal recalculateCartTotal(Cart cart) {
-        BigDecimal total = BigDecimal.ZERO;
-        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
-        for (CartItem item : cartItems){
-            // Start with base menu item price
+        BigDecimal subtotal = BigDecimal.ZERO;
+
+        for (CartItem item : cart.getCartItems()) {
             BigDecimal itemPrice = item.getMenuItem().getPrice() != null
                     ? item.getMenuItem().getPrice()
                     : BigDecimal.ZERO;
 
-            // Fetch related choices for this cart item
-            List<CartItemChoice> choices = cartItemOptionRepository.findByCartItem(item);
-
-            // Add prices for each option
-            for (CartItemChoice choice : choices) {
+            for (CartItemChoice choice : item.getChoices()) {
                 if (choice.getMenuItemOption() != null && choice.getMenuItemOption().getPrice() != null) {
                     itemPrice = itemPrice.add(choice.getMenuItemOption().getPrice());
                 }
             }
 
-            // Multiply by quantity
-            total = total.add(itemPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+            subtotal = subtotal.add(itemPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
         }
 
+        // Calculate tax (you have 0.07 in application.properties)
+        BigDecimal taxRate = new BigDecimal("0.07");
+        BigDecimal tax = subtotal.multiply(taxRate).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal total = subtotal.add(tax);
+
+        cart.setSubtotal(subtotal);
+        cart.setTotalTax(tax);
         cart.setTotalPrice(total);
-        cartRepository.save(cart);
-        cartRepository.flush();
+
         return total;
     }
 
@@ -363,17 +359,19 @@ public class CartServiceImplementation implements CartService {
     }
 
 
-
     private Cart createCart() {
-       Cart userCart = cartRepository.findCartByUserEmail(authUtil.loggedInEmail());
-       if (userCart != null) {
-          return userCart;
-       }
+        Cart userCart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                authUtil.loggedInEmail(), CartStatus.ACTIVE).orElse(null);
+        if (userCart != null) {
+            return userCart;
+        }
 
-       Cart cart = new Cart();
-       cart.setTotalPrice(new BigDecimal(0.0));
-       cart.setUser(authUtil.loggedInUser());
-       Cart newCart = cartRepository.save(cart);
-       return newCart;
+        Cart cart = new Cart();
+        cart.setSubtotal(BigDecimal.ZERO);
+        cart.setTotalTax(BigDecimal.ZERO);
+        cart.setTotalPrice(BigDecimal.ZERO);
+        cart.setCartStatus(CartStatus.ACTIVE);
+        cart.setUser(authUtil.loggedInUser());
+        return cartRepository.save(cart);
     }
 }

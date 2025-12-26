@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,7 +34,7 @@ public class RestaurantController {
     }
 
     // Get all restaurants with pagination
-    @GetMapping("/restaurants/")
+    @GetMapping("/restaurants")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'RESTAURANT_ADMIN', 'MANAGER')")
     public ResponseEntity<RestaurantResponse> getAllRestaurants(
             @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
@@ -42,9 +43,10 @@ public class RestaurantController {
     }
 
     // Get a restaurant by its UUID
-    @GetMapping("/restaurants/{id}")
-    public ResponseEntity<Optional<RestaurantDTO>> getRestaurantById(@PathVariable Long id) {
-        return new ResponseEntity<>(restaurantServiceImplementation.getRestaurantById(id), HttpStatus.OK);
+    @GetMapping("/restaurants/{restaurantId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'RESTAURANT_ADMIN', 'MANAGER')")
+    public ResponseEntity<Optional<RestaurantDTO>> getRestaurantById(@PathVariable Long restaurantId) {
+        return new ResponseEntity<>(restaurantServiceImplementation.getRestaurantById(restaurantId), HttpStatus.OK);
     }
 
     // Create a new restaurant
@@ -71,6 +73,44 @@ public class RestaurantController {
         RestaurantDTO updatedRestaurantDTO = restaurantServiceImplementation.updateRestaurant(restaurantDTO, restaurantId);
         return new ResponseEntity<>(updatedRestaurantDTO, HttpStatus.OK);
     }
+    // Toggle accepting orders (busy mode)
+    @PatchMapping("/restaurants/{restaurantId}/accepting-orders")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+    public ResponseEntity<RestaurantDTO> toggleAcceptingOrders(
+            @PathVariable Long restaurantId,
+            @RequestParam boolean accepting) {
+        RestaurantDTO updated = restaurantServiceImplementation.setAcceptingOrders(restaurantId, accepting);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    // Update estimated pickup time
+    @PatchMapping("/restaurants/{restaurantId}/pickup-time")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+    public ResponseEntity<RestaurantDTO> updatePickupTime(
+            @PathVariable Long restaurantId,
+            @RequestParam Integer minutes) {
+        RestaurantDTO updated = restaurantServiceImplementation.setEstimatedPickupMinutes(restaurantId, minutes);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    // Get restaurant hours
+    @GetMapping("/restaurants/{restaurantId}/hours")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+    public ResponseEntity<List<RestaurantHoursDTO>> getRestaurantHours(@PathVariable Long restaurantId) {
+        List<RestaurantHoursDTO> hours = restaurantServiceImplementation.getRestaurantHours(restaurantId);
+        return new ResponseEntity<>(hours, HttpStatus.OK);
+    }
+
+    // Update restaurant hours
+    @PutMapping("/restaurants/{restaurantId}/hours")
+    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
+    public ResponseEntity<List<RestaurantHoursDTO>> updateRestaurantHours(
+            @PathVariable Long restaurantId,
+            @RequestBody List<RestaurantHoursDTO> hours) {
+        List<RestaurantHoursDTO> updated = restaurantServiceImplementation.updateRestaurantHours(restaurantId, hours);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
 
     //create order at restaurant
 

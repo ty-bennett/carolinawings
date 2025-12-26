@@ -28,7 +28,7 @@ public class CartController {
     @Autowired
     private CartRepository cartRepository;
 
-    @PostMapping("/carts/items")
+    @PostMapping("/cart/items")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartDTO> addProductToCart(@RequestBody AddCartItemDTO addCartItemDTO)
     {
@@ -39,10 +39,7 @@ public class CartController {
     @GetMapping("/cart")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartDTO> getCartByUser() {
-        String emailId = authUtil.loggedInEmail();
-        Cart cart = cartRepository.findCartByUserEmail(emailId);
-        Long cartId = cart.getId();
-        CartDTO cartDTO = cartServiceImplementation.getUserCart(emailId, cartId);
+        CartDTO cartDTO = cartServiceImplementation.getUserCart(authUtil.loggedInEmail(), null);
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 

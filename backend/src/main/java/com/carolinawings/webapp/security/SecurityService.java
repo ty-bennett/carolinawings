@@ -127,8 +127,8 @@ public class SecurityService {
         }
 
         OrderStatus status = order.getStatus();
-        if(!(status == OrderStatus.READY || status == OrderStatus.COMPLETED || status == OrderStatus.CANCELLED)) {
-            if(order.getUser().equals(currentUser)) {
+        if (status == OrderStatus.PENDING) {
+            if (order.getUser().equals(currentUser)) {
                 return true;
             }
         }

@@ -33,6 +33,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems/all")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'RESTAURANT_ADMIN')")
     public ResponseEntity<MenuItemResponse> getAllMenuItems() {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItems(), HttpStatus.OK);
     }
@@ -55,10 +56,10 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItemsSorted(pageNumber, pageSize, sortBy, sortOrder, menuId), HttpStatus.OK);
     }
 
-    @GetMapping("/menuitems/{id}")
-
-    public ResponseEntity<Optional<MenuItemDTO>> getMenuItemById(@PathVariable Long id) {
-        return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemById(id), HttpStatus.OK);
+    @GetMapping("/menuitems/{menuItemId}")
+    @PreAuthorize("@securityService.canManageMenuItem(#menuItemId)")
+    public ResponseEntity<Optional<MenuItemDTO>> getMenuItemById(@PathVariable Long menuItemId) {
+        return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemById(menuItemId), HttpStatus.OK);
     }
 
     @PostMapping("/menuitems")
@@ -97,11 +98,11 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItem, HttpStatus.OK);
     }
 
-    @DeleteMapping("/menus/{id}/menuitems/{menuitemid}")
+    @DeleteMapping("/menus/{id}/menuitems/{menuItemId}")
     @PreAuthorize("@securityService.canManageMenu(#id)")
-    public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Long menuitemid)
+    public ResponseEntity<MenuItemDTO> deleteMenuItemFromMenu(@PathVariable Long id, @PathVariable Long menuItemId)
     {
-        MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
+        MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuItemId);
         return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
     }
 
@@ -116,6 +117,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menuitems/library")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'RESTAURANT_ADMIN', 'MANAGER')")
     public ResponseEntity<MenuItemResponse> getLibraryItems() {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemsWithoutMenu(), HttpStatus.OK);
     }
