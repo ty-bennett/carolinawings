@@ -38,6 +38,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menus/{menuId}/menuitems/paged")
+    @PreAuthorize("@securityService.canManageMenu(#menuId)")
     public ResponseEntity<MenuItemResponse> getAllMenuItemsPaged(@RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
                                                             @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize,
                                                             @PathVariable Long menuId){
@@ -45,6 +46,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/menus/{menuId}/menuitems/sort")
+    @PreAuthorize("@securityService.canManageMenu(#menuId)")
     public ResponseEntity<MenuItemResponse> getAllMenuItemsSorted(@RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
                                                             @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize,
                                                             @RequestParam(name="sortBy", defaultValue = ApplicationConstants.SORT_MENU_ITEMS_BY, required = false) String sortBy,
@@ -57,6 +59,13 @@ public class MenuItemController {
 
     public ResponseEntity<Optional<MenuItemDTO>> getMenuItemById(@PathVariable Long id) {
         return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/menuitems")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'RESTAURANT_ADMIN')")
+    public ResponseEntity<MenuItemDTO> createMenuItem(@Valid @RequestBody MenuItemDTO menuItemDTO) {
+        MenuItemDTO created = menuItemServiceImplementation.createMenuItem(menuItemDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
 
@@ -94,5 +103,20 @@ public class MenuItemController {
     {
         MenuItemDTO responseMenuItem = menuItemServiceImplementation.deleteMenuItemFromMenu(id, menuitemid);
         return new ResponseEntity<>(responseMenuItem, HttpStatus.OK);
+    }
+
+    @PostMapping("/menus/{menuId}/menuitems/clone/{menuItemId}")
+    @PreAuthorize("@securityService.canManageMenu(#menuId)")
+    public ResponseEntity<MenuItemDTO> cloneLibraryItemToMenu(
+            @PathVariable Long menuId,
+            @PathVariable Long menuItemId) {
+
+        MenuItemDTO cloned = menuItemServiceImplementation.cloneLibraryItemToMenu(menuId, menuItemId);
+        return new ResponseEntity<>(cloned, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/menuitems/library")
+    public ResponseEntity<MenuItemResponse> getLibraryItems() {
+        return new ResponseEntity<>(menuItemServiceImplementation.getMenuItemsWithoutMenu(), HttpStatus.OK);
     }
 }

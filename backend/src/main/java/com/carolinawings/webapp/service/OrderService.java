@@ -29,4 +29,7 @@ public interface OrderService {
     );
 
     OrderResponseDTO updateOrderStatusForManager(UUID orderId, OrderStatus orderStatus);
+
+    OrderDTO cancelOrder(UUID id);
+
 }

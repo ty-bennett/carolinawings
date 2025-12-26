@@ -241,6 +241,20 @@ public class OrderServiceImplementation implements OrderService {
         return OrderMapper.toOrderResponseDTO(saved);
     }
 
+    @Override
+    public OrderDTO cancelOrder(UUID id) {
+        Order order =  orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "orderId", id));
+        OrderStatus orderStatus = order.getStatus();
+        if(orderStatus.equals(OrderStatus.PENDING)) {
+            order.setStatus(OrderStatus.CANCELLED);
+        } else {
+            throw new APIException("order cannot be cancelled");
+        }
+        Order savedOrder = orderRepository.save(order);
+        return modelMapper.map(savedOrder, OrderDTO.class);
+    }
+
 
     // private helper methods
     private boolean userManagesRestaurant(User user, Restaurant restaurant) {

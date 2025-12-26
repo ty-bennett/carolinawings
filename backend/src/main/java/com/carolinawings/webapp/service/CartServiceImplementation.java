@@ -3,6 +3,7 @@ package com.carolinawings.webapp.service;
 import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.enums.CartStatus;
 import com.carolinawings.webapp.exceptions.APIException;
+import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.util.AuthUtil;
@@ -180,6 +181,55 @@ public class CartServiceImplementation implements CartService {
 //        } else {
 //            throw new APIException("Invalid menu item");
 //        }
+    }
+
+    @Override
+    public CartDTO removeMenuItemFromCart(Long menuItemId) {
+        User user = authUtil.loggedInUser();
+        Cart cart = cartRepository.findCartByUserEmail(user.getUsername());
+
+        CartItem itemToRemove = cart.getCartItems().stream()
+                .filter(item -> item.getMenuItem().getId().equals(menuItemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "menuItemId", menuItemId));
+
+        cart.getCartItems().remove(itemToRemove);
+        recalculateCartTotal(cart);
+        Cart saved = cartRepository.save(cart);
+
+        return modelMapper.map(saved, CartDTO.class);
+    }
+
+    @Override
+    public CartDTO updateCartItemQuantity(Long menuItemId, Integer quantity) {
+        if(quantity < 1) {
+            throw new APIException("Invalid quantity");
+        }
+
+        User user = authUtil.loggedInUser();
+        Cart cart = cartRepository.findCartByUserEmail(user.getUsername());
+
+        CartItem itemToUpdate = cart.getCartItems().stream()
+                .filter(item -> item.getMenuItem().getId().equals(menuItemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "menuItemId", menuItemId));
+        itemToUpdate.setQuantity(quantity);
+        recalculateCartTotal(cart);
+
+        Cart saved = cartRepository.save(cart);
+
+        return modelMapper.map(saved, CartDTO.class);
+    }
+
+    @Override
+    public CartDTO clearCart() {
+        User user = authUtil.loggedInUser();
+        Cart cart = cartRepository.findCartByUserEmail(user.getUsername());
+        cart.getCartItems().clear();
+        recalculateCartTotal(cart);
+        Cart saved = cartRepository.save(cart);
+
+        return modelMapper.map(saved, CartDTO.class);
     }
 
     public CartDTO getUserCart(String userEmail, Long cartId) {

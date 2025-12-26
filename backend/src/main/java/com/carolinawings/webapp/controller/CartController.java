@@ -10,12 +10,13 @@ import com.carolinawings.webapp.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class CartController {
 
     @Autowired
@@ -27,21 +28,43 @@ public class CartController {
     @Autowired
     private CartRepository cartRepository;
 
-    @PostMapping("/carts/menuitems")
+    @PostMapping("/carts/items")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartDTO> addProductToCart(@RequestBody AddCartItemDTO addCartItemDTO)
     {
         CartDTO cartDTO = cartService.addMenuItemToCart(addCartItemDTO);
         return new ResponseEntity<>(cartDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/carts/users/cart")
+    @GetMapping("/cart")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartDTO> getCartByUser() {
         String emailId = authUtil.loggedInEmail();
         Cart cart = cartRepository.findCartByUserEmail(emailId);
         Long cartId = cart.getId();
         CartDTO cartDTO = cartServiceImplementation.getUserCart(emailId, cartId);
-        return new ResponseEntity<>(cartDTO, HttpStatus.FOUND);
+        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 
+    @DeleteMapping("/cart/items/{menuItemId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartDTO> removeItemFromCart(@PathVariable Long menuItemId) {
+        CartDTO cartDTO = cartService.removeMenuItemFromCart(menuItemId);
+        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
+    }
 
+    @PatchMapping("/cart/items/{menuItemId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartDTO> updateItemQuantity(@PathVariable Long menuItemId,
+                                                      @RequestParam Integer quantity) {
+        CartDTO cartDTO = cartService.updateCartItemQuantity(menuItemId, quantity);
+        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cart")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartDTO> clearCart() {
+        CartDTO cartDTO = cartService.clearCart();
+        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
+    }
 }

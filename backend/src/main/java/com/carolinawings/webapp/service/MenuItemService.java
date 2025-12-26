@@ -6,6 +6,7 @@ package com.carolinawings.webapp.service;
 
 import com.carolinawings.webapp.dto.MenuItemDTO;
 import com.carolinawings.webapp.dto.MenuItemResponse;
+import com.carolinawings.webapp.repository.MenuItemRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +18,6 @@ import java.util.Optional;
 @Service
 public interface MenuItemService {
     MenuItemResponse getAllMenuItems();
-
-    MenuItemResponse getAllMenuItems(Long menuId);
 
     MenuItemResponse getAllMenuItemsPaged(Integer pageNumber, Integer pageSize, Long menuId);
     MenuItemResponse getAllMenuItemsSorted(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection, Long menuId);
@@ -34,6 +33,6 @@ public interface MenuItemService {
     MenuItemDTO deleteMenuItemFromMenu(Long menuId, Long menuItemID);
 
     MenuItemDTO editMenuItemByMenu(@PathVariable Long menuId, @PathVariable Long menuItemId, @Valid @RequestBody MenuItemDTO menuItemDTO);
-
-    //   MenuItemDTO addProductToMenu(Long menuId, MenuItem menuItem);
+    MenuItemDTO cloneLibraryItemToMenu(Long menuId, Long libraryItemId);
+    MenuItemResponse getMenuItemsWithoutMenu();
 }

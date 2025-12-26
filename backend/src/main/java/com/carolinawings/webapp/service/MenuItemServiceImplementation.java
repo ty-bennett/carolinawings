@@ -58,18 +58,13 @@ public class MenuItemServiceImplementation implements MenuItemService {
             );
             menuItems = pagedItems.getContent();
         }
-        if(menuItems.isEmpty() || menuItems == null) {
+        if(menuItems.isEmpty()) {
             throw new APIException("No menu items found");
         }
         List<MenuItemDTO> menuItemDTOS = menuItems.stream()
                 .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
                 .toList();
         return new MenuItemResponse(menuItemDTOS);
-    }
-
-    @Override
-    public MenuItemResponse getAllMenuItems(Long menuId) {
-        return null;
     }
 
     @Override
@@ -119,13 +114,22 @@ public class MenuItemServiceImplementation implements MenuItemService {
 
     @Override
     public MenuItemDTO createMenuItem(MenuItemDTO menuItemDTO) {
-        MenuItem menuItem = modelMapper.map(menuItemDTO, MenuItem.class);
-        MenuItem existingMenuItem = menuItemRepository.findByName(menuItem.getName())
-                .orElseThrow(ResourceNotFoundException::new);
-        if (existingMenuItem != null)
-            throw new APIException("Menu item with the name " + menuItem.getName() + " already exists");
-        MenuItem savedMenuItem = menuItemRepository.save(menuItem);
-        return modelMapper.map(savedMenuItem, MenuItemDTO.class);
+
+        Optional<MenuItem> existingMenuItem = menuItemRepository.findByName(menuItemDTO.getName());
+
+        if(existingMenuItem.isPresent()) {
+            throw new APIException("Item already exists");
+        }
+
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName(menuItemDTO.getName());
+        menuItem.setDescription(menuItemDTO.getDescription());
+        menuItem.setPrice(menuItemDTO.getPrice());
+        menuItem.setCategory(menuItemDTO.getCategory());
+        menuItem.setImageURL(menuItemDTO.getImageUrl());
+
+        MenuItem savedItem = menuItemRepository.save(menuItem);
+        return modelMapper.map(savedItem, MenuItemDTO.class);
     }
 
     @Override
@@ -155,33 +159,33 @@ public class MenuItemServiceImplementation implements MenuItemService {
     @Override
     public MenuItemDTO addMenuItemToMenu(Long menuId, MenuItemDTO requestMenuItem) {
         //get Menu
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
 
        //Find existing menu Item (if it exists) by name
-        MenuItem menuItem =  menuItemRepository.findByName(requestMenuItem.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemName", requestMenuItem.getName()));
-        if(menuItem == null) {
-            menuItem = new MenuItem();
-            menuItem.setName(requestMenuItem.getName());
-            menuItem.setDescription(requestMenuItem.getDescription());
-            menuItem.setImageURL(requestMenuItem.getImageUrl());
-            menuItem.setPrice(requestMenuItem.getPrice());
-            menuItem.setCategory(requestMenuItem.getCategory());
-            menuItem.setMenu(menu);
 
-            menuItemRepository.save(menuItem);
+        boolean alreadyExists = menu.getMenuItemsList().stream()
+                .anyMatch(item -> item.getName().equalsIgnoreCase(requestMenuItem.getName()));
+
+        if(alreadyExists) {
+            throw new APIException("Menu item with the name " + requestMenuItem.getName() + " already exists in this menu");
         }
+
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName(requestMenuItem.getName());
+        menuItem.setDescription(requestMenuItem.getDescription());
+        menuItem.setImageURL(requestMenuItem.getImageUrl());
+        menuItem.setPrice(requestMenuItem.getPrice());
+        menuItem.setCategory(requestMenuItem.getCategory());
+        menuItem.setMenu(menu);
+        MenuItem saved = menuItemRepository.save(menuItem);
+
         List<MenuItem> menuItemList = menu.getMenuItemsList();
-        boolean existing = menuItemList.stream().anyMatch(item -> item.getId().equals(requestMenuItem.getId()));
-        if (existing)
-            throw new APIException("Menu item with the id " + menuItem.getId() + " already exists");
-        else {
-            menuItemList.add(menuItem);
-            menuItemRepository.save(menuItem);
-            menu.setMenuItemsList(menuItemList);
-            menuRepository.save(menu);
-        }
-        return modelMapper.map(menuItem, MenuItemDTO.class);
+        menuItemList.add(menuItem);
+        menu.setMenuItemsList(menuItemList);
+        menuRepository.save(menu);
+
+        return modelMapper.map(saved, MenuItemDTO.class);
     }
 
 
@@ -189,19 +193,17 @@ public class MenuItemServiceImplementation implements MenuItemService {
     public List<MenuItemDTO> getMenuItemsByMenu(String menuId, Integer pageNumber, Integer pageSize) {
         Long newMenuID = Long.valueOf(menuId);
         Menu menu = menuRepository.findById(newMenuID).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
-        if(menu == null) {
-            throw new ResourceNotFoundException("Menu", "menuId", menuId);
-        }
         return menu.getMenuItemsList().stream().map(item -> modelMapper.map(item, MenuItemDTO.class)).toList();
     }
 
     @Override
-    public MenuItemDTO deleteMenuItemFromMenu(Long menuId, Long menuItemID)
+    public MenuItemDTO deleteMenuItemFromMenu(Long menuId, Long menuItemId)
     {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "menuID", menuId));
         List<MenuItem> menuItemList = menu.getMenuItemsList();
-        MenuItem deletedMenuItem = menuItemList.stream().filter(item -> item.getId().equals(menuItemID)).findFirst().get();
-        menuItemList.removeIf(item -> item.getId().equals(menuItemID));
+        MenuItem deletedMenuItem = menuItemList.stream().filter(item -> item.getId().equals(menuItemId)).findFirst()
+                        .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuItemId", menuItemId));
+        menuItemList.removeIf(item -> item.getId().equals(menuItemId));
         menu.setMenuItemsList(menuItemList);
         menuRepository.save(menu);
         return modelMapper.map(deletedMenuItem, MenuItemDTO.class);
@@ -226,6 +228,48 @@ public class MenuItemServiceImplementation implements MenuItemService {
         MenuItem res = menuItemRepository.save(menuItem);
         menuRepository.save(menu);
         return modelMapper.map(res, MenuItemDTO.class);
+    }
+
+    public MenuItemDTO cloneLibraryItemToMenu(Long menuId, Long libraryItemId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
+
+        MenuItem libraryItem = menuItemRepository.findById(libraryItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", libraryItemId));
+
+        boolean exists = menu.getMenuItemsList().stream()
+                .anyMatch(item -> item.getName().equalsIgnoreCase(libraryItem.getName()));
+        if(exists) {
+            throw new APIException("Menu already has a menu item named '" + libraryItem.getName() + "' ");
+        }
+
+        // Create a copy
+        MenuItem cloned = new MenuItem();
+        cloned.setName(libraryItem.getName());
+        cloned.setDescription(libraryItem.getDescription());
+        cloned.setImageURL(libraryItem.getImageURL());
+        cloned.setPrice(libraryItem.getPrice());
+        cloned.setCategory(libraryItem.getCategory());
+        cloned.setEnabled(libraryItem.getEnabled());
+        cloned.setMenu(menu);
+
+        MenuItem saved = menuItemRepository.save(cloned);
+        return modelMapper.map(saved, MenuItemDTO.class);
+    }
+
+    @Override
+    public MenuItemResponse getMenuItemsWithoutMenu() {
+        List<MenuItem> libraryItems = menuItemRepository.findByMenuIsNull();
+
+        if (libraryItems.isEmpty()) {
+            throw new APIException("No library items found");
+        }
+
+        List<MenuItemDTO> dtos = libraryItems.stream()
+                .map(item -> modelMapper.map(item, MenuItemDTO.class))
+                .toList();
+
+        return new MenuItemResponse(dtos);
     }
 }
 
