@@ -10,71 +10,81 @@ import java.util.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
 @Table(name="users",
-uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username")
-})
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username")
+        })
 @Getter
 @Setter
 @NoArgsConstructor
 
 public class User {
-    //Identifying information
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    //UUID of user
     @Column(name = "id")
     private UUID id;
-    //name of user
-    @Column(name = "name")
-    @Size(min = 2, max = 40, message = "Name must be at least 2 characters long")
-    private String name;
-    //email of users
+
+    @Column(name = "first_name")
+    @Size(min = 1, max = 30, message = "First name must be between 1 and 30 characters")
+    private String firstName;
+
+    @Column(name = "last_name")
+    @Size(min = 1, max = 30, message = "Last name must be between 1 and 30 characters")
+    private String lastName;
+
     @Email(message = "Email should be valid")
     @Size(max=50, min = 7, message = "Email must be a valid email")
     @Column(nullable = false, unique = true)
     private String username;
+
     @Size(min=8, max=120, message = "Password must be at least 8 characters long")
     @Column(name = "password")
     private String password;
+
     @Column(name = "phone_number")
     private String phoneNumber;
+
     @Column(name = "newsletter_member")
-    //Are they a member of mailing list
     private Boolean newsletterMember;
+
     @Column(name = "date_joined")
-    //keep track of how old account is
     private LocalDate dateJoined;
-    //set status of User
+
     @OneToMany(mappedBy = "user")
     private List<Order> orderHistoryList;
+
     @Enumerated(EnumType.STRING)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_restaurant",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
     private Set<Restaurant> restaurants;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Cart cart;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Cart> cart;
 
-
-
-
-    public User(@NotBlank @Size(min = 3, max = 40) @Email String username, @NotBlank @Size(min = 8, max=50) String password, String encode, String phoneNumber, boolean newsletterMember, String name) {
-        this.name = name;
+    public User(@NotBlank @Size(min = 3, max = 40) @Email String username,
+                @NotBlank @Size(min = 8, max=50) String password,
+                String firstName,
+                String lastName,
+                String phoneNumber,
+                boolean newsletterMember) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
-        this.password = encode;
+        this.password = password;
         this.newsletterMember = newsletterMember;
         this.dateJoined = LocalDate.now();
         this.roles = new HashSet<>();
@@ -82,29 +92,34 @@ public class User {
         this.orderHistoryList = new ArrayList<>();
     }
 
+    // Helper method to get full name
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", newsletterMember=" + newsletterMember +
                 ", dateJoined=" + dateJoined +
-                ", ordersList= " + orderHistoryList +
                 '}';
     }
 
-    public boolean equals(User u) {
-        return u != null &&
-                this.id.equals(u.id) &&
-                this.name.equals(u.name) &&
-                this.username.equals(u.username) &&
-                this.password.equals(u.password) &&
-                this.phoneNumber.equals(u.phoneNumber) &&
-                this.newsletterMember.equals(u.newsletterMember) &&
-                this.dateJoined.equals(u.dateJoined) &&
-                this.orderHistoryList.equals(u.orderHistoryList);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}

@@ -13,11 +13,9 @@ import java.util.List;
 @Setter
 public class CartItemDTO {
     private Long cartItemId;
-    @JsonIgnore
-    private CartDTO cart;
     private MenuItemDTO menuItem;
     private Integer quantity;
     private BigDecimal price;
     private String memos;
-    private List<String> sauces;
+    private List<CartItemOptionDTO> options;
 }

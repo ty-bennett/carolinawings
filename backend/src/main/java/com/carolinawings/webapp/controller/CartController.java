@@ -43,18 +43,18 @@ public class CartController {
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/cart/items/{menuItemId}")
+    @DeleteMapping("/cart/items/{cartItemId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<CartDTO> removeItemFromCart(@PathVariable Long menuItemId) {
-        CartDTO cartDTO = cartService.removeMenuItemFromCart(menuItemId);
+    public ResponseEntity<CartDTO> removeItemFromCart(@PathVariable Long cartItemId) {
+        CartDTO cartDTO = cartService.removeCartItem(cartItemId);
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 
-    @PatchMapping("/cart/items/{menuItemId}")
+    @PatchMapping("/cart/items/{cartItemId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<CartDTO> updateItemQuantity(@PathVariable Long menuItemId,
+    public ResponseEntity<CartDTO> updateItemQuantity(@PathVariable Long cartItemId,
                                                       @RequestParam Integer quantity) {
-        CartDTO cartDTO = cartService.updateCartItemQuantity(menuItemId, quantity);
+        CartDTO cartDTO = cartService.updateCartItemQuantity(cartItemId, quantity);
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 

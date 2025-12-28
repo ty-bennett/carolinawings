@@ -116,13 +116,10 @@ public class RestaurantServiceImplementation implements RestaurantService {
     }
 
     @Override
-    public Optional<RestaurantDTO> getRestaurantById(Long id) {
+    public RestaurantDTO getRestaurantById(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantID", id));
         RestaurantDTO restaurantDTO = modelMapper.map(restaurant, RestaurantDTO.class);
-        Set<UUID> restaurantAdminIds = restaurant.getRestaurantAdmin()
-                .stream().map(User::getId).collect(Collectors.toSet());
-        restaurantDTO.setRestaurantAdmin(restaurantAdminIds);
-        return Optional.of(restaurantDTO);
+        return restaurantDTO;
 
     }
 

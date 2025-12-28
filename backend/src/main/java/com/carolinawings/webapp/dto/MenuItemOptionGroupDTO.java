@@ -12,6 +12,6 @@ public class MenuItemOptionGroupDTO {
     private String optionType;
     private int minChoices;
     private int maxChoices;
-    private MenuItemDTO menuItem;
     private OptionGroupDTO optionGroup;
+    private boolean required;
 }

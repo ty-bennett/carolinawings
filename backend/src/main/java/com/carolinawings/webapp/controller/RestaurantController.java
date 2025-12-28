@@ -45,7 +45,7 @@ public class RestaurantController {
     // Get a restaurant by its UUID
     @GetMapping("/restaurants/{restaurantId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'RESTAURANT_ADMIN', 'MANAGER')")
-    public ResponseEntity<Optional<RestaurantDTO>> getRestaurantById(@PathVariable Long restaurantId) {
+    public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long restaurantId) {
         return new ResponseEntity<>(restaurantServiceImplementation.getRestaurantById(restaurantId), HttpStatus.OK);
     }
 
@@ -121,17 +121,6 @@ public class RestaurantController {
 //        OrderDTO savedOrderDTO = orderServiceImplementation.createOrderByRestaurant(id, orderDTO);
 //        return new ResponseEntity<>(savedOrderDTO, HttpStatus.CREATED);
 //    }
-
-    // Get all orders by restaurant id with pagination
-    @GetMapping("/restaurants/{restaurantId}/orders")
-    @PreAuthorize("@securityService.canManageRestaurant(#restaurantId)")
-    public ResponseEntity<OrderResponseDTO> getOrders(
-            @RequestParam(name = "pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = ApplicationConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @PathVariable Long restaurantId)
-    {
-        return new ResponseEntity<>(orderServiceImplementation.getAllOrdersByRestaurantPaged(pageNumber, pageSize, restaurantId), HttpStatus.OK);
-    }
 
 //    // Get all menus and paginate results
 //    @GetMapping("/restaurants/{restaurantId}/menus")

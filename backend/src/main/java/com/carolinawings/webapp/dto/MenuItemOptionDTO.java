@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class MenuItemOptionDTO {
     private String id;
     private String name;
-    private OptionGroupDTO group;
+    private boolean defaultSelected;
 }

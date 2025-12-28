@@ -48,6 +48,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+               logger.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
+               logger.debug("Authorization header: {}", request.getHeader("Authorization"));
            }
        } catch(Exception e) {
            logger.error("Cannot set user authenticaion: {}", e);

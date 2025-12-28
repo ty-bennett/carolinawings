@@ -53,7 +53,8 @@ public class CartOptionValidation {
                     User u = new User();
                     u.setUsername("test@example.com");
                     u.setPassword(passwordEncoder.encode("password123"));
-                    u.setName("Test User");
+                    u.setFirstName("Test");
+                    u.setLastName("User");
                     u.setPhoneNumber("8035551234");
                     u.setDateJoined(LocalDate.now());
                     return userRepository.save(u);
@@ -122,7 +123,8 @@ public class CartOptionValidation {
                     User u = new User();
                     u.setUsername("test@example.com");
                     u.setPassword(passwordEncoder.encode("password123"));
-                    u.setName("Test User");
+                    u.setFirstName("Test");
+                    u.setLastName("User");
                     u.setPhoneNumber("8035551234");
                     u.setDateJoined(LocalDate.now());
                     return userRepository.save(u);
@@ -197,7 +199,8 @@ public class CartOptionValidation {
                     User u = new User();
                     u.setUsername("test@example.com");
                     u.setPassword(passwordEncoder.encode("password123"));
-                    u.setName("Test User");
+                    u.setFirstName("Test");
+                    u.setLastName("User");
                     u.setPhoneNumber("8035551234");
                     u.setDateJoined(LocalDate.now());
                     return userRepository.save(u);

@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class CartItemOptionDTO {
     private String id;
-    private CartItemDTO cartItem;
     private String optionGroupName;
     private String optionName;
     private BigDecimal price;

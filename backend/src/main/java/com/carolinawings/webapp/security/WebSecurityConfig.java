@@ -112,7 +112,8 @@ public class WebSecurityConfig {
     //tells which requests to ignore
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (WebSecurity::ignoring);
+
+        return web -> web.ignoring().requestMatchers("/h2-console/**");
     }
 }
 //

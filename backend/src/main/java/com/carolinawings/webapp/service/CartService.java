@@ -10,7 +10,8 @@ import java.util.Map;
 
 public interface CartService {
     CartDTO addMenuItemToCart(AddCartItemDTO addCartItemDTO);
-    CartDTO removeMenuItemFromCart(Long menuItemId);
     CartDTO updateCartItemQuantity(Long menuItemId, Integer quantity);
     CartDTO clearCart();
+
+    CartDTO removeCartItem(Long cartItemId);
 }

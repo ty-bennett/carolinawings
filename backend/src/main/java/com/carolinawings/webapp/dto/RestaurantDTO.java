@@ -16,7 +16,6 @@ public class RestaurantDTO {
     private Long id;
     private String name;
     private String address;
-    private Set<UUID> restaurantAdmin;
     private Set<MenuDTO> menus;
     private RestaurantStatus status;
     private boolean acceptingOrders;

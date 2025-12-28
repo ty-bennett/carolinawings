@@ -67,7 +67,7 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).toList();
         UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
-                toDisplayCase(userDetails.getName()), userDetails.getUsername(), jwtToken, roles, userDetails.getRestaurants());
+                toDisplayCase(userDetails.getFullName()), userDetails.getUsername(), jwtToken, roles, userDetails.getRestaurants());
 
         return ResponseEntity.ok(response);
     }
@@ -80,12 +80,13 @@ public class AuthController {
                     .body(new MessageResponse("Error: Account already registered!" + "ERROR:" + HttpStatus.BAD_REQUEST));
         }
 
-        User user = new User(toDisplayCase(signUpRequest.getUsername()),
-                signUpRequest.getPassword(),
+        User user = new User(
+                signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getFirstName(),
+                signUpRequest.getLastName(),
                 signUpRequest.getPhoneNumber(),
-                signUpRequest.isNewsletterMember(),
-                signUpRequest.getName()
+                signUpRequest.isNewsletterMember()
         );
 
         Set<String> setRoles = signUpRequest.getRoles();
@@ -118,6 +119,7 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
 
     private static String toDisplayCase(String s) {
         final String ACTIONABLE_DELIMITERS = " '-/"; // these cause the character following

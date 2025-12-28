@@ -1,11 +1,11 @@
 package com.carolinawings.webapp.dto;
 
-import com.carolinawings.webapp.model.MenuItem;
-import com.carolinawings.webapp.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,9 +13,21 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
+    private UUID id;
+    private String status;  // Maps from OrderStatus enum
+    private BigDecimal subtotal;
+    private BigDecimal totalTax;
+    private BigDecimal totalPrice;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime pickupTime;
+    private String customerName;
+    private String customerPhone;
+    private String customerNotes;
+    private String orderType;
+    private List<OrderItemDTO> items;
+
+    // For nested objects, use IDs or simplified DTOs
     private Long restaurantId;
-    private String pickupTime;
-    private String orderAmount;
-    private UserResponseDTO userAssignedTo;
-    private List<Long> listOfItems;
+    private String restaurantName;
 }

@@ -32,7 +32,7 @@ public class AuthUtil {
     }
 
     public User loggedInUser(){
-        if(testUser.get() == null){
+        if(testUser.get() != null){
             return testUser.get();
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

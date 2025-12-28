@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,5 +16,5 @@ public class AddCartItemDTO {
     private Long cartId;
     private Integer quantity;
     private String memos;
-    private List<SelectedOptionGroupDTO> selectedOptionGroups;
+    private List<SelectedOptionGroupDTO> selectedOptionGroups = new ArrayList<>();
 }

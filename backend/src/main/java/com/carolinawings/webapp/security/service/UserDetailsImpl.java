@@ -1,17 +1,13 @@
 package com.carolinawings.webapp.security.service;
 
-import com.carolinawings.webapp.dto.RestaurantDTO;
 import com.carolinawings.webapp.model.Restaurant;
 import com.carolinawings.webapp.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.io.Serial;
 import java.util.*;
@@ -24,45 +20,48 @@ public class UserDetailsImpl implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private static ModelMapper modelMapper;
-
     private UUID id;
     private String username;
-    private String name;
+    private String firstName;
+    private String lastName;
     private Set<Long> restaurants;
     @JsonIgnore
     private String password;
-    private Collection<? extends  GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(UUID id, String username,String name, String password, Collection<? extends GrantedAuthority> authorities, Set<Long> restaurants) {
+    public UserDetailsImpl(UUID id, String username, String firstName, String lastName,
+                           String password, Set<Long> restaurants,
+                           Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
-        this.authorities = authorities;
         this.restaurants = restaurants;
+        this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user)
-    {
+    public static UserDetailsImpl build(User user) {
         List<SimpleGrantedAuthority> grantedAuthorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .toList();
-        Set<Long> restaurants = user.getRestaurants().stream()
+
+        Set<Long> restaurants = user.getRestaurants() != null
+                ? user.getRestaurants().stream()
                 .map(Restaurant::getId)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet())
+                : new HashSet<>();
 
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
-                user.getName(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getPassword(),
-                grantedAuthorities,
-                restaurants
+                restaurants,
+                grantedAuthorities
         );
     }
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -91,7 +90,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return  true;
+        return true;
     }
 
     @Override
@@ -99,22 +98,18 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    public String getName() {
-        return this.name;
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
-    public Set<Long> getRestaurants()
-    {
+    public Set<Long> getRestaurants() {
         return this.restaurants;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if(this == o)
-            return true;
-        if(o == null || getClass() != o.getClass())
-            return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
     }
@@ -123,6 +118,4 @@ public class UserDetailsImpl implements UserDetails {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-
 }

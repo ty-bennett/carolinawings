@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CartDTO {
     private Long cartId;
-    private BigDecimal totalPrice = new BigDecimal(0);
-    @JsonManagedReference
-    private List<CartItemDTO> menuItems = new ArrayList<>();
+    private BigDecimal totalPrice;
+    private List<CartItemDTO> cartItems;
 }

@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CartItemChoice {
+public class CartItemOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

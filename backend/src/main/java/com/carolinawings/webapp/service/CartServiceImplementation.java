@@ -7,7 +7,6 @@ import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
 import com.carolinawings.webapp.util.AuthUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -148,7 +147,7 @@ public class CartServiceImplementation implements CartService {
         for (Map.Entry<MenuItemOptionGroup, List<MenuItemOption>> entry : selectionsByGroup.entrySet()) {
 
             for (MenuItemOption option : entry.getValue()) {
-                CartItemChoice choice = CartItemChoice.builder()
+                CartItemOption choice = CartItemOption.builder()
                         .cartItem(cartItem)
                         .menuItemOption(option)
                         .choiceType(entry.getKey().getOptionGroup().getName())
@@ -175,26 +174,8 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
-    public CartDTO removeMenuItemFromCart(Long menuItemId) {
-        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
-                        authUtil.loggedInEmail(), CartStatus.ACTIVE)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart", "user", authUtil.loggedInEmail()));
-
-        CartItem itemToRemove = cart.getCartItems().stream()
-                .filter(item -> item.getMenuItem().getId().equals(menuItemId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "menuItemId", menuItemId));
-
-        cart.getCartItems().remove(itemToRemove);
-        recalculateCartTotal(cart);
-        Cart saved = cartRepository.save(cart);
-
-        return convertToDTO(saved);
-    }
-
-    @Override
-    public CartDTO updateCartItemQuantity(Long menuItemId, Integer quantity) {
-        if (quantity < 1) {
+    public CartDTO updateCartItemQuantity(Long cartItemId, Integer quantity) {
+        if (quantity < 0) {
             throw new APIException("Invalid quantity");
         }
 
@@ -203,10 +184,12 @@ public class CartServiceImplementation implements CartService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "user", authUtil.loggedInEmail()));
 
         CartItem itemToUpdate = cart.getCartItems().stream()
-                .filter(item -> item.getMenuItem().getId().equals(menuItemId))
+                .filter(item -> item.getId().equals(cartItemId))
                 .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "menuItemId", menuItemId));
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "cartItemId", cartItemId));
+
         itemToUpdate.setQuantity(quantity);
+        itemToUpdate.setPrice(itemToUpdate.getMenuItem().getPrice().multiply(new BigDecimal(quantity)));
         recalculateCartTotal(cart);
 
         Cart saved = cartRepository.save(cart);
@@ -228,6 +211,26 @@ public class CartServiceImplementation implements CartService {
         return convertToDTO(saved);
     }
 
+    @Override
+    public CartDTO removeCartItem(Long cartItemId) {
+        Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
+                        authUtil.loggedInEmail(), CartStatus.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "user", authUtil.loggedInEmail()));
+
+        CartItem itemToRemove = cart.getCartItems().stream()
+                .filter(item -> item.getId().equals(cartItemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "cartItemId", cartItemId));
+
+        cart.getCartItems().remove(itemToRemove);
+        recalculateCartTotal(cart);
+        Cart saved = cartRepository.save(cart);
+
+        return convertToDTO(saved);
+    }
+
+
+
     public CartDTO getUserCart(String userEmail, Long cartId) {
         Cart cart = cartRepository.findCartByUser_UsernameAndCartStatusOrderByIdDesc(
                         authUtil.loggedInEmail(), CartStatus.ACTIVE)
@@ -236,7 +239,7 @@ public class CartServiceImplementation implements CartService {
         CartDTO cartDTO = convertToDTO(cart);
         List<CartItem> cartItemList = cart.getCartItems().stream().toList();
         List<CartItemDTO> cartItemDTOs = cartItemList.stream().map(item -> mapCartItemToDTO(item)).toList();
-        cartDTO.setMenuItems(cartItemDTOs);
+        cartDTO.setCartItems(cartItemDTOs);
         return cartDTO;
     }
 
@@ -248,7 +251,7 @@ public class CartServiceImplementation implements CartService {
                     ? item.getMenuItem().getPrice()
                     : BigDecimal.ZERO;
 
-            for (CartItemChoice choice : item.getChoices()) {
+            for (CartItemOption choice : item.getChoices()) {
                 if (choice.getMenuItemOption() != null && choice.getMenuItemOption().getPrice() != null) {
                     itemPrice = itemPrice.add(choice.getMenuItemOption().getPrice());
                 }
@@ -277,7 +280,7 @@ public class CartServiceImplementation implements CartService {
         List<CartItemDTO> cartItemDTOs = cart.getCartItems().stream()
                 .map(this::mapCartItemToDTO)
                 .toList();
-        dto.setMenuItems(cartItemDTOs);
+        dto.setCartItems(cartItemDTOs);
         return dto;
     }
 
@@ -290,12 +293,11 @@ public class CartServiceImplementation implements CartService {
 
         // Map MenuItem
         dto.setMenuItem(mapMenuItemToDTO(cartItem.getMenuItem()));
+        List<CartItemOptionDTO> cartItemOptionDTOS = cartItem.getChoices().stream()
+                        .map(item -> modelMapper.map(item, CartItemOptionDTO.class))
+                                .toList();
+        dto.setOptions(cartItemOptionDTOS);
 
-        // Map selected options (sauces, dressings, etc.) as list of option names
-        List<String> selectedOptionNames = cartItem.getChoices().stream()
-                .map(choice -> choice.getMenuItemOption().getName())
-                .toList();
-        dto.setSauces(selectedOptionNames);
         return dto;
     }
 
@@ -353,7 +355,6 @@ public class CartServiceImplementation implements CartService {
         OptionGroupDTO groupDTO = new OptionGroupDTO();
         groupDTO.setId(group.getId() != null ? group.getId().toString() : null);
         groupDTO.setName(group.getName());
-        dto.setGroup(groupDTO);
 
         return dto;
     }

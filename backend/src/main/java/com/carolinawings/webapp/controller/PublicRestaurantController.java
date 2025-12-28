@@ -24,7 +24,6 @@ public class PublicRestaurantController {
 
     @GetMapping("/restaurants/{restaurantId}")
     public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable Long restaurantId) {
-        return new ResponseEntity<>(restaurantService.getRestaurantById(restaurantId)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found")), HttpStatus.OK);
+        return  new ResponseEntity<>(restaurantService.getRestaurantById(restaurantId), HttpStatus.OK);
     }
 }

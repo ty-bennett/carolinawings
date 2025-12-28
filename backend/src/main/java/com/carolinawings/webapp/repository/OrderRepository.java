@@ -20,7 +20,6 @@ import java.util.UUID;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
     Optional<Order> findOrderById(UUID id);
-
     Page<Order> findByRestaurantIdAndStatus(Long restaurantId, OrderStatus status, Pageable pageable);
     Page<Order> findByRestaurantId(Long restaurantId, Pageable pageable);
 }

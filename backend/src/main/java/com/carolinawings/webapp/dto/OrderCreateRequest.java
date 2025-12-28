@@ -29,7 +29,7 @@ public class OrderCreateRequest {
     private String customerNotes;
     // an enum of type (only 1)
     @NotNull
-    private OrderType orderType;
+    private OrderType orderType = OrderType.PICKUP;
     // a string to be able to parse a pickup time (default when creating an order is 15 minutes from when req is made)
     private String requestedPickupTime;
 }

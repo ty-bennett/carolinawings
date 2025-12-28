@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface RestaurantService {
     RestaurantResponse getAllRestaurants();
     RestaurantResponse getAllRestaurantsPaged(Integer page, Integer pageSize);
-    Optional<RestaurantDTO> getRestaurantById(Long id);
+    RestaurantDTO getRestaurantById(Long id);
     RestaurantDTO createRestaurant(RestaurantDTO restaurant);
     RestaurantDTO deleteRestaurant(Long id);
     RestaurantDTO updateRestaurant(RestaurantDTO restaurantDTO, Long id);

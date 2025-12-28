@@ -17,17 +17,26 @@ import java.util.Set;
 @NoArgsConstructor
 public class SignUpRequest {
     @NotBlank
-    @Size(min = 2, max = 50)
-    private String name;
+    @Size(min = 1, max = 30)
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 1, max = 30)
+    private String lastName;
+
     @NotBlank
     @Size(min = 3, max = 40)
     @Email
     private String username;
+
     @NotBlank
     private String phoneNumber;
+
     @NotNull
     private boolean newsletterMember;
+
     private Set<String> roles;
+
     @NotBlank
     @Size(min = 8, max=50)
     private String password;

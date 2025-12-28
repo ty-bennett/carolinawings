@@ -26,7 +26,7 @@ public class OrderMapper {
                         order.getRestaurant().getId()
                         : null)
                 .restaurantName(order.getRestaurant().getName())
-                .customerName(order.getUser() != null ? order.getUser().getName() : null)
+                .customerName(order.getUser() != null ? order.getUser().getFullName() : null)
                 .customerPhone(order.getUser() != null ? order.getUser().getPhoneNumber() : null)
                 .customerNotes(order.getCustomerNotes())
                 .orderType(OrderType.PICKUP)

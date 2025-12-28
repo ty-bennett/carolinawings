@@ -4,10 +4,7 @@ Written by Ty Bennett
 
 package com.carolinawings.webapp.service;
 
-import com.carolinawings.webapp.dto.OrderCreateRequest;
-import com.carolinawings.webapp.dto.OrderDTO;
-import com.carolinawings.webapp.dto.OrderResponseDTO;
-import com.carolinawings.webapp.dto.PagedOrderResponseDTO;
+import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.enums.CartStatus;
 import com.carolinawings.webapp.enums.OrderStatus;
 import com.carolinawings.webapp.exceptions.APIException;
@@ -27,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -64,8 +60,60 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public Optional<OrderDTO> getOrderById(UUID id) {
-        Optional<Order> order = orderRepository.findById(id);
-        return order.map(element -> modelMapper.map(element, OrderDTO.class));
+        return orderRepository.findById(id).map(this::mapOrderToDTO);
+    }
+
+    private OrderDTO mapOrderToDTO(Order order) {
+        OrderDTO dto = new OrderDTO();
+        dto.setId(order.getId());
+        dto.setStatus(order.getStatus().name());
+        dto.setSubtotal(order.getSubtotal());
+        dto.setTotalTax(order.getTotalTax());
+        dto.setTotalPrice(order.getTotalPrice());
+        dto.setCreatedAt(order.getCreatedAt());
+        dto.setUpdatedAt(order.getUpdatedAt());
+        dto.setPickupTime(order.getPickupTime());
+        dto.setCustomerName(order.getCustomerName());
+        dto.setCustomerPhone(order.getCustomerPhone());
+        dto.setCustomerNotes(order.getCustomerNotes());
+        dto.setOrderType(order.getOrderType().name());
+        dto.setRestaurantId(order.getRestaurant().getId());
+        dto.setRestaurantName(order.getRestaurant().getName());
+
+        if (order.getItems() != null) {
+            dto.setItems(order.getItems().stream()
+                    .map(this::mapOrderItemToDTO)
+                    .toList());
+        }
+
+        return dto;
+    }
+
+    private OrderItemDTO mapOrderItemToDTO(OrderItem item) {
+        OrderItemDTO dto = new OrderItemDTO();
+        dto.setId(item.getId());
+        dto.setMenuItemId(item.getMenuItemId());
+        dto.setMenuItemName(item.getMenuItemName());
+        dto.setUnitPrice(item.getMenuItemPrice());
+        dto.setQuantity(item.getQuantity());
+        dto.setLineTotal(item.getTotalPrice());
+
+        if (item.getOptions() != null) {
+            dto.setOptions(item.getOptions().stream()
+                    .map(this::mapOrderItemOptionToDTO)
+                    .toList());
+        }
+
+        return dto;
+    }
+
+    private OrderItemOptionDTO mapOrderItemOptionToDTO(OrderItemOption option) {
+        OrderItemOptionDTO dto = new OrderItemOptionDTO();
+        dto.setOptionId(option.getId());
+        dto.setOptionGroupName(option.getGroupName());
+        dto.setOptionName(option.getOptionName());
+        dto.setExtraPrice(option.getExtraPrice());
+        return dto;
     }
 
     @Override
@@ -155,7 +203,7 @@ public class OrderServiceImplementation implements OrderService {
             // total price will be filled by an @PrePersist method
             List<OrderItemOption> options = new ArrayList<>();
 
-            for(CartItemChoice choice : cartItem.getChoices()) {
+            for(CartItemOption choice : cartItem.getChoices()) {
                 MenuItemOption menuItemOption = choice.getMenuItemOption();
 
                 OrderItemOption orderItemOption = new OrderItemOption();

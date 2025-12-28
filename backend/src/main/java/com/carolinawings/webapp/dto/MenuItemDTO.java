@@ -1,6 +1,5 @@
 package com.carolinawings.webapp.dto;
 
-import com.carolinawings.webapp.model.MenuItemOptionGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +19,5 @@ public class MenuItemDTO {
     private BigDecimal price;
     private String category;
     private Boolean enabled;
-    @JsonIgnore
     private List<MenuItemOptionGroupDTO> optionGroups;
 }

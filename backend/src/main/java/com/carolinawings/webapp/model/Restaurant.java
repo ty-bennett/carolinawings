@@ -42,6 +42,7 @@ public class Restaurant {
     private Set<Menu> menus;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderBy("dayOfWeek ASC")
     private Set<RestaurantHours> hours;
 
     public Restaurant(String name, String address, Set<User> restaurantAdmin, Set<Menu> menus) {
