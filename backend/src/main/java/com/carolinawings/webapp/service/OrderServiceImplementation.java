@@ -10,6 +10,8 @@ import com.carolinawings.webapp.enums.OrderStatus;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
 import com.carolinawings.webapp.mapper.OrderMapper;
+import com.carolinawings.webapp.messaging.OrderMessage;
+import com.carolinawings.webapp.messaging.OrderProducer;
 import com.carolinawings.webapp.model.*;
 import com.carolinawings.webapp.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,9 @@ public class OrderServiceImplementation implements OrderService {
     private UserRepository userRepository;
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private OrderProducer orderProducer;
 
     public OrderServiceImplementation(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -224,7 +229,34 @@ public class OrderServiceImplementation implements OrderService {
         cart.setCartStatus(CartStatus.CHECKED_OUT);
         cartRepository.save(cart);
 
-        return OrderMapper.toOrderResponseDTO(saved);
+        // try catch in case rabbit mq servicve is down
+        try {
+            OrderMessage orderMessage = OrderMessage.builder()
+                    .orderId(saved.getId())
+                    .restaurantId(saved.getRestaurant().getId())
+                    .restaurantName(saved.getRestaurant().getName())
+                    .customerName(saved.getCustomerName())
+                    .customerPhone(saved.getCustomerPhone())
+                    .customerNotes(saved.getCustomerNotes())
+                    .pickupTime(saved.getPickupTime())
+                    .totalPrice(saved.getTotalPrice())
+                    .items(saved.getItems().stream()
+                            .map(item -> OrderMessage.OrderItemMessage.builder()
+                                    .name(item.getMenuItemName())
+                                    .quantity(item.getQuantity())
+                                    .price(item.getTotalPrice())
+                                    .options(item.getOptions().stream()
+                                            .map(opt -> opt.getOptionName())
+                                            .toList())
+                                    .build())
+                            .toList())
+                    .build();
+
+            orderProducer.sendOrderToKitchen(orderMessage);
+        } catch (Exception e) {
+            log.error("Failed to send order {} to kitchen queue: {}", saved.getId(), e.getMessage());
+            // Order is still saved - kitchen can view it in admin panel
+        }        return OrderMapper.toOrderResponseDTO(saved);
     }
 
     @Override
