@@ -111,16 +111,29 @@ public class MenuServiceImplementation implements MenuService {
     public MenuDTO updateMenu(MenuDTO menuDTO, Long restaurantId, Long menuId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("restaurant", "restaurantId", restaurantId));
+
         List<Long> menuIdList = restaurant.getMenus().stream().map(Menu::getId).toList();
-        if(menuIdList.contains(menuId)) {
-           Menu menu = menuRepository.findById(menuId)
-                   .orElseThrow(() -> new ResourceNotFoundException("menu", "menuId", menuId));
-           Menu newMenu = modelMapper.map(menuDTO, Menu.class);
-           newMenu.setId(menu.getId());
-           Menu savedMenuToRepo = menuRepository.save(menu);
-           return modelMapper.map(savedMenuToRepo, MenuDTO.class);
+
+        if (!menuIdList.contains(menuId)) {
+            throw new ResourceNotFoundException("menu", "menuId", menuId);
         }
-        return new MenuDTO();
+
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("menu", "menuId", menuId));
+
+        // Update fields
+        if (menuDTO.getName() != null) {
+            menu.setName(menuDTO.getName());
+        }
+        if (menuDTO.getDescription() != null) {
+            menu.setDescription(menuDTO.getDescription());
+        }
+        if (menuDTO.getIsPrimary() != null) {
+            menu.setIsPrimary(menuDTO.getIsPrimary());
+        }
+
+        Menu savedMenu = menuRepository.save(menu);
+        return modelMapper.map(savedMenu, MenuDTO.class);
     }
 
     @Override
@@ -185,12 +198,20 @@ public class MenuServiceImplementation implements MenuService {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu", "menuId", menuId));
 
-        if(restaurant.getMenus().contains(menu)) {
-            restaurant.getMenus().remove(menu);
-            menuRepository.deleteById(menuId);
-            menuRepository.flush();
-            restaurantRepository.save(restaurant);
-        } else throw new APIException("Menu with name "+ menu.getId() + " does not belong to restaurant!");
+        if (!restaurant.getMenus().contains(menu)) {
+            throw new APIException("Menu with ID " + menu.getId() + " does not belong to restaurant!");
+        }
+
+        // Clear menu items first to avoid transient object issues
+        menu.getMenuItemsList().clear();
+        menuRepository.save(menu);
+
+        // Remove from restaurant
+        restaurant.getMenus().remove(menu);
+        restaurantRepository.save(restaurant);
+
+        // Now delete the menu
+        menuRepository.delete(menu);
     }
 
     @Override

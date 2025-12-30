@@ -4,9 +4,11 @@ import com.carolinawings.webapp.dto.*;
 import com.carolinawings.webapp.enums.RoleName;
 import com.carolinawings.webapp.exceptions.APIException;
 import com.carolinawings.webapp.exceptions.ResourceNotFoundException;
+import com.carolinawings.webapp.model.CartItem;
 import com.carolinawings.webapp.model.Menu;
 import com.carolinawings.webapp.model.MenuItem;
 import com.carolinawings.webapp.model.User;
+import com.carolinawings.webapp.repository.CartItemRepository;
 import com.carolinawings.webapp.repository.MenuItemRepository;
 import com.carolinawings.webapp.repository.MenuRepository;
 import com.carolinawings.webapp.util.AuthUtil;
@@ -36,8 +38,8 @@ public class MenuItemServiceImplementation implements MenuItemService {
     private MenuRepository menuRepository;
     @Autowired
     private AuthUtil authUtil;
-
     @Autowired
+    private CartItemRepository cartItemRepository;
 
     public MenuItemServiceImplementation(MenuItemRepository menuItemRepository) {
         this.menuItemRepository = menuItemRepository;
@@ -141,17 +143,56 @@ public class MenuItemServiceImplementation implements MenuItemService {
     @Override
     public MenuItemDTO deleteMenuItem(Long id) {
         MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", Long.valueOf(id)));
+                .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", id));
+
+        // Remove cart items that reference this menu item
+        List<CartItem> cartItems = cartItemRepository.findByMenuItemId(id);
+        for (CartItem cartItem : cartItems) {
+            cartItem.setMenuItem(null);
+            cartItemRepository.delete(cartItem);
+        }
+
+        // Remove from menu's list
+        Menu menu = menuItem.getMenu();
+        if (menu != null) {
+            menu.getMenuItemsList().remove(menuItem);
+        }
+
+        // Clear option groups
+        menuItem.getOptionGroups().clear();
+        menuItemRepository.save(menuItem);
+
+        // Now delete
         menuItemRepository.delete(menuItem);
+
         return modelMapper.map(menuItem, MenuItemDTO.class);
     }
 
     @Override
     public MenuItemDTO updateMenuItem(MenuItemDTO menuItemDTO, Long id) {
-        MenuItem existingMenuItem = menuItemRepository.findById(id)
+        MenuItem menuItem = menuItemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("MenuItem", "menuItemId", id));
-        MenuItem menuItem = modelMapper.map(menuItemDTO, MenuItem.class);
-        menuItem.setId(id);
+
+        // Update fields directly
+        if (menuItemDTO.getName() != null) {
+            menuItem.setName(menuItemDTO.getName());
+        }
+        if (menuItemDTO.getDescription() != null) {
+            menuItem.setDescription(menuItemDTO.getDescription());
+        }
+        if (menuItemDTO.getPrice() != null) {
+            menuItem.setPrice(menuItemDTO.getPrice());
+        }
+        if (menuItemDTO.getCategory() != null) {
+            menuItem.setCategory(menuItemDTO.getCategory());
+        }
+        if (menuItemDTO.getEnabled() != null) {
+            menuItem.setEnabled(menuItemDTO.getEnabled());
+        }
+        if (menuItemDTO.getImageUrl() != null) {
+            menuItem.setImageURL(menuItemDTO.getImageUrl());
+        }
+
         MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
         return modelMapper.map(updatedMenuItem, MenuItemDTO.class);
     }

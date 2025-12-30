@@ -175,14 +175,19 @@ public class SecurityService {
         }
 
         Menu menu = menuItem.getMenu();
-        if(menu == null) return false;
+        if(menu == null) {
+            return false;
+        }
 
         Restaurant restaurant = menu.getRestaurant();
-        if(restaurant == null) return false;
+        if(restaurant == null) {
+            return false;
+        }
 
         if(currentUser.getRoles().stream().anyMatch(
-                role -> role.getName() == RoleName.RESTAURANT_ADMIN || role.getName() == RoleName.MANAGER)) {
-            return currentUser.getRestaurants().contains(restaurant);
+                role -> role.getName() == RoleName.ADMIN || role.getName() == RoleName.RESTAURANT_ADMIN || role.getName() == RoleName.MANAGER)) {
+            boolean contains = currentUser.getRestaurants().contains(restaurant);
+            return contains;
         }
 
         return false;

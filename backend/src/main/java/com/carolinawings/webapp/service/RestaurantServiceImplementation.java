@@ -18,6 +18,7 @@ import com.carolinawings.webapp.model.RestaurantHours;
 import com.carolinawings.webapp.model.User;
 import com.carolinawings.webapp.repository.RestaurantHoursRepository;
 import com.carolinawings.webapp.repository.RestaurantRepository;
+import com.carolinawings.webapp.repository.UserRepository;
 import com.carolinawings.webapp.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -41,12 +42,14 @@ public class RestaurantServiceImplementation implements RestaurantService {
     private AuthUtil authUtil;
 
     private final RestaurantHoursRepository restaurantHoursRepository;
+    private final UserRepository userRepository;
 
-    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository, ModelMapper modelMapper, AuthUtil authUtil, RestaurantHoursRepository restaurantHoursRepository) {
+    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository, ModelMapper modelMapper, AuthUtil authUtil, RestaurantHoursRepository restaurantHoursRepository,  UserRepository userRepository) {
         this.restaurantRepository = restaurantRepository;
         this.modelMapper = modelMapper;
         this.authUtil = authUtil;
         this.restaurantHoursRepository = restaurantHoursRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -127,7 +130,29 @@ public class RestaurantServiceImplementation implements RestaurantService {
     public RestaurantDTO deleteRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant", "restaurantId", id));
+
+        // Remove restaurant from all users' restaurant sets
+        if (restaurant.getRestaurantAdmin() != null) {
+            for (User user : restaurant.getRestaurantAdmin()) {
+                user.getRestaurants().remove(restaurant);
+                userRepository.save(user);
+            }
+            restaurant.getRestaurantAdmin().clear();
+        }
+
+        // Clear menus (will cascade to menu items)
+        if (restaurant.getMenus() != null) {
+            restaurant.getMenus().clear();
+        }
+
+        // Clear hours
+        if (restaurant.getHours() != null) {
+            restaurant.getHours().clear();
+        }
+
+        restaurantRepository.save(restaurant);
         restaurantRepository.delete(restaurant);
+
         return modelMapper.map(restaurant, RestaurantDTO.class);
     }
 
