@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class OrderConsumer {
 
 
-    @RabbitListener(queues = RabbitMQConfig.QUEUE_RESTAURANT_1)
+    @RabbitListener(queues = "orders.restaurant.*")
     public void receiveOrder(OrderMessage orderMessage) {
         log.info("========== NEW ORDER RECEIVED ==========");
         log.info("Order ID: {}", orderMessage.getOrderId());

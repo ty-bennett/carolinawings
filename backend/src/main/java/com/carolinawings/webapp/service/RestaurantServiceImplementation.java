@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class RestaurantServiceImplementation implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-
+    private final QueueService queueService;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -44,8 +44,9 @@ public class RestaurantServiceImplementation implements RestaurantService {
     private final RestaurantHoursRepository restaurantHoursRepository;
     private final UserRepository userRepository;
 
-    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository, ModelMapper modelMapper, AuthUtil authUtil, RestaurantHoursRepository restaurantHoursRepository,  UserRepository userRepository) {
+    public RestaurantServiceImplementation(RestaurantRepository restaurantRepository, QueueService queueService, ModelMapper modelMapper, AuthUtil authUtil, RestaurantHoursRepository restaurantHoursRepository, UserRepository userRepository) {
         this.restaurantRepository = restaurantRepository;
+        this.queueService = queueService;
         this.modelMapper = modelMapper;
         this.authUtil = authUtil;
         this.restaurantHoursRepository = restaurantHoursRepository;
@@ -115,6 +116,7 @@ public class RestaurantServiceImplementation implements RestaurantService {
         restaurant.setEstimatedPickupMinutes(15);
 
         Restaurant saved = restaurantRepository.save(restaurant);
+        queueService.createQueueForRestaurant(saved.getId());
         return modelMapper.map(saved, RestaurantDTO.class);
     }
 

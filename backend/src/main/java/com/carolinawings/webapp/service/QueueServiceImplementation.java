@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,9 @@ import org.springframework.stereotype.Service;
 public class QueueServiceImplementation implements QueueService {
 
     private final RabbitAdmin rabbitAdmin;
-    private final DirectExchange ordersExchange;
+    private final TopicExchange ordersExchange;
 
-    public QueueServiceImplementation(RabbitAdmin rabbitAdmin, DirectExchange ordersExchange) {
+    public QueueServiceImplementation(RabbitAdmin rabbitAdmin, TopicExchange ordersExchange) {
         this.rabbitAdmin = rabbitAdmin;
         this.ordersExchange = ordersExchange;
     }

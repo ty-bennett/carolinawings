@@ -15,8 +15,8 @@ public class RabbitMQConfig {
     public static final String EXCHANGE_NAME = "orders.exchange";
 
     @Bean
-    public DirectExchange ordersExchange() {
-        return new DirectExchange(EXCHANGE_NAME);
+    public TopicExchange ordersExchange() {
+        return new TopicExchange(EXCHANGE_NAME);
     }
 
     @Bean
