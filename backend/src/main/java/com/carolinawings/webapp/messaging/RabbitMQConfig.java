@@ -13,6 +13,21 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String EXCHANGE_NAME = "orders.exchange";
+    public static final String ALL_ORDERS_QUEUE = "orders.all";
+    public static final String WILDCARD_ROUTING_KEY = "orders.restaurant.*";
+
+    @Bean
+    public Queue allOrdersQueue() {
+        return new Queue(ALL_ORDERS_QUEUE, true);
+    }
+
+    @Bean
+    public Binding allOrdersBinding(Queue allOrdersQueue, TopicExchange ordersExchange) {
+        return BindingBuilder
+                .bind(allOrdersQueue)
+                .to(ordersExchange)
+                .with(WILDCARD_ROUTING_KEY);
+    }
 
     @Bean
     public TopicExchange ordersExchange() {
