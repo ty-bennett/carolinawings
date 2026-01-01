@@ -11,7 +11,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import AddMenuModal from "../components/AddMenuModal";
 
 
-function MenuPage() {
+export function MenuPage() {
   const [menus, setMenus] = useState([]);
   const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);

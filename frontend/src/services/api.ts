@@ -157,6 +157,14 @@ export interface CreateOrderRequest {
   requestedPickupTime?: string;
 }
 
+export interface PaginatedResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+};
+
 // Axios instance
 
 const api = axios.create({
@@ -180,6 +188,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      console.log("401 detected, redirecting to login");
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -198,10 +207,10 @@ export const authAPI = {
 
 // Public API
 export const publicAPI = {
-  getRestaurants: () => api.get<Restaurant[]>('/public/restaurants'),
+  getRestaurants: () => api.get<PaginatedResponse<Restaurant>>('/public/restaurants'),
   getRestaurant: (id: number) => api.get<Restaurant>(`/public/restaurants/${id}`),
-  getMenus: (restaurantId: number) => api.get<Menu[]>(`/public/restaurants/${restaurantId}/menus`),
-  getMenuItems: (menuId: number) => api.get<MenuItem[]>(`/public/menus/${menuId}/items`),
+  getMenus: (restaurantId: number) => api.get<PaginatedResponse<Menu>>(`/public/restaurants/${restaurantId}/menus`),
+  getMenuItems: (menuId: number) => api.get<PaginatedResponse<MenuItem>>(`/public/menus/${menuId}/items`),
 };
 
 // Cart API

@@ -1,44 +1,43 @@
 import CompanyForm from "../components/CompanyForm";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Companies() {
   const navigate = useNavigate();
-  const [roles, setRoles] = useState([]);
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    const roles = JSON.parse(localStorage.getItem("roles"));
-    setRoles(roles || []);
+    if (isLoading) return; // Wait for auth to load
 
-    
-
-    if (!roles) {
-      // User is not logged in
+    if (!isAuthenticated) {
       navigate("/login");
     } else if (
-      roles.includes("ROLE_RESTAURANT_ADMIN") ||
-      roles.includes("ROLE_MANAGER") ||
-      roles.includes("ROLE_USER")) {
-      // Logged in but wrong role
+      user?.roles.includes("RESTAURANT_ADMIN") ||
+      user?.roles.includes("MANAGER") ||
+      user?.roles.includes("USER")
+    ) {
       navigate("/unauthorized");
     }
-  }, [navigate]);
+  }, [isAuthenticated, isLoading, user, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
       <div className="flex">
         <div className="bg-stone-200 w-1/6 h-screen">
           <h2 className="bg-darkred text-white text-2xl text-center">Admin Panel</h2>
-          <button className="bg-darkred text-white text-xl w-full mt-6 rounded-sm cursor-pointer py-2"> Companies</button>
-
+          <button className="bg-darkred text-white text-xl w-full mt-6 rounded-sm cursor-pointer py-2">Companies</button>
         </div>
-                <div className="w-5/6 p-6">
+        <div className="w-5/6 p-6">
           <CompanyForm />
         </div>
-      </div> 
+      </div>
     </>
   );
 }
-
 
 export default Companies;
