@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import { publicAPI, Restaurant, Menu, MenuItem } from '../services/api';
+import MenuItemModal from '../components/MenuItemModal';
 
 function OrderMenu() {
   const { restaurantId } = useParams<{ restaurantId: string }>();
@@ -10,6 +11,7 @@ function OrderMenu() {
   const [menus, setMenus] = useState<Menu[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -149,9 +151,10 @@ function OrderMenu() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-lg shadow p-4 hover:shadow-md transition cursor-pointer"
+                <div
+                  key={item.id}
+                  onClick={() => setSelectedItem(item)}
+                  className="bg-white rounded-lg shadow p-4 hover:shadow-md transition cursor-pointer"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -176,6 +179,12 @@ function OrderMenu() {
           ))}
         </div>
       </main>
+      {selectedItem && (
+      <MenuItemModal 
+        item={selectedItem} 
+        onClose={() => setSelectedItem(null)} 
+      />
+      )}
       <Footer />
     </>
   );

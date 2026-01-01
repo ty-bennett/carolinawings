@@ -64,6 +64,7 @@ export interface MenuItemOptionGroup {
   minChoices: number;
   maxChoices: number;
   optionGroup: OptionGroup;
+  required: boolean;
 }
 
 export interface OptionGroup {
