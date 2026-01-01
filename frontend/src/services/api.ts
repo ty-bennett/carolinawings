@@ -178,8 +178,9 @@ const api = axios.create({
 // Attach jwtToken to every request 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
+  console.log('Request interceptor:', config.url, 'Token exists:', token?.substring(0, 20));
   if (token) {
-    config.headers.Authorization = 'Bearer ${token}';
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -188,12 +189,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      console.log("401 detected, redirecting to login");
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
-    }
+    console.log('API error interceptor:', error.response?.status, error.config?.url)
     return Promise.reject(error);
   }
 )

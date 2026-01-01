@@ -15,7 +15,7 @@ const NavBar = () => {
   const toggleDropdown = () => setShowUserDropdown(!showUserDropdown);
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
   };
 
   const { user } = useAuth();
@@ -31,7 +31,7 @@ const NavBar = () => {
         <img src={wood} className={navbar.backgroundimg}></img>
       </div>
       <div className={navbar.gridchildbutton}>
-        <button className={navbar.ordernow}>Order Now</button>
+        <NavLink to="/order" className={navbar.ordernow}>Order Now</NavLink>
       </div>
       <div className={navbar.gridchildnav}>
         <div className={navbar.navbarposition}>

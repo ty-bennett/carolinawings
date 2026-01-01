@@ -100,9 +100,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Fetch cart when user logs in
   useEffect(() => {
+    console.log('CartContext useEffect:', { isAuthenticated, user, roles: user?.roles });
     if (isAuthenticated && user && user.roles.includes('USER')) {
+      console.log('fetching cart...');
       fetchCart();
     } else {
+      console.log('not fetching cart')
       setCart(null);
     }
   }, [isAuthenticated, user]);
