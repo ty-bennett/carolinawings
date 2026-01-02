@@ -99,7 +99,7 @@ public class CartServiceImplementation implements CartService {
                                 new APIException("Invalid option selected")
                         );
 
-                if (!option.getOptionGroup().getId().equals(menuItemOptionGroup.getId())) {
+                if (!option.getOptionGroup().getId().equals(menuItemOptionGroup.getOptionGroup().getId())) {
                     throw new APIException("Option does not belong to option group");
                 }
 

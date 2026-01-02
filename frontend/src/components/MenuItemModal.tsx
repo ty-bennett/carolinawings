@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { MenuItem, AddCartItemRequest, SelectedOptionGroup } from '../services/api';
+import { useState, useEffect } from 'react';
+import { MenuItem, AddCartItemRequest, SelectedOptionGroup, CartItemOption } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,38 +7,72 @@ import { useNavigate } from 'react-router-dom';
 interface MenuItemModalProps {
   item: MenuItem;
   onClose: () => void;
+  editMode?: boolean;
+  cartItemId?: number;
+  initialQuantity?: number;
+  initialMemos?: string;
+  initialOptions?: CartItemOption[];
 }
 
-function MenuItemModal({ item, onClose }: MenuItemModalProps) {
-  const [quantity, setQuantity] = useState(1);
-  const [memos, setMemos] = useState('');
+function MenuItemModal({
+  item,
+  onClose,
+  editMode = false,
+  cartItemId,
+  initialQuantity = 1,
+  initialMemos = '',
+  initialOptions = []
+}: MenuItemModalProps) {
+  const [quantity, setQuantity] = useState(initialQuantity);
+  const [memos, setMemos] = useState(initialMemos || '');
   const [selectedOptions, setSelectedOptions] = useState<Record<string, number[]>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
-  const { addItem } = useCart();
+
+  const { addItem, removeItem } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Initialize selected options from initialOptions when editing
+  useEffect(() => {
+    if (editMode && initialOptions && initialOptions.length > 0) {
+      const optionsMap: Record<string, number[]> = {};
+
+      initialOptions.forEach(opt => {
+        // Find the option group this option belongs to
+        item.optionGroups?.forEach(og => {
+          const foundOption = og.optionGroup.options.find(o => o.name === opt.optionName);
+          if (foundOption) {
+            const groupId = og.optionGroup.id;
+            if (!optionsMap[groupId]) {
+              optionsMap[groupId] = [];
+            }
+            optionsMap[groupId].push(Number(foundOption.id));
+          }
+        });
+      });
+
+      setSelectedOptions(optionsMap);
+    }
+  }, [editMode, initialOptions, item.optionGroups]);
 
   const handleOptionChange = (optionGroupId: string, optionId: number, isMultiple: boolean) => {
     setSelectedOptions(prev => {
       const current = prev[optionGroupId] || [];
-      
+
       if (isMultiple) {
-        // Toggle for checkboxes
         if (current.includes(optionId)) {
           return { ...prev, [optionGroupId]: current.filter(id => id !== optionId) };
         } else {
           return { ...prev, [optionGroupId]: [...current, optionId] };
         }
       } else {
-        // Replace for radio buttons
         return { ...prev, [optionGroupId]: [optionId] };
       }
     });
   };
 
-  const handleAddToCart = async () => {
+  const handleSubmit = async () => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -55,27 +89,41 @@ function MenuItemModal({ item, onClose }: MenuItemModalProps) {
           selectedOptionIds: optionIds,
         }));
 
-      const request: AddCartItemRequest = {
-        menuItemId: item.id,
-        quantity,
-        memos: memos || undefined,
-        selectedOptionGroups,
-      };
+      if (editMode && cartItemId) {
+        // Remove old item and add new one (since we can't update options directly)
+        await removeItem(cartItemId);
 
-      await addItem(request);
+        const request: AddCartItemRequest = {
+          menuItemId: item.id,
+          quantity,
+          memos: memos || undefined,
+          selectedOptionGroups,
+        };
+        await addItem(request);
+      } else {
+        const request: AddCartItemRequest = {
+          menuItemId: item.id,
+          quantity,
+          memos: memos || undefined,
+          selectedOptionGroups,
+        };
+
+        console.log('Sending request:', JSON.stringify(request, null, 2));
+        await addItem(request);
+      }
+
       onClose();
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.message || 'Failed to add item to cart');
+      setError(err.response?.data?.message || 'Failed to update cart');
     } finally {
       setLoading(false);
     }
   };
 
-  // Calculate total price
   const calculateTotal = () => {
     let total = item.price * quantity;
-    
+
     item.optionGroups?.forEach(og => {
       const selected = selectedOptions[og.optionGroup.id] || [];
       og.optionGroup.options.forEach(opt => {
@@ -84,20 +132,30 @@ function MenuItemModal({ item, onClose }: MenuItemModalProps) {
         }
       });
     });
-    
+
     return total;
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Overlay */}
+      <div
+        className="absolute inset-0 bg-black opacity-30"
+        onClick={onClose}
+      />
+
+      {/* Modal Content */}
+      <div
+        className="relative bg-white rounded-lg max-w-lg w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="p-4 border-b sticky top-0 bg-white">
           <div className="flex justify-between items-start">
-            <h2 className="text-xl font-bold">{item.name}</h2>
-            <button 
+            <h2 className="text-xl font-bold">{editMode ? 'Edit Item' : item.name}</h2>
+            <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl"
+              className="text-gray-500 hover:text-gray-700 text-2xl bg-transparent border-none cursor-pointer"
             >
               &times;
             </button>
@@ -112,23 +170,23 @@ function MenuItemModal({ item, onClose }: MenuItemModalProps) {
             <div key={og.id} className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-semibold">{og.optionGroup.name}</h3>
-                {og.required&& (
+                {og.required && (
                   <span className="text-red-500 text-sm">Required</span>
                 )}
               </div>
               <p className="text-gray-500 text-sm mb-2">
-                {og.minChoices === og.maxChoices 
-                  ? `Select ${og.minChoices}` 
+                {og.minChoices === og.maxChoices
+                  ? `Select ${og.minChoices}`
                   : `Select ${og.minChoices} to ${og.maxChoices}`}
               </p>
-              
+
               <div className="space-y-2">
                 {og.optionGroup.options.map(opt => {
                   const isMultiple = og.maxChoices > 1;
                   const isSelected = (selectedOptions[og.optionGroup.id] || []).includes(Number(opt.id));
-                  
+
                   return (
-                    <label 
+                    <label
                       key={opt.id}
                       className="flex items-center justify-between p-2 border rounded hover:bg-gray-50 cursor-pointer"
                     >
@@ -169,14 +227,14 @@ function MenuItemModal({ item, onClose }: MenuItemModalProps) {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 text-xl font-bold"
+                className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 text-xl font-bold cursor-pointer border-none"
               >
                 -
               </button>
               <span className="text-xl font-semibold">{quantity}</span>
               <button
                 onClick={() => setQuantity(q => q + 1)}
-                className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 text-xl font-bold"
+                className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 text-xl font-bold cursor-pointer border-none"
               >
                 +
               </button>
@@ -189,11 +247,16 @@ function MenuItemModal({ item, onClose }: MenuItemModalProps) {
         {/* Footer */}
         <div className="p-4 border-t sticky bottom-0 bg-white">
           <button
-            onClick={handleAddToCart}
+            onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-darkred text-white py-3 rounded-lg font-semibold hover:bg-red-800 transition disabled:opacity-50"
+            className="w-full bg-darkred text-white py-3 rounded-lg font-semibold hover:bg-red-800 transition disabled:opacity-50 cursor-pointer border-none"
           >
-            {loading ? 'Adding...' : `Add to Cart - $${calculateTotal().toFixed(2)}`}
+            {loading
+              ? 'Updating...'
+              : editMode
+                ? `Update Item - $${calculateTotal().toFixed(2)}`
+                : `Add to Cart - $${calculateTotal().toFixed(2)}`
+            }
           </button>
         </div>
       </div>
