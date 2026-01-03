@@ -28,6 +28,8 @@ const NavBar = () => {
     navigate("/");
   };
 
+
+
   return (
     <>
       <div className={navbar.gridparent}>
@@ -53,7 +55,7 @@ const NavBar = () => {
               {!id && (
                 <NavLink to="/login" className={({ isActive }) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Login</NavLink>
               )}
-              {(roles.includes("MANAGER") || roles.includes("RESTAURANT_ADMIN")) && (
+              {(roles.includes("MANAGER") || roles.includes("RESTAURANT_ADMIN") || roles.includes("ADMIN") &&
                 <NavLink to="/admin/restaurants/dashboard" className={({ isActive }) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Admin Panel</NavLink>
               )}
             </div>
@@ -84,6 +86,12 @@ const NavBar = () => {
                   <span className={navbar.welcomeMessage}>Welcome, {name}</span>
                   {showUserDropdown && (
                     <div className={navbar.dropdownMenu}>
+                      <button
+                        onClick={() => navigate('/orders')}
+                        className={navbar.dropdownItem}
+                      >
+                        Order History
+                      </button>
                       <button onClick={handleLogout} className={navbar.dropdownItem}>
                         Logout
                       </button>
@@ -94,15 +102,16 @@ const NavBar = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Cart Sidebar */}
-      <div
+      < div
         className={`fixed inset-0 z-50 transition-opacity duration-300 ${showCart ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
+          }`
+        }
       >
         {/* Overlay - semi-transparent so you can still see the page */}
-        <div
+        < div
           className={`absolute inset-0 bg-black transition-opacity duration-300 ${showCart ? 'opacity-30' : 'bg-opacity-0'
             }`}
           onClick={() => setShowCart(false)}

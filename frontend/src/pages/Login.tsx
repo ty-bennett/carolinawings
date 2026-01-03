@@ -25,7 +25,7 @@ function Login() {
       if (data.roles.includes("RESTAURANT_ADMIN") || data.roles.includes("MANAGER")) {
         navigate("/admin/restaurants/dashboard");
       } else if (data.roles.includes("ADMIN")) {
-        navigate("/admin/companies");
+        navigate("/admin/restaurants/dashboard");
       } else {
         navigate("/");
       }

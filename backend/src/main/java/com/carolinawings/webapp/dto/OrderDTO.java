@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
-    private UUID id;
+    private UUID orderId;
     private String status;  // Maps from OrderStatus enum
     private BigDecimal subtotal;
     private BigDecimal totalTax;

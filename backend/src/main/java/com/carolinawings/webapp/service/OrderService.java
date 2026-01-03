@@ -9,6 +9,7 @@ import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
 import com.carolinawings.webapp.dto.PagedOrderResponseDTO;
 import com.carolinawings.webapp.enums.OrderStatus;
+import org.springframework.data.domain.Page;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -32,4 +33,5 @@ public interface OrderService {
 
     OrderDTO cancelOrder(UUID id);
 
+    Page<OrderDTO> getOrdersForCurrentUser(int page, int pageSize);
 }

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -70,7 +71,7 @@ public class OrderServiceImplementation implements OrderService {
 
     private OrderDTO mapOrderToDTO(Order order) {
         OrderDTO dto = new OrderDTO();
-        dto.setId(order.getId());
+        dto.setOrderId(order.getId());
         dto.setStatus(order.getStatus().name());
         dto.setSubtotal(order.getSubtotal());
         dto.setTotalTax(order.getTotalTax());
@@ -177,15 +178,17 @@ public class OrderServiceImplementation implements OrderService {
         order.setRestaurant(restaurant);
         order.setStatus(OrderStatus.PENDING);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         OffsetDateTime pickupTime;
         String requestedPickupTime = request.getRequestedPickupTime();
 
         if(requestedPickupTime == null || requestedPickupTime.isBlank()) {
             pickupTime = OffsetDateTime.now().plusMinutes(restaurant.getEstimatedPickupMinutes());
         } else {
-            pickupTime = LocalDateTime.parse(request.getRequestedPickupTime(), formatter).atOffset(ZoneOffset.of("-05:00"));
+            // Parse ISO format directly - no custom formatter needed
+            pickupTime = OffsetDateTime.parse(requestedPickupTime);
         }
+        order.setPickupTime(pickupTime);
+
         order.setPickupTime(pickupTime);
         order.setUser(cart.getUser());
         order.setSubtotal(cart.getSubtotal());
@@ -337,6 +340,18 @@ public class OrderServiceImplementation implements OrderService {
         return modelMapper.map(savedOrder, OrderDTO.class);
     }
 
+    @Override
+    public Page<OrderDTO> getOrdersForCurrentUser(int page, int pageSize) {
+        String username = getCurrentUser().getUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new APIException("User not found"));
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
+        Page<Order> orders = orderRepository.findByUser(user, pageable);
+
+        return orders.map(this::convertToDTO);
+    }
+
 
     // private helper methods
     private boolean userManagesRestaurant(User user, Restaurant restaurant) {
@@ -370,6 +385,57 @@ public class OrderServiceImplementation implements OrderService {
                 .map(Menu::getRestaurant)
                 .findFirst()
                 .orElse(null);
+    }
+
+    private OrderDTO convertToDTO(Order order) {
+        OrderDTO dto = new OrderDTO();
+        dto.setOrderId(order.getId());
+        dto.setStatus(order.getStatus().name());
+        dto.setSubtotal(order.getSubtotal());
+        dto.setTotalTax(order.getTotalTax());
+        dto.setTotalPrice(order.getTotalPrice());
+        dto.setCreatedAt(order.getCreatedAt());
+        dto.setUpdatedAt(order.getUpdatedAt());
+        dto.setPickupTime(order.getPickupTime());
+        dto.setCustomerName(order.getCustomerName());
+        dto.setCustomerPhone(order.getCustomerPhone());
+        dto.setCustomerNotes(order.getCustomerNotes());
+        dto.setOrderType(order.getOrderType().name());
+        dto.setRestaurantId(order.getRestaurant().getId());
+        dto.setRestaurantName(order.getRestaurant().getName());
+
+        List<OrderItemDTO> itemDTOs = order.getItems().stream()
+                .map(this::convertItemToDTO)
+                .toList();
+        dto.setItems(itemDTOs);
+
+        return dto;
+    }
+
+    private OrderItemDTO convertItemToDTO(OrderItem item) {
+        OrderItemDTO dto = new OrderItemDTO();
+        dto.setId(item.getId());
+        dto.setMenuItemId(item.getMenuItemId());
+        dto.setMenuItemName(item.getMenuItemName());
+        dto.setUnitPrice(item.getMenuItemPrice());
+        dto.setQuantity(item.getQuantity());
+        dto.setLineTotal(item.getTotalPrice());
+
+        List<OrderItemOptionDTO> optionDTOs = item.getOptions().stream()
+                .map(this::convertOptionToDTO)
+                .toList();
+        dto.setOptions(optionDTOs);
+
+        return dto;
+    }
+
+    private OrderItemOptionDTO convertOptionToDTO(OrderItemOption option) {
+        return OrderItemOptionDTO.builder()
+                .optionId(option.getId())
+                .optionGroupName(option.getGroupName())
+                .optionName(option.getOptionName())
+                .extraPrice(option.getExtraPrice())
+                .build();
     }
 }
 

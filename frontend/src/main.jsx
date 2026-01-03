@@ -3,26 +3,29 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from './pages/Home.jsx';
-import Menu from './pages/Menu.jsx';
-import Specials from './pages/Specials.jsx';
-import Catering from './pages/Catering.jsx';
-import Locations from './pages/Locations.jsx';
-import Contact from './pages/Contact.jsx';
+import Home from './pages/Home';
+import Menu from './pages/Menu';
+import Specials from './pages/Specials';
+import Catering from './pages/Catering';
+import Locations from './pages/Locations';
+import Contact from './pages/Contact';
 import Login from './pages/Login.js';
-import Register from './pages/Register.jsx';
-import Companies from './pages/Companies.jsx';
-import RestaurantDashboard from './pages/RestaurantDashboard.jsx';
-import Unauthorized from './pages/Unauthorized.jsx';
-import MenuDetails from './pages/MenuDetails.jsx';
-import MenuPage from './pages/MenuPage.jsx';
+import Register from './pages/Register';
+//import Companies from './pages/Companies';
+import AdminDashboard from './pages/AdminDashboard';
+import Unauthorized from './pages/Unauthorized';
+import MenuDetails from './pages/MenuDetails';
+import MenuPage from './pages/MenuPage';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext'
 import Order from './pages/Order';
 import OrderMenu from './pages/OrderMenu';
 import Checkout from './pages/Checkout';
-import OrderConfirmation from './pages/OrderConfirmation.tsx'
+import OrderConfirmation from './pages/OrderConfirmation';
+import OrderHistory from './pages/OrderHistory';
+import OrderDetails from './pages/OrderDetails'
 
+//<Route path="/admin/companies" element={<Companies />} />
 export default function App() {
 
   return (
@@ -37,8 +40,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin/companies" element={<Companies />} />
-          <Route path="/admin/restaurants/dashboard" element={<RestaurantDashboard />} />
+          <Route path="/admin/restaurants/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/restaurants/dashboard/menus/:menuId" element={<MenuDetails />} />
           <Route path="/admin/restaurants/dashboard/menus" element={<MenuPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
@@ -46,6 +48,8 @@ export default function App() {
           <Route path="/order/:restaurantId" element={<OrderMenu />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+          <Route path="/orders" element={<OrderHistory />} />
+          <Route path="/orders/:orderId" element={<OrderDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

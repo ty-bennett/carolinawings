@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
@@ -14,22 +14,64 @@ function Checkout() {
   const [customerName, setCustomerName] = useState(user?.name || '');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerNotes, setCustomerNotes] = useState('');
+  const [pickupTime, setPickupTime] = useState('');
+  const [pickupOptions, setPickupOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Get restaurant ID from first cart item
   const restaurantId = Number(localStorage.getItem('selectedRestaurantId'));
   const restaurantName = localStorage.getItem('selectedRestaurantName');
+  const estimatedMinutes = Number(localStorage.getItem('selectedRestaurantEstimate')) || 15;
 
-  const handlePlaceOrder = async () => {
+  // Generate pickup time options
+  useEffect(() => {
+    const options: string[] = [];
+    const now = new Date();
 
-    if (!restaurantId) {
-      setError('Restaurant not selected. Please start a new order.');
+    // Start from estimated prep time
+    const firstPickup = new Date(now.getTime() + estimatedMinutes * 60000);
+
+    // Round up to nearest 5 minutes
+    const minutes = firstPickup.getMinutes();
+    const roundedMinutes = Math.ceil(minutes / 5) * 5;
+    firstPickup.setMinutes(roundedMinutes, 0, 0);
+
+    // End of day is 9pm
+    const endOfDay = new Date(now);
+    endOfDay.setHours(21, 0, 0, 0);
+
+    // If it's already past 9pm, no pickup times available
+    if (firstPickup >= endOfDay) {
+      setPickupOptions([]);
       return;
     }
 
+    // Generate options every 5 minutes until 9pm
+    let currentTime = new Date(firstPickup);
+    while (currentTime <= endOfDay) {
+      options.push(currentTime.toISOString());
+      currentTime = new Date(currentTime.getTime() + 5 * 60000);
+    }
+
+    setPickupOptions(options);
+    if (options.length > 0) {
+      setPickupTime(options[0]);
+    }
+  }, [estimatedMinutes]);
+
+  const formatPickupTime = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const handlePlaceOrder = async () => {
     if (!cart || cart.cartItems.length === 0) {
       setError('Your cart is empty');
+      return;
+    }
+
+    if (!restaurantId) {
+      setError('Restaurant not selected. Please start a new order.');
       return;
     }
 
@@ -43,22 +85,27 @@ function Checkout() {
       return;
     }
 
+    if (!pickupTime) {
+      setError('Please select a pickup time');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
       const request: CreateOrderRequest = {
         cartId: cart.cartId,
-        restaurantId: restaurantId!,
+        restaurantId: restaurantId,
         customerName: customerName.trim(),
         customerPhone: customerPhone.trim(),
         customerNotes: customerNotes.trim() || undefined,
+        requestedPickupTime: pickupTime,
       };
 
       const { data: order } = await orderAPI.createOrder(request);
-      console.log('Order response:', order);
+
       resetCart();
-      // Clear cart and navigate to confirmation
       navigate(`/order-confirmation/${order.orderId}`);
     } catch (err: any) {
       console.error(err);
@@ -67,6 +114,21 @@ function Checkout() {
       setLoading(false);
     }
   };
+
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-digits
+    const digits = value.replace(/\D/g, '');
+
+    // Format as ###-###-####
+    if (digits.length <= 3) {
+      return digits;
+    } else if (digits.length <= 6) {
+      return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+    } else {
+      return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+    }
+  };
+
 
   if (!cart || cart.cartItems.length === 0) {
     return (
@@ -124,12 +186,34 @@ function Checkout() {
                   <input
                     type="tel"
                     value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    onChange={(e) => setCustomerPhone(formatPhoneNumber(e.target.value))}
                     className="w-full border rounded-lg p-3"
-                    placeholder="123-456-7890"
+                    placeholder="(555) 555-5555"
                   />
                 </div>
-
+                <div>
+                  <label className="block text-sm font-medium mb-1">Pickup Time *</label>
+                  {pickupOptions.length === 0 ? (
+                    <div className="w-full border rounded-lg p-3 bg-gray-100 text-gray-500">
+                      No pickup times available today. We close at 9pm.
+                    </div>
+                  ) : (
+                    <select
+                      value={pickupTime}
+                      onChange={(e) => setPickupTime(e.target.value)}
+                      className="w-full border rounded-lg p-3"
+                    >
+                      {pickupOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {formatPickupTime(option)}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <p className="text-sm text-gray-500 mt-1">
+                    Estimated prep time: {estimatedMinutes} minutes
+                  </p>
+                </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Special Instructions</label>
                   <textarea
@@ -188,15 +272,11 @@ function Checkout() {
 
               <button
                 onClick={handlePlaceOrder}
-                disabled={loading}
+                disabled={loading || pickupOptions.length === 0}
                 className="w-full mt-6 bg-darkred text-white py-4 rounded-lg font-semibold hover:bg-red-800 transition disabled:opacity-50 cursor-pointer border-none text-lg"
               >
                 {loading ? 'Placing Order...' : 'Place Order'}
               </button>
-
-              <p className="text-center text-sm text-gray-500 mt-4">
-                Payment will be collected at pickup
-              </p>
             </div>
           </div>
         </div>

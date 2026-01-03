@@ -29,9 +29,9 @@ export function Order() {
   const handleSelectRestaurant = (restaurant: Restaurant) => {
     localStorage.setItem('selectedRestaurantId', restaurant.id.toString());
     localStorage.setItem('selectedRestaurantName', restaurant.name);
+    localStorage.setItem('selectedRestaurantEstimate', restaurant.estimatedPickupMinutes?.toString() || '15');
     navigate(`/order/${restaurant.id}`);
   };
-
   if (loading) {
     return (
       <>

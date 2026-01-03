@@ -224,6 +224,7 @@ export const cartAPI = {
 export const orderAPI = {
   createOrder: (data: CreateOrderRequest) => api.post<Order>('/orders', data),
   getOrder: (orderId: string) => api.get<Order>(`/orders/${orderId}`),
+  getUserOrderHistory: () => api.get<PaginatedResponse<Order>>('/orders'),
   cancelOrder: (orderId: string) => api.patch<Order>(`/orders/${orderId}/cancel`),
 };
 

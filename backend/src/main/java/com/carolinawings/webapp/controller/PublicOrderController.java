@@ -5,6 +5,7 @@ import com.carolinawings.webapp.dto.OrderDTO;
 import com.carolinawings.webapp.dto.OrderResponseDTO;
 import com.carolinawings.webapp.service.OrderServiceImplementation;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,5 +41,13 @@ public class PublicOrderController {
     @PreAuthorize("@securityService.canCancelOrder(#orderId)")
     public ResponseEntity<OrderDTO> cancelOrderById(@PathVariable UUID orderId) {
         return new ResponseEntity<>(orderServiceImplementation.cancelOrder(orderId), HttpStatus.OK);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<Page<OrderDTO>> getMyOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        Page<OrderDTO> orders = orderServiceImplementation.getOrdersForCurrentUser(page, pageSize);
+        return ResponseEntity.ok(orders);
     }
 }
