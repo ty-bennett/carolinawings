@@ -8,7 +8,7 @@ import { orderAPI, CreateOrderRequest } from '../services/api';
 
 function Checkout() {
   const navigate = useNavigate();
-  const { cart } = useCart();
+  const { cart, resetCart } = useCart();
   const { user } = useAuth();
 
   const [customerName, setCustomerName] = useState(user?.name || '');
@@ -57,6 +57,7 @@ function Checkout() {
 
       const { data: order } = await orderAPI.createOrder(request);
       console.log('Order response:', order);
+      resetCart();
       // Clear cart and navigate to confirmation
       navigate(`/order-confirmation/${order.orderId}`);
     } catch (err: any) {

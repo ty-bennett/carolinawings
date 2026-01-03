@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="add: created Order-related DTOS and request and response objects with relevant info for order confirmation pages, and manager admin panel info.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/CartServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/CartServiceImplementation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/NavBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/NavBar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

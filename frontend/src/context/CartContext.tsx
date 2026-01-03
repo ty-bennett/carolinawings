@@ -12,6 +12,7 @@ interface CartContextType {
   updateItem: (cartItemId: number, quantity: number) => Promise<void>;
   removeItem: (cartItemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
+  resetCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -103,6 +104,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const resetCart = () => {
+    setCart(null);
+  };
+
   // Fetch cart when user logs in
   useEffect(() => {
     console.log('CartContext useEffect:', { isAuthenticated, user, roles: user?.roles });
@@ -128,6 +133,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       updateItem,
       removeItem,
       clearCart,
+      resetCart,
     }}>
       {children}
     </CartContext.Provider>
