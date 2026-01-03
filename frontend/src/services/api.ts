@@ -115,7 +115,7 @@ export interface SelectedOptionGroup {
 }
 
 export interface Order {
-  id: string;
+  orderId: string;
   status: string;
   subtotal: number;
   totalTax: number;

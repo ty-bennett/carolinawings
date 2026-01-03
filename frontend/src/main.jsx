@@ -20,6 +20,8 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext'
 import Order from './pages/Order';
 import OrderMenu from './pages/OrderMenu';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation.tsx'
 
 export default function App() {
 
@@ -42,6 +44,8 @@ export default function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/order" element={<Order />} />
           <Route path="/order/:restaurantId" element={<OrderMenu />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
         </Route>
       </Routes>
     </BrowserRouter>

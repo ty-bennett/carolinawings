@@ -30,9 +30,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const { data } = await cartAPI.getCart();
       setCart(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to fetch cart:', err);
-      setError('Failed to load cart');
+      // If cart not found (no active cart), just set cart to null
+      if (err.response?.status === 404) {
+        setCart(null);
+      } else {
+        setError('Failed to load cart');
+      }
     } finally {
       setIsLoading(false);
     }

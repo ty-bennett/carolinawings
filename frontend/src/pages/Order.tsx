@@ -27,6 +27,8 @@ export function Order() {
   }, []);
 
   const handleSelectRestaurant = (restaurant: Restaurant) => {
+    localStorage.setItem('selectedRestaurantId', restaurant.id.toString());
+    localStorage.setItem('selectedRestaurantName', restaurant.name);
     navigate(`/order/${restaurant.id}`);
   };
 
@@ -47,9 +49,9 @@ export function Order() {
       <main className="min-h-screen bg-gray-100 py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-center mb-8">Select a Location</h1>
-          
+
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {restaurants.map((restaurant) => (
               <div
@@ -63,11 +65,10 @@ export function Order() {
                   <p className="text-gray-500 text-sm">{restaurant.phone}</p>
                 )}
                 <div className="mt-4 flex items-center justify-between">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    restaurant.acceptingOrders 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
+                  <span className={`px-2 py-1 rounded text-sm ${restaurant.acceptingOrders
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
+                    }`}>
                     {restaurant.acceptingOrders ? 'Open for Orders' : 'Currently Closed'}
                   </span>
                   <span className="text-gray-500 text-sm">

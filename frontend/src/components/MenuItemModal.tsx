@@ -108,7 +108,6 @@ function MenuItemModal({
           selectedOptionGroups,
         };
 
-        console.log('Sending request:', JSON.stringify(request, null, 2));
         await addItem(request);
       }
 
