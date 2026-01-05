@@ -288,10 +288,6 @@ public class OrderServiceImplementation implements OrderService {
             orderPage = orderRepository.findByRestaurantId(restaurantId, pageable);
         }
 
-        if(orderPage.isEmpty()) {
-            throw new APIException("No orders found for this restaurant" + restaurant.getName());
-        }
-
         List<OrderResponseDTO> dtos = orderPage
                 .getContent()
                 .stream()

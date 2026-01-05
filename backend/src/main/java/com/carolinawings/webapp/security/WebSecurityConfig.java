@@ -92,7 +92,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/public/**").permitAll()
                         // Admin endpoints
-                    .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN", "RESTAURANT_ADMIN")
+                    .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN", "RESTAURANT_ADMIN", "MANAGER")
                         // manager endpoints
                     .requestMatchers("/api/manager/**").hasAnyAuthority("MANAGER", "RESTAURANT_ADMIN", "ADMIN")
                         // user cart/order endpoints

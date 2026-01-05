@@ -11,7 +11,6 @@ import Locations from './pages/Locations';
 import Contact from './pages/Contact';
 import Login from './pages/Login.js';
 import Register from './pages/Register';
-//import Companies from './pages/Companies';
 import AdminDashboard from './pages/AdminDashboard';
 import Unauthorized from './pages/Unauthorized';
 import MenuDetails from './pages/MenuDetails';
@@ -25,7 +24,6 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import OrderHistory from './pages/OrderHistory';
 import OrderDetails from './pages/OrderDetails'
 
-//<Route path="/admin/companies" element={<Companies />} />
 export default function App() {
 
   return (

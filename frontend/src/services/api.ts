@@ -230,7 +230,7 @@ export const orderAPI = {
 
 // Admin API
 export const adminAPI = {
-  getRestaurants: () => api.get<Restaurant[]>('/admin/restaurants'),
+  getRestaurants: () => api.get<PaginatedResponse<Restaurant>>('/admin/restaurants'),
   getOrders: (restaurantId: number, page = 0, size = 20) =>
     api.get(`/admin/restaurants/${restaurantId}/orders?page=${page}&pageSize=${size}`),
   updateOrderStatus: (orderId: string, status: string) =>
