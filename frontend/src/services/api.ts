@@ -230,19 +230,36 @@ export const orderAPI = {
 
 // Admin API
 export const adminAPI = {
+
+  // Restaurants
   getRestaurants: () => api.get<PaginatedResponse<Restaurant>>('/admin/restaurants'),
+  getRestaurant: (id: number) => api.get<Restaurant>(`/admin/restaurants/${id}`),
+  updateRestaurant: (id: number, data: Partial<Restaurant>) => api.put<Restaurant>(`/admin/restaurants/${id}`, data),
+
+  // Orders
   getOrders: (restaurantId: number, page = 0, size = 20) =>
-    api.get(`/admin/restaurants/${restaurantId}/orders?page=${page}&pageSize=${size}`),
+    api.get<PaginatedResponse<Order>>(`/admin/restaurants/${restaurantId}/orders?page=${page}&pageSize=${size}`),
   updateOrderStatus: (orderId: string, status: string) =>
     api.patch(`/admin/orders/${orderId}/status?status=${status}`),
+
+  // Menus
+  getMenus: (restaurantId: number) => api.get<PaginatedResponse<Menu>>(`/admin/restaurants/${restaurantId}/menus`),
+  getMenu: (restaurantId: number, menuId: number) => api.get<Menu>(`/admin/restaurants/${restaurantId}/menus/${menuId}`),
   createMenu: (restaurantId: number, data: { name: string; description?: string }) =>
-    api.post(`/admin/restaurants/${restaurantId}/menus`, data),
+    api.post<Menu>(`/admin/restaurants/${restaurantId}/menus`, data),
+  updateMenu: (restaurantId: number, menuId: number, data: { name: string; description?: string }) =>
+    api.put<Menu>(`/admin/restaurants/${restaurantId}/menus/${menuId}`, data),
   deleteMenu: (restaurantId: number, menuId: number) =>
     api.delete(`/admin/restaurants/${restaurantId}/menus/${menuId}`),
+  setPrimaryMenu: (restaurantId: number, menuId: number) =>
+    api.put(`/admin/restaurants/${restaurantId}/menus/${menuId}/primary`),
+
+  // Menu Items
+  getMenuItems: (menuId: number) => api.get<PaginatedResponse<MenuItem>>(`/admin/menus/${menuId}/menuitems`),
   createMenuItem: (menuId: number, data: Partial<MenuItem>) =>
-    api.post(`/admin/menus/${menuId}/menuitems`, data),
+    api.post<MenuItem>(`/admin/menus/${menuId}/menuitems`, data),
   updateMenuItem: (menuItemId: number, data: Partial<MenuItem>) =>
-    api.put(`/admin/menuitems/${menuItemId}`, data),
+    api.put<MenuItem>(`/admin/menuitems/${menuItemId}`, data),
   deleteMenuItem: (menuItemId: number) =>
     api.delete(`/admin/menuitems/${menuItemId}`),
 };

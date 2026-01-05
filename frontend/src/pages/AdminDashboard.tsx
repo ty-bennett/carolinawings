@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { adminAPI, Order, Restaurant } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import MenuManagement from "../components/admin/MenuManagement";
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("orders");
@@ -13,7 +14,7 @@ function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { user } = useAuth();
 
   const isAdmin = user?.roles.includes("ADMIN");
@@ -158,8 +159,11 @@ function AdminDashboard() {
               📋 Orders
             </button>
             <button
-              onClick={() => navigate("/admin/restaurants/dashboard/menus")}
-              className="w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-red-800 transition"
+              onClick={() => setActiveTab("menus")}
+              className={`w-full text-left px-4 py-3 rounded-lg mb-2 transition ${activeTab === "menus"
+                ? "bg-white text-darkred font-semibold"
+                : "hover:bg-red-800"
+                }`}
             >
               🍔 Menus
             </button>
@@ -199,6 +203,13 @@ function AdminDashboard() {
             </div>
           )}
         </div>
+
+        {activeTab === "menus" && selectedRestaurant && (
+          <MenuManagement
+            restaurantId={selectedRestaurant}
+            restaurantName={selectedRestaurantName}
+          />
+        )}
 
         {/* Main Content */}
         <div className="flex-1 bg-gray-100 p-6">
@@ -353,7 +364,7 @@ function AdminDashboard() {
             </div>
           )}
         </div>
-      </div>
+      </div >
       <Footer />
     </>
   );
