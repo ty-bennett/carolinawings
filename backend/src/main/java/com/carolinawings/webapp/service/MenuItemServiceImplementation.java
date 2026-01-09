@@ -61,7 +61,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
             menuItems = pagedItems.getContent();
         }
         if(menuItems.isEmpty()) {
-            throw new APIException("No menu items found");
+            return new MenuItemResponse();
         }
         List<MenuItemDTO> menuItemDTOS = menuItems.stream()
                 .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
@@ -76,7 +76,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
         Page<MenuItem> menuItems = menuItemRepository.findAllByMenu_Id(menuId, pageDetails);
         List<MenuItem> menuItemsPageable = menuItems.getContent();
         if (menuItemsPageable.isEmpty())
-            throw new APIException("No menu items present");
+           return new MenuItemResponse();
         List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
                 .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
                 .toList();
@@ -99,7 +99,7 @@ public class MenuItemServiceImplementation implements MenuItemService {
         Page<MenuItem> menuItems = menuItemRepository.findAll(pageDetails);
         List<MenuItem> menuItemsPageable = menuItems.getContent();
         if (menuItemsPageable.isEmpty())
-            throw new APIException("No menu items present");
+            return new MenuItemResponse();
         List<MenuItemDTO> menuItemDTOS = menuItemsPageable.stream()
                 .map(menuItem -> modelMapper.map(menuItem, MenuItemDTO.class))
                 .toList();

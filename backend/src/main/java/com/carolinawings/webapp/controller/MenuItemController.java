@@ -38,7 +38,7 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItemServiceImplementation.getAllMenuItems(), HttpStatus.OK);
     }
 
-    @GetMapping("/menus/{menuId}/menuitems/paged")
+    @GetMapping("/menus/{menuId}/menuitems")
     @PreAuthorize("@securityService.canManageMenu(#menuId)")
     public ResponseEntity<MenuItemResponse> getAllMenuItemsPaged(@RequestParam(name="pageNumber", defaultValue = ApplicationConstants.PAGE_NUMBER) Integer pageNumber,
                                                             @RequestParam(name="pageSize", defaultValue = ApplicationConstants.PAGE_SIZE) Integer pageSize,

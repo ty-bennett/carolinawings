@@ -28,10 +28,12 @@ function MenuManagement({ restaurantId, restaurantName }: MenuManagementProps) {
   // Fetch menu items when selected menu changes
   useEffect(() => {
     if (selectedMenu) {
+      setMenuItems([]); // Clear items first
       fetchMenuItems();
+    } else {
+      setMenuItems([]);
     }
   }, [selectedMenu]);
-
   const fetchMenus = async () => {
     setLoading(true);
     try {
@@ -53,20 +55,27 @@ function MenuManagement({ restaurantId, restaurantName }: MenuManagementProps) {
   };
 
   const fetchMenuItems = async () => {
-    if (!selectedMenu) return;
+    if (!selectedMenu) {
+      setMenuItems([]);
+      return;
+    }
 
     setLoading(true);
     try {
       const { data } = await adminAPI.getMenuItems(selectedMenu.id);
       setMenuItems(data.content || []);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError('Failed to load menu items');
+      // If no items found, just set empty array instead of showing error
+      if (err.response?.status === 404) {
+        setMenuItems([]);
+      } else {
+        setError('Failed to load menu items');
+      }
     } finally {
       setLoading(false);
     }
   };
-
   const handleCreateMenu = async (name: string, description: string) => {
     try {
       await adminAPI.createMenu(restaurantId, { name, description });

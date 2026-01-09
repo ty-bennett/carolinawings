@@ -55,7 +55,7 @@ const NavBar = () => {
               {!id && (
                 <NavLink to="/login" className={({ isActive }) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Login</NavLink>
               )}
-              {(roles.includes("MANAGER") || roles.includes("RESTAURANT_ADMIN") || roles.includes("ADMIN") &&
+              {((roles.includes("MANAGER") || roles.includes("RESTAURANT_ADMIN") || roles.includes("ADMIN")) &&
                 <NavLink to="/admin/restaurants/dashboard" className={({ isActive }) => isActive ? navbar.navbaritemactive : navbar.navbaritem}>Admin Panel</NavLink>
               )}
             </div>

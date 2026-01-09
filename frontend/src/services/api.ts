@@ -24,19 +24,12 @@ export interface LoginResponse {
 export interface Restaurant {
   id: number;
   name: string;
-  address: string;
+  address?: string;
   phone?: string;
   email?: string;
   status: string;
   acceptingOrders: boolean;
   estimatedPickupMinutes: number;
-  hours: RestaurantHours[];
-}
-
-export interface RestaurantHours {
-  dayOfWeek: string;
-  openTime: string;
-  closeTime: string;
 }
 
 export interface Menu {
@@ -164,6 +157,14 @@ export interface PaginatedResponse<T> {
   totalElements: number;
   size: number;
   number: number;
+}
+
+export interface RestaurantHours {
+  id?: number;
+  dayOfWeek: number; // 0-6 (Sunday-Saturday)
+  openTime: string;  // "HH:mm"
+  closeTime: string; // "HH:mm"
+  closed: boolean;
 };
 
 // Axios instance
@@ -178,7 +179,6 @@ const api = axios.create({
 // Attach jwtToken to every request 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  console.log('Request interceptor:', config.url, 'Token exists:', token?.substring(0, 20));
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -189,7 +189,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log('API error interceptor:', error.response?.status, error.config?.url)
     return Promise.reject(error);
   }
 )
@@ -235,6 +234,16 @@ export const adminAPI = {
   getRestaurants: () => api.get<PaginatedResponse<Restaurant>>('/admin/restaurants'),
   getRestaurant: (id: number) => api.get<Restaurant>(`/admin/restaurants/${id}`),
   updateRestaurant: (id: number, data: Partial<Restaurant>) => api.put<Restaurant>(`/admin/restaurants/${id}`, data),
+
+  // Restaurant Settings
+  toggleAcceptingOrders: (restaurantId: number, accepting: boolean) =>
+    api.patch<Restaurant>(`/admin/restaurants/${restaurantId}/accepting-orders?accepting=${accepting}`),
+  updatePickupTime: (restaurantId: number, minutes: number) =>
+    api.patch<Restaurant>(`/admin/restaurants/${restaurantId}/pickup-time?minutes=${minutes}`),
+  getRestaurantHours: (restaurantId: number) =>
+    api.get<RestaurantHours[]>(`/admin/restaurants/${restaurantId}/hours`),
+  updateRestaurantHours: (restaurantId: number, hours: RestaurantHours[]) =>
+    api.put<RestaurantHours[]>(`/admin/restaurants/${restaurantId}/hours`, hours),
 
   // Orders
   getOrders: (restaurantId: number, page = 0, size = 20) =>

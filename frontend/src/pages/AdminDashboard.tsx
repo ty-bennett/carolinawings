@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { adminAPI, Order, Restaurant } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import MenuManagement from "../components/admin/MenuManagement";
+import RestaurantSettings from "../components/admin/RestaurantSettings";
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("orders");
@@ -204,13 +205,6 @@ function AdminDashboard() {
           )}
         </div>
 
-        {activeTab === "menus" && selectedRestaurant && (
-          <MenuManagement
-            restaurantId={selectedRestaurant}
-            restaurantName={selectedRestaurantName}
-          />
-        )}
-
         {/* Main Content */}
         <div className="flex-1 bg-gray-100 p-6">
           {error && (
@@ -353,15 +347,20 @@ function AdminDashboard() {
             </div>
           )}
 
+          {/* Menus Tab */}
+          {activeTab === "menus" && selectedRestaurant && (
+            <MenuManagement
+              restaurantId={selectedRestaurant}
+              restaurantName={selectedRestaurantName}
+            />
+          )}
+
           {/* Settings Tab */}
-          {activeTab === "settings" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-6">Restaurant Settings</h1>
-              <p className="text-gray-500 mb-4">{selectedRestaurantName}</p>
-              <div className="bg-white rounded-lg shadow p-6">
-                <p className="text-gray-500">Settings coming soon...</p>
-              </div>
-            </div>
+          {activeTab === "settings" && selectedRestaurant && (
+            <RestaurantSettings
+              restaurantId={selectedRestaurant}
+              restaurantName={selectedRestaurantName}
+            />
           )}
         </div>
       </div >
