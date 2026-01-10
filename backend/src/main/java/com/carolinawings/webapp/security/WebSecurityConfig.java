@@ -88,6 +88,8 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
                 .authorizeHttpRequests(auth -> auth
+                        // websocket
+                    .requestMatchers("/ws/**").permitAll()
                         // typical auth endpoints
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/public/**").permitAll()
@@ -97,7 +99,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/api/manager/**").hasAnyAuthority("MANAGER", "RESTAURANT_ADMIN", "ADMIN")
                         // user cart/order endpoints
                     .requestMatchers("/api/**").authenticated()
-                       // any api request should be auth
+                   // any api request should be auth
                     .anyRequest().authenticated()
                 );
 

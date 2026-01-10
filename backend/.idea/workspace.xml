@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="053f3a27-e29d-4cf2-9548-ecd53695e088" name="Changes" comment="add: created Order-related DTOS and request and response objects with relevant info for order confirmation pages, and manager admin panel info.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/config/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderNotificationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderNotificationServiceImplementation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/config/WebSocketAuthInterceptor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/config/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/config/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/security/WebSecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/carolinawings/webapp/service/OrderServiceImplementation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/admin/MenuManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/admin/MenuManagement.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/admin/RestaurantSettings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/admin/RestaurantSettings.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/PickupStation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/PickupStation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -312,6 +311,7 @@
       <workItem from="1767447365197" duration="11281000" />
       <workItem from="1767583431010" duration="2695000" />
       <workItem from="1768012617346" duration="3952000" />
+      <workItem from="1768055598313" duration="3340000" />
     </task>
     <task id="LOCAL-00001" summary="Config options to get Hibernate to work and app to run in container. Also, added a migration file that works with the tables that revolve around the orders.">
       <option name="closed" value="true" />

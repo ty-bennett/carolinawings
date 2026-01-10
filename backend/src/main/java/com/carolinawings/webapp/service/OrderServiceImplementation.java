@@ -179,7 +179,7 @@ public class OrderServiceImplementation implements OrderService {
         order.setCustomerNotes(request.getCustomerNotes());
 
         order.setRestaurant(restaurant);
-        order.setStatus(OrderStatus.PENDING);
+        order.setStatus(OrderStatus.PREPARING);
 
         OffsetDateTime pickupTime;
         String requestedPickupTime = request.getRequestedPickupTime();
