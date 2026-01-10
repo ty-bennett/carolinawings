@@ -148,8 +148,8 @@ function PickupStation() {
         <button
           onClick={() => setActiveTab('PREPARING')}
           className={`flex-1 md:flex-none px-6 md:px-12 py-5 rounded-xl font-bold text-xl md:text-2xl transition active:scale-95 cursor-pointer ${activeTab === 'PREPARING'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-700 text-gray-300'
+            ? 'bg-blue-600 text-white'
+            : 'bg-gray-700 text-gray-300'
             }`}
         >
           🍳 Preparing ({preparingOrders.length})
@@ -157,8 +157,8 @@ function PickupStation() {
         <button
           onClick={() => setActiveTab('READY')}
           className={`flex-1 md:flex-none px-6 md:px-12 py-5 rounded-xl font-bold text-xl md:text-2xl transition active:scale-95 cursor-pointer ${activeTab === 'READY'
-              ? 'bg-green-600 text-white'
-              : 'bg-gray-700 text-gray-300'
+            ? 'bg-green-600 text-white'
+            : 'bg-gray-700 text-gray-300'
             }`}
         >
           ✓ Ready ({readyOrders.length})
