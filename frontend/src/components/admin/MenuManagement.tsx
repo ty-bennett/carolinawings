@@ -275,7 +275,7 @@ function MenuManagement({ restaurantId, restaurantName }: MenuManagementProps) {
               {Object.entries(itemsByCategory).map(([category, items]) => (
                 <div key={category}>
                   <h3 className="text-md font-semibold text-gray-600 mb-3 border-b pb-2">{category}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {items.map(item => (
                       <div
                         key={item.id}

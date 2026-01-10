@@ -22,7 +22,8 @@ import OrderMenu from './pages/OrderMenu';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrderHistory from './pages/OrderHistory';
-import OrderDetails from './pages/OrderDetails'
+import OrderDetails from './pages/OrderDetails';
+import PickupStation from './pages/PickupStation';
 
 export default function App() {
 
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
           <Route path="/orders" element={<OrderHistory />} />
           <Route path="/orders/:orderId" element={<OrderDetails />} />
+          <Route path="/pickup" element={<PickupStation />} />
         </Route>
       </Routes>
     </BrowserRouter>

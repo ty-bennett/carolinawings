@@ -214,10 +214,6 @@ function RestaurantSettings({ restaurantId, restaurantName }: RestaurantSettings
             <p className="font-medium">{restaurant?.phone || 'Not set'}</p>
           </div>
           <div>
-            <label className="block text-sm text-gray-500 mb-1">Email</label>
-            <p className="font-medium">{restaurant?.email || 'Not set'}</p>
-          </div>
-          <div>
             <label className="block text-sm text-gray-500 mb-1">Status</label>
             <span className={`px-2 py-1 rounded text-sm ${restaurant?.status === 'OPEN'
               ? 'bg-green-100 text-green-800'

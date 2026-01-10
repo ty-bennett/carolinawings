@@ -51,12 +51,15 @@ public class OrderServiceImplementation implements OrderService {
     private UserRepository userRepository;
     @Autowired
     private CartRepository cartRepository;
-
     @Autowired
     private OrderProducer orderProducer;
+    @Autowired
+    private final OrderNotificationService orderNotificationService;
 
-    public OrderServiceImplementation(OrderRepository orderRepository) {
+
+    public OrderServiceImplementation(OrderRepository orderRepository, OrderNotificationService orderNotificationService) {
         this.orderRepository = orderRepository;
+        this.orderNotificationService = orderNotificationService;
     }
 
     @Override
@@ -256,6 +259,8 @@ public class OrderServiceImplementation implements OrderService {
                     .build();
 
             orderProducer.sendOrderToKitchen(orderMessage);
+            // Notify via WebSocket
+            orderNotificationService.notifyNewOrder(restaurant.getId(), convertToDTO(saved));
         } catch (Exception e) {
             log.error("Failed to send order {} to kitchen queue: {}", saved.getId(), e.getMessage());
             // Order is still saved - kitchen can view it in admin panel
@@ -317,6 +322,8 @@ public class OrderServiceImplementation implements OrderService {
         }
 
         order.setStatus(orderStatus);
+        // After updating status
+        orderNotificationService.notifyOrderStatusChange(order.getRestaurant().getId(), convertToDTO(order));
         Order saved = orderRepository.save(order);
 
         return OrderMapper.toOrderResponseDTO(saved);
